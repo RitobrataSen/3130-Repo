@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">Group App</string>
+    <string name="app_name">Master</string>
     <string name="action_settings">Settings</string>
+    <string name="Student_ID">Enter student ID</string>
+    <string name="key_Submit">Submit</string>
+    <string name="Button_Login">Login</string>
+    <string name="Button_register">Register</string>
+    <string name="Password">Enter Password</string>
 </resources>
