@@ -44,10 +44,6 @@ public class Courses {
         this.Insct = name;
     }
 
-    public int GetNum(){
-        return this.num;
-    }
-
     //Get methods
     //For get the information to display on screen
     public String GetCname(){
@@ -64,5 +60,9 @@ public class Courses {
 
     public String GetIns(){
         return this.Insct;
+    }
+
+    public int GetNum(){
+        return this.num;
     }
 }
