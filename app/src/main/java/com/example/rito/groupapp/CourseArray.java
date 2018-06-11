@@ -12,6 +12,7 @@ public class CourseArray {
         ArrayList<Courses> list = new ArrayList<>();
         Courses c1 = new Courses (23345, "Networking", "May.7", "Aug.11", "Aziz");
         Courses c2 = new Courses ();
+        Courses c3 = new Courses();
         c2.SetNo(19527);
         c2.SetNam("PPL");
         c2.SetSd("May.7");
