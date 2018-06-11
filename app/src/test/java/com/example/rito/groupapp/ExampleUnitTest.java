@@ -37,6 +37,6 @@ public class ExampleUnitTest {
 
     @AfterClass
     public static void run_once() {
-        System.out.println(c);
+        System.out.println(c + "/4 passed");
     }
 }

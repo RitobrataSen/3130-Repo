@@ -32,7 +32,7 @@ public class MainContentLogin extends AppCompatActivity {
                 String display = "user: " + username + "\npassword: " + password;
                 showUserInfo.setText(display);
                 /*
-                verification steps:
+                authentication steps:
                 if(username.equals() && password.equals()){
                     startActivity(new Intent(MainContentLogin.this, [featureIncomplete].class));
                 }
