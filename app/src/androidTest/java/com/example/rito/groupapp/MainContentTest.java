@@ -35,6 +35,6 @@ public class MainContentTest {
         //submit forms
         onView(withId(R.id.login_submit_button)).perform(click());
         //check returned text
-        //onView(withId(R.id.show_user_info)).check(matches(withText("user: espresso_username\npassword: espresso_password")));
+        onView(withId(R.id.show_user_info)).check(matches(withText("user: espresso_username\npassword: espresso_password")));
     }
 }
