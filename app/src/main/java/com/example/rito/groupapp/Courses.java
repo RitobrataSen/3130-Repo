@@ -8,18 +8,20 @@ public class Courses {
     private String Sdate;
     private String Edate;
     private String Insct;
+    private String Term;
 
     //empty constructor
     public Courses() {
     }
 
     //constructor
-    public Courses(int num, String name, String Sd, String Ed, String Ins ){
+    public Courses(int num, String name, String Sd, String Ed, String Ins, String Ter ){
         this.num = num;
         this.Cname = name;
         this.Sdate = Sd;
         this.Edate = Ed;
         this.Insct = Ins;
+        this.Term = Ter;
     }
 
     //Set methods
@@ -44,6 +46,8 @@ public class Courses {
         this.Insct = name;
     }
 
+    public void SetTerm(String ter) { this.Term = ter;}
+
     //Get methods
     //For get the information to display on screen
     public String GetCname(){
@@ -61,6 +65,8 @@ public class Courses {
     public String GetIns(){
         return this.Insct;
     }
+
+    public String GetTer() { return this.Term;}
 
     public int GetNum(){
         return this.num;
