@@ -1,9 +1,17 @@
 package com.example.rito.groupapp.Student;
 import com.example.rito.groupapp.Course.Course;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Student {
+
+    private DatabaseReference SeDB;
 
     private String username;
     private String email;
@@ -16,6 +24,22 @@ public class Student {
         this.password=password;
         this.a1=a1;
         a1 = new ArrayList<Course>();
+
+        SeDB = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com/");
+        SeDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String value = dataSnapshot.getValue(String.class);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
     }
     public void setName(String username){
@@ -51,4 +75,7 @@ public class Student {
 
     }
 
-}
+
+    }
+
+
