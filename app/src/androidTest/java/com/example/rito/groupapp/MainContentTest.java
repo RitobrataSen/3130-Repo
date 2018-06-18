@@ -30,11 +30,11 @@ public class MainContentTest {
         onView(withId(R.id.login_submit_button)).check(matches(isClickable()));
         onView(withId(R.id.login_submit_button)).check(matches(withText(R.string.key_Submit)));
         //text fields
-        onView(withId(R.id.user_number)).perform(typeText("espresso_username"));
-        onView(withId(R.id.user_pw)).perform(typeText("espresso_password"));
+        onView(withId(R.id.user_number)).perform(typeText("Email_Address2"));
+        onView(withId(R.id.user_pw)).perform(typeText("pw2".toLowerCase()));
         //submit forms
         onView(withId(R.id.login_submit_button)).perform(click());
         //check returned text
-        onView(withId(R.id.show_user_info)).check(matches(withText("user: espresso_username\npassword: espresso_password")));
+
     }
 }
