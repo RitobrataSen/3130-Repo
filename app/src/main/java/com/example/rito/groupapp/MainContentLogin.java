@@ -20,7 +20,8 @@ public class MainContentLogin extends AppCompatActivity {
     EditText userEmail;
     EditText userPassword;
     User currentUser;
-    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
+
     /*
         @Override
         public void onStart() {
