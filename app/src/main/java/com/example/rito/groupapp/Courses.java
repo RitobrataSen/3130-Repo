@@ -33,7 +33,7 @@ public class Courses {
     }
 
     public void SetNam(String Nam){
-        this.course_code = Nam;
+        this.course_name = Nam;
     }
 
     public void SetSd(String date){
@@ -55,6 +55,8 @@ public class Courses {
     public void SetEtime(String Et){
         this.end_time = Et;
     }
+
+    public void SetInstructor(String ins) {this.instructor=ins;}
 
     //Get methods
     //For get the information to display on screen
