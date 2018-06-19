@@ -1,3 +1,16 @@
+/**
+ * MainContentLogin.java:
+ * This is the main script for the login activity. The entered
+ * login details are verified with the firebase data and feedback is provided
+ * back to the user.
+ *
+ * @author Shane Mitravitz
+ * @param savedInstanceState passed in to the onCreate method
+ * @param view passed in to the onClick method
+ * @param dataSnapshot passed in to the onDataChange method
+ * @param onCancelled passed in to the onCancelled method
+ */
+
 package com.example.rito.groupapp;
 
 import android.os.Bundle;
@@ -31,6 +44,7 @@ public class MainContentLogin extends AppCompatActivity {
             updateUI(currentUser);
         }
     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +64,13 @@ public class MainContentLogin extends AppCompatActivity {
                 //https://stackoverflow.com/questions/45136779/login-using-email-stored-in-firebase-realtime-database
                 Query student_exists_query = databaseRef.child("STUDENT");
                 student_exists_query.addListenerForSingleValueEvent(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                    /*
+                    * this verifies login info after pressing the submit button
+                    * */
+
                         boolean emailExists = false;
                         System.out.println(dataSnapshot.getChildrenCount());
                         if (dataSnapshot.exists()) {
@@ -62,6 +81,10 @@ public class MainContentLogin extends AppCompatActivity {
                                 //currentUser.setEnrollment(Integer.parseInt(student.child("enrollment").getValue().toString()));
                                 currentUser.setUsername(student.child("username").getValue().toString());
 
+                                /*
+                                these blocks perform validation on the enter details vs details
+                                found in firebase
+                                 */
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
