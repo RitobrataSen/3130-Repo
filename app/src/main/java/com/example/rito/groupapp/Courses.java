@@ -56,6 +56,8 @@ public class Courses {
         this.end_time = Et;
     }
 
+    public void SetInstructor(String ins) {this.instructor=ins;}
+
     //Get methods
     //For get the information to display on screen
     public String GetCname(){
