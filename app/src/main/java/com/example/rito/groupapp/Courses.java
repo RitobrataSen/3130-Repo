@@ -33,7 +33,7 @@ public class Courses {
     }
 
     public void SetNam(String Nam){
-        this.course_code = Nam;
+        this.course_name = Nam;
     }
 
     public void SetSd(String date){

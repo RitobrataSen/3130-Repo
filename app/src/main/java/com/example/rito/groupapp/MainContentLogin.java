@@ -1,5 +1,6 @@
 package com.example.rito.groupapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +20,7 @@ public class MainContentLogin extends AppCompatActivity {
     Button loginButton;
     EditText userEmail;
     EditText userPassword;
+    Button Submit;
     User currentUser;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
@@ -39,7 +41,10 @@ public class MainContentLogin extends AppCompatActivity {
         loginButton = findViewById(R.id.login_submit_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+
+
             public void onClick(View view) {
+
 
                 userEmail = findViewById(R.id.user_number);
                 userPassword = findViewById(R.id.user_pw);
@@ -53,6 +58,7 @@ public class MainContentLogin extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean emailExists = false;
+
                         System.out.println(dataSnapshot.getChildrenCount());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
@@ -66,9 +72,12 @@ public class MainContentLogin extends AppCompatActivity {
                                     continue;
                                 }
                                 emailExists = true;
-                                if (currentUser.getPassword().equals(pw))
+                                if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(MainContentLogin.this, ReadCourses.class));
+                                }
+
                                 else {
                                     Toast.makeText(getApplicationContext(), "Incorrect password, please try again!", Toast.LENGTH_LONG).show();
                                 }
@@ -82,10 +91,18 @@ public class MainContentLogin extends AppCompatActivity {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
+
                 });
-                //
 
             }
+
+
+
         });
+
+
+
+
+
     }
 }

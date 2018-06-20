@@ -2,10 +2,12 @@ package com.example.rito.groupapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,65 +17,115 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import android.graphics.Color;
+import android.widget.TableRow;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+
 import java.util.*;
+
 public class ReadCourses extends AppCompatActivity {
-    private static final String TAG = "ReadCourses";
-    private static final String EXTRA_COURSE_KEY = "course_key";
+    public DatabaseReference mCourseReference;
 
-    private String mCourseKey;
+    public TextView courseCode;
+    public TextView courseName;
 
-    private DatabaseReference mCourseReference;
-    private ValueEventListener mCourseListener;
-    private TextView mCourseCode;
-    private TextView mCourseName;
+    public ArrayList<Courses> list = new ArrayList<Courses>();
+
+
+    public TableLayout tableLayout;
+    public TableRow tableRow;
+    public TextView id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_load);
 
-        mCourseKey = getIntent().getStringExtra(EXTRA_COURSE_KEY);
-        if(mCourseKey == null){
-            throw  new IllegalArgumentException("Must pass EXTRA_COURSE_KEY");
-        }
 
         //Initialize Database
-        mCourseReference = FirebaseDatabase.getInstance().getReference().child("courses").child(mCourseKey);
+        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201830").child("SUBJECTS").child("BIOC").child("COURSES").child("31211");
 
-        //Initialize text view
-        mCourseCode = findViewById(R.id.course_code);
-        mCourseName = findViewById(R.id.course_name);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        tableLayout = (TableLayout) this.findViewById(R.id.tableLayout);
+        id = new TextView(this);
+        tableRow = new TableRow(this);
 
-        //Event listener for loading data from firebase.
-        ValueEventListener courseListener = new ValueEventListener() {
+        TableRow header = new TableRow(this);
+
+        TextView h1 = new TextView(this);
+        h1.setText(String.valueOf("      CRN      "));
+        h1.setBackgroundColor(0xffABCDEF);
+        h1.setPadding(32, 32, 32, 32);
+
+        TextView h2 = new TextView(this);
+        h2.setText(String.valueOf("       Name       "));
+        h2.setBackgroundColor(0xffABCDEF);
+        h2.setPadding(32, 32, 32, 32);
+
+        TextView h3 = new TextView(this);
+        h3.setText(String.valueOf("     Register    "));
+        h3.setBackgroundColor(0xffABCDEF);
+        h3.setPadding(32, 32, 32, 32);
+
+        header.addView(h1);
+        header.addView(h2);
+        header.addView(h3);
+        tableLayout.addView(header);
+
+        mCourseReference.addValueEventListener( new ValueEventListener() {
+            //Reading from database
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Get the course object and use the values to update the UI
-                Courses course = dataSnapshot.getValue(Courses.class);
-                //Setting the textviews from the object values
-                mCourseCode.setText(course.GetCode());
-                mCourseName.setText(course.GetCname());
-            }
-        //onCancelled method for cancel the loading process
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadCourse: onCancelled", databaseError.toException());
-                Toast.makeText(ReadCourses.this, "Failed to load course.", Toast.LENGTH_SHORT).show();
-            }
-        };
-        mCourseReference.addValueEventListener(courseListener);
-        mCourseListener = courseListener;
+
+                Courses course = new Courses();
+                course.SetNam(dataSnapshot.child("course_name").getValue().toString());
+                    course.SetNo(dataSnapshot.child("course_code").getValue().toString());
+                list.add(course);
+              for(int i=0; i<list.size(); i++){
+                    addRow(list.get(i));
+                     }
+                }
+
+                //onCancelled method for cancel the loading process
+                @Override
+                public void onCancelled (DatabaseError databaseError){
+                }
+
+        });
+
     }
 
-    @Override
-    public void onStop(){
-        super.onStop();
-        if(mCourseListener != null)
-            mCourseReference.removeEventListener(mCourseListener);
+    public void addRow(Courses c){
+        TableRow tableRow = new TableRow(this);
+        TextView id = new TextView(this);
+        TextView name = new TextView(this);
+
+        id.setText(String.valueOf("  "+c.GetCode()+" "));
+        id.setPadding(32, 32, 32, 32);
+        id.setBackgroundColor(0xffff346d);
+        id.setTextColor(Color.WHITE);
+
+
+        name.setText(String.valueOf(c.GetCname()));
+        name.setPadding(32, 32, 32, 32);
+        name.setBackgroundColor(0xffFFDBAC);
+
+        Button button = new Button(this);
+        button.setText("Add");
+
+        tableRow.addView(id);
+        tableRow.addView(name);
+        tableRow.addView(button);
+        tableLayout.addView(tableRow);
     }
 }
