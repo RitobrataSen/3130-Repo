@@ -39,6 +39,7 @@ public class ReadCourses extends AppCompatActivity {
     //defined the ArrayList for Courses object
     public ArrayList<Courses> list = new ArrayList<Courses>();
 
+    //defined table display variables
     public TableLayout tableLayout;
     public TableRow tableRow;
     public TextView id;
@@ -48,11 +49,12 @@ public class ReadCourses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_load);
 
-        //Initialize Database, this reference is made for the demo which only get one course to display
+        //Initialize Database
+        //Setting the path of the database to read
         mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201830").child("SUBJECTS").child("CSCI").child("COURSES");
 
         //Defined variables for the display table
-        tableLayout = (TableLayout) this.findViewById(R.id.tableLayout);
+        tableLayout =  this.findViewById(R.id.tableLayout);
         id = new TextView(this);
         tableRow = new TableRow(this);
         TableRow header = new TableRow(this);
@@ -89,6 +91,7 @@ public class ReadCourses extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Read all the course under the database reference
+                //This for loop will keep reading data as long as there are unread value
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     //using set methods to change the value of the course and add it to the list
                     Courses course = new Courses();
