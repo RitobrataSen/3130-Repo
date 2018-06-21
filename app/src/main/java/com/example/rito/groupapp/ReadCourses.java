@@ -105,7 +105,7 @@ public class ReadCourses extends AppCompatActivity {
                     addRow(list.get(i));
                 }
             }
-            
+
             //onCancelled method for cancel the loading process
             @Override
             public void onCancelled (DatabaseError databaseError){
