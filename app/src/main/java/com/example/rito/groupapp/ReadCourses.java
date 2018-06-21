@@ -36,9 +36,6 @@ import java.util.*;
 public class ReadCourses extends AppCompatActivity {
     public DatabaseReference mCourseReference;
 
-    public TextView courseCode;
-    public TextView courseName;
-
     //defined the ArrayList for Courses object
     public ArrayList<Courses> list = new ArrayList<Courses>();
 
