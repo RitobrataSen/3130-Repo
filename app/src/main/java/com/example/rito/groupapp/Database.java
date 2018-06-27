@@ -67,7 +67,7 @@ public class Database{
 	public void findCRN(int crn);
 	
 	public void findCourse(String[] course_code);
-	public void findCourse(String course_code);`
+	public void findCourse(String course_code);
 	
 	public void findSubjects(String[] subject_code);
 	public void findSubjects(String subject_code);
