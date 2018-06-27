@@ -21,16 +21,19 @@
         </activity>
         <activity
             android:name=".MainContentLogin"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".ReadCourses"
+            android:parentActivityName=".MainContentLogin">
 
-        <activity android:name=".ReadCourses"
-            android:parentActivityName=".MainContentLogin" >
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainContentLogin" />
         </activity>
+        <activity
+            android:name=".Filtration.Filter"
+            android:label="@string/title_activity_filter"></activity>
     </application>
 
 </manifest>

@@ -6,4 +6,5 @@
     <string name="Button_Login">Login</string>
     <string name="Button_register">Register</string>
     <string name="Password">Enter Password</string>
+    <string name="title_activity_filter">Filter</string>
 </resources>
