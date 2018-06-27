@@ -20,7 +20,7 @@ public class ReadCourse {
 
 
 //    constructor method
-    public ReadCourse(String url,){
+    public ReadCourse(String url){
         mr = FirebaseDatabase.getInstance().getReferenceFromUrl(url);
 
     }
@@ -34,12 +34,13 @@ public class ReadCourse {
         return this.url;
     }
     public void getSummer(){
-
+        mr = mr.child("TERMS").child("201830");
     }
     public void getFall(){
-
+        mr = mr.child("TERMS").child("201910");
     }
     public void getWinter(){
-
+        mr = mr.child("TERMS").child("201920");
     }
+
 }

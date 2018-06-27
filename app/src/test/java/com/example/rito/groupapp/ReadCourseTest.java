@@ -24,5 +24,17 @@ public class ReadCourseTest {
         Assert.assertTrue(rc1.getDataBaseUrl().matches(e));
         testNum++;
     }
+    @Test
+    public void check_GetFall(){
+
+    }
+    @Test
+    public void check_GetSummer(){
+
+    }
+    @Test
+    public void check_GetWinter(){
+
+    }
 
 }

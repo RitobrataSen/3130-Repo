@@ -13,7 +13,7 @@ public class Filter extends Activity implements AdapterView.OnItemSelectedListen
 
     private Spinner sp;
     private String []terms = {"Fall","Winter","Summer","All"};
-
+    ReadCourse rc = new ReadCourse(("https://group-10-9598f.firebaseio.com");
     private DatabaseReference mr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +32,15 @@ public class Filter extends Activity implements AdapterView.OnItemSelectedListen
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position==0){
-
+            rc.getFall();
         }
         if(position==1){
-
+            rc.getWinter();
         }
         if(position==2){
-
+            rc.getSummer();
         }
-        if(position==3){
 
-        }
 
     }
 
