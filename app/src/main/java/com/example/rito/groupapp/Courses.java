@@ -79,6 +79,7 @@ public class Courses {
     public String GetMax() {
         return this.max;
     }
+
     public String GetCode(){
         return this.course_code;
     }

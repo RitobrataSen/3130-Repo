@@ -8,9 +8,10 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-
     Button loginButton;
     Button registerButton;
+    Button calendarView;
+
     Button Submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +20,18 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.login_button);
         registerButton = findViewById(R.id.register_button);
-
+        calendarView = findViewById(R.id.view_calendar);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
               //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
+            }
+        });
+        calendarView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, CalendarView.class));
+                //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
             }
         });
 
