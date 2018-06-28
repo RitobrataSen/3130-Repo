@@ -1,16 +1,10 @@
 package com.example.rito.groupapp;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,17 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import android.graphics.Color;
 import android.widget.TableRow;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
 import java.util.ArrayList;
-
-import java.util.*;
 
 public class ReadCourses extends AppCompatActivity {
     public DatabaseReference mCourseReference;
@@ -44,6 +28,7 @@ public class ReadCourses extends AppCompatActivity {
     public TableRow tableRow;
     public TextView id;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +36,7 @@ public class ReadCourses extends AppCompatActivity {
 
         //Initialize Database
         //Setting the path of the database to read
-        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201830").child("SUBJECTS").child("CSCI").child("COURSES");
+        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
         //Defined variables for the display table
         tableLayout =  this.findViewById(R.id.tableLayout);
@@ -137,5 +122,18 @@ public class ReadCourses extends AppCompatActivity {
 
         tableLayout.addView(tableRow);
 
+    }
+    public void getFall(){
+        //mCourseReference = new DatabaseReference();
+        mCourseReference = mCourseReference.child("TERMS").child("201830");
+    }
+    public void getSummer(){
+        //mCourseReference = new DatabaseReference;
+        mCourseReference = mCourseReference.child("TERMS").child("201910");
+
+    }
+    public void getWinter(){
+        //mCourseReference = new DatabaseReference;
+        mCourseReference = mCourseReference.child("TERMS").child("201920");
     }
 }

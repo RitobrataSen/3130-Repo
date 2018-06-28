@@ -33,7 +33,13 @@
         </activity>
         <activity
             android:name=".Filtration.Filter"
-            android:label="@string/title_activity_filter"></activity>
+            android:label="@string/title_activity_filter">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
