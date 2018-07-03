@@ -35,15 +35,15 @@ public class Filter extends Activity implements AdapterView.OnItemSelectedListen
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position==0){
-            
+        if(position==1){
+
               startActivity(new Intent(Filter.this, ReadCourseFall.class));
         }
-        if(position==1){
+        if(position==2){
 
             startActivity(new Intent(Filter.this, ReadCourseWinter.class));
         }
-        if(position==2){
+        if(position==3){
 
             startActivity(new Intent(Filter.this, ReadCourseSummer.class));
 

@@ -36,7 +36,7 @@ public class ReadCourses extends AppCompatActivity {
 
         //Initialize Database
         //Setting the path of the database to read
-        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
+        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201830");;
 
         //Defined variables for the display table
         tableLayout =  this.findViewById(R.id.tableLayout);
@@ -123,18 +123,6 @@ public class ReadCourses extends AppCompatActivity {
         tableLayout.addView(tableRow);
 
     }
-    public void getFall(){
-        //mCourseReference = new DatabaseReference();
 
-        mCourseReference = mCourseReference.child("TERMS").child("201830");
-    }
-    public void getSummer(){
-        //mCourseReference = new DatabaseReference;
-        mCourseReference = mCourseReference.child("TERMS").child("201910");
 
-    }
-    public void getWinter(){
-        //mCourseReference = new DatabaseReference;
-        mCourseReference = mCourseReference.child("TERMS").child("201920");
-    }
 }
