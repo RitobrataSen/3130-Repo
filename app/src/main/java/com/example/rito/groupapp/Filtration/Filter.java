@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.*;
 
 import com.example.rito.groupapp.R;
+import com.example.rito.groupapp.Filtration.ReadCourseFall;
+import com.example.rito.groupapp.Filtration.ReadCourseWinter;
 import com.example.rito.groupapp.ReadCourses;
 import com.google.firebase.database.DatabaseReference;
 
@@ -15,8 +17,6 @@ public class Filter extends Activity implements AdapterView.OnItemSelectedListen
 
     private Spinner sp;
     private String []terms = {"Fall","Winter","Summer","All"};
-
-    private ReadCourses rc = new ReadCourses();
 
 
     @Override
@@ -36,17 +36,16 @@ public class Filter extends Activity implements AdapterView.OnItemSelectedListen
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position==0){
-            rc.getFall();
-
-              startActivity(new Intent(Filter.this, ReadCourses.class));
+            
+              startActivity(new Intent(Filter.this, ReadCourseFall.class));
         }
         if(position==1){
-            rc.getWinter();
-            startActivity(new Intent(Filter.this, ReadCourses.class));
+
+            startActivity(new Intent(Filter.this, ReadCourseWinter.class));
         }
         if(position==2){
-            rc.getSummer();
-            startActivity(new Intent(Filter.this, ReadCourses.class));
+
+            startActivity(new Intent(Filter.this, ReadCourseSummer.class));
 
         }
 

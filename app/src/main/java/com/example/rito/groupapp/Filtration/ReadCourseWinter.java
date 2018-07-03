@@ -1,4 +1,6 @@
-package com.example.rito.groupapp;
+package com.example.rito.groupapp.Filtration;
+
+import com.example.rito.groupapp.*;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +19,7 @@ import android.widget.TableRow;
 
 import java.util.ArrayList;
 
-public class ReadCourses extends AppCompatActivity {
+public class ReadCourseWinter extends AppCompatActivity {
     public DatabaseReference mCourseReference;
 
     //defined the ArrayList for Courses object

@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".MainContentLogin"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".ReadCourses"
             android:parentActivityName=".MainContentLogin">
@@ -36,10 +36,13 @@
             android:label="@string/title_activity_filter">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".Filtration.ReadCourseFall" />
+        <activity android:name=".Filtration.ReadCourseWinter" />
+        <activity android:name=".Filtration.ReadCourseSummer"></activity>
     </application>
 
 </manifest>
