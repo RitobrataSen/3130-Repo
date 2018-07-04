@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.view.*;
 
 public class tool_bar_activity extends AppCompatActivity {
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.toolbar_main);
-
+        setContentView(R.layout.toolbar_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
     }
@@ -37,7 +38,6 @@ public class tool_bar_activity extends AppCompatActivity {
             setContentView(R.layout.feature_incomplete_page);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
