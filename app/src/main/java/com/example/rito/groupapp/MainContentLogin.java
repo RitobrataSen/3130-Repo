@@ -76,6 +76,7 @@ public class MainContentLogin extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(MainContentLogin.this, ReadCourses.class));
+                                    MainActivity.currentUser = currentUser;
                                 }
 
                                 else {

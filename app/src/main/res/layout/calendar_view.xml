@@ -79,7 +79,7 @@
             <TextView
                 android:id="@+id/m_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -89,7 +89,7 @@
             <TextView
                 android:id="@+id/t_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -98,7 +98,7 @@
             <TextView
                 android:id="@+id/w_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -107,7 +107,7 @@
             <TextView
                 android:id="@+id/r_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -115,7 +115,7 @@
             <TextView
                 android:id="@+id/f_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -130,7 +130,7 @@
             <TextView
                 android:id="@+id/m1_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -140,7 +140,7 @@
             <TextView
                 android:id="@+id/t1_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -149,7 +149,7 @@
             <TextView
                 android:id="@+id/w1_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -158,7 +158,7 @@
             <TextView
                 android:id="@+id/r1_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -166,7 +166,7 @@
             <TextView
                 android:id="@+id/f1_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -181,7 +181,7 @@
             <TextView
                 android:id="@+id/m2_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -191,7 +191,7 @@
             <TextView
                 android:id="@+id/t2_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -200,7 +200,7 @@
             <TextView
                 android:id="@+id/w2_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -209,7 +209,7 @@
             <TextView
                 android:id="@+id/r2_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
@@ -217,11 +217,61 @@
             <TextView
                 android:id="@+id/f2_body"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/cell_shape"
                 android:padding="5dp"
                 android:text=""
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tableRow5" >
+
+                <TextView
+                    android:id="@+id/m3_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                <TextView
+                    android:id="@+id/t3_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <TextView
+                    android:id="@+id/w3_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <TextView
+                    android:id="@+id/r3_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <TextView
+                    android:id="@+id/f3_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
             </TableRow>
         </TableLayout>
     </HorizontalScrollView>
