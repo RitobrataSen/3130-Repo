@@ -39,7 +39,7 @@ public class ReadCourseFall extends AppCompatActivity {
 
         //Initialize Database
         //Setting the path of the database to read
-        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201830");;
+        mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201910").child("subjects").child("CSCI");;
 
         //Defined variables for the display table
         tableLayout =  this.findViewById(R.id.tableLayout);
