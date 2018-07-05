@@ -1,20 +1,23 @@
 package com.example.rito.groupapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
+import java.util.Set;
 
 
 public class CalendarView extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class CalendarView extends AppCompatActivity {
     public TextView wednesday[] = new TextView[courseListSize];
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
+    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +44,28 @@ public class CalendarView extends AppCompatActivity {
         c.SetStime("3:30");
         c.SetEtime("4:30");
 
-        displayCourse(monday[1],c);
+        displayCourse(monday[1], c);
+
+        for(String x: MainActivity.currentUser.getRegistration().keySet()) {
+            Log.d("Shane",MainActivity.currentUser.getRegistration().get(x).toString());
+//            Query courseSchedule = databaseRef.child("COURSE_SCHEDULE").child();
+//            courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.exists())
+//                        for (DataSnapshot course_sched : dataSnapshot.getChildren())
+//                            if (course_sched.child("crn").equals("10677"))
+//
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                }
+//            });
+      }
+    }
+
 
 
 
@@ -73,7 +98,7 @@ public class CalendarView extends AppCompatActivity {
 //            }
 //        });
 
-    }
+
 
     public void displayCourse(TextView selected, Courses course){
         selected.setText(course.GetCname()+"\n"+course.GetCode()+"\n"+course.GetSt()+"-"+course.GetEt());
