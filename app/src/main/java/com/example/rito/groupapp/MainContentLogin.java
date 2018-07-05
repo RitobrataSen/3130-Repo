@@ -3,6 +3,7 @@ package com.example.rito.groupapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+/**/
 public class MainContentLogin extends AppCompatActivity {
 
     Button loginButton;
@@ -62,12 +64,7 @@ public class MainContentLogin extends AppCompatActivity {
                         System.out.println(dataSnapshot.getChildrenCount());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
-                                currentUser = new User();
-                                currentUser.setPassword(student.child("password").getValue().toString());
-                                currentUser.setEmail(student.child("email").getValue().toString());
-                                //currentUser.setEnrollment(Integer.parseInt(student.child("enrollment").getValue().toString()));
-                                currentUser.setUsername(student.child("username").getValue().toString());
-
+                                User currentUser = (User) student.getValue(User.class);
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }

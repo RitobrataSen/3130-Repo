@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class User {
 
     //fields
-    private String uid;
+    //private String uid;
     private String email;
     private String username;
     private String password;
@@ -19,8 +19,8 @@ public class User {
     public User() {
     }
 
-    public User(String u, String e, String un, String p, HashMap<String, Boolean> re) {
-        this.uid = u;
+    public User(/*String u, */String e, String un, String p, HashMap<String, Boolean> re) {
+        //this.uid = u;
         this.email = e;
         this.username = un;
         this.password = p;
@@ -30,13 +30,13 @@ public class User {
 
     //methods
 
-    public String getUid() {return this.uid;}
+    //public String getUid() {return this.uid;}
     public String getEmail() {return this.email;}
     public String getUsername() {return this.username;}
     public String getPassword() {return this.password;}
     public HashMap<String, Boolean> getRegistration(){return this.registration;}
 
-    public void setUid(String u) {this.uid = u;}
+    //public void setUid(String u) {this.uid = u;}
     public void setEmail(String e) {this.email = e;}
     public void setUsername(String un) {this.username = un;}
     public void setPassword(String p) {this.password = p;}
@@ -47,10 +47,14 @@ public class User {
         this.registration.putAll(re);
     }
 
+    public String toString(){
+        return String.format("%s %s %s", this.email, this.username, this.password);
+    }
+
     @Exclude
     public HashMap<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("uid", this.uid);
+        //result.put("uid", this.uid);
         result.put("email", this.email);
         result.put("username", this.username);
         result.put("password", this.password);
