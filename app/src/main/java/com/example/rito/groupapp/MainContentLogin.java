@@ -21,7 +21,7 @@ public class MainContentLogin extends AppCompatActivity {
     EditText userEmail;
     EditText userPassword;
     Button Submit;
-    User currentUser;
+    public User currentUser;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
     /*
@@ -91,15 +91,8 @@ public class MainContentLogin extends AppCompatActivity {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
-
                 });
-
             }
         });
-
-
-
-
-
     }
 }
