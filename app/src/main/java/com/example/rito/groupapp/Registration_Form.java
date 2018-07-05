@@ -26,17 +26,14 @@ public class Registration_Form extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration__form);
-        //initiated the test view
         user = (EditText)findViewById(R.id.user_name);
         password = (EditText)findViewById(R.id.password);
         email = (EditText)findViewById(R.id.email);
-
-
         submit = findViewById(R.id.submit_button);
 
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                //get the user info into the list
+
                 String name_info = user.getText().toString();
                 String password_info = password.getText().toString();
                 String email_info = email.getText().toString();
@@ -46,13 +43,10 @@ public class Registration_Form extends AppCompatActivity {
                 newUser.setPassword(password_info);
                 newUser.setUsername(name_info);
 
-
                 String x = databaseRef.push().getKey();
                 databaseRef.child(x).setValue(newUser);
             }
         });
-
-
 
     }
 }
