@@ -1,14 +1,9 @@
 package com.example.rito.groupapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,15 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-
 public class CalendarView extends AppCompatActivity {
 
-    public DatabaseReference courseReference;
-    ArrayList<String> temp = new ArrayList<>();
-    Courses currentCourse;
     private int courseListSize = 4;
     public TextView monday[] = new TextView[courseListSize];
     public TextView tuesday[] = new TextView[courseListSize];
@@ -40,68 +28,56 @@ public class CalendarView extends AppCompatActivity {
 
         populateTextViewLists();
 
-        Courses c = new Courses("CSCI3110", "Computer Science Class", "", "", "", "");
-        c.SetStime("3:30");
-        c.SetEtime("4:30");
+        for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
 
-        displayCourse(monday[1], c);
+            //Recall, this wont work unless a user is signed in.
+            String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
+            Query courseSchedule = databaseRef.child("COURSE_SCHEDULE").child(crn);
+            courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        dataSnapshot.getChildren();
+                        Courses toAdd = new Courses();
+                        toAdd.SetNo(dataSnapshot.child("course_code").getValue().toString());
+                        toAdd.SetNam(dataSnapshot.child("course_name").getValue().toString());
+                        toAdd.SetEtime(dataSnapshot.child("end_time").getValue().toString());
+                        toAdd.SetStime(dataSnapshot.child("start_time").getValue().toString());
 
-        for(String x: MainActivity.currentUser.getRegistration().keySet()) {
-            Log.d("Shane",MainActivity.currentUser.getRegistration().get(x).toString());
-//            Query courseSchedule = databaseRef.child("COURSE_SCHEDULE").child();
-//            courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.exists())
-//                        for (DataSnapshot course_sched : dataSnapshot.getChildren())
-//                            if (course_sched.child("crn").equals("10677"))
-//
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//                }
-//            });
+                        if(dataSnapshot.child("mon").getValue().toString().equals("1")){
+                            displayCourse(monday, toAdd);
+                        }
+                        if(dataSnapshot.child("tue").getValue().toString().equals("1")){
+                            displayCourse(tuesday, toAdd);
+                        }
+                        if(dataSnapshot.child("wed").getValue().toString().equals("1")){
+                            displayCourse(wednesday, toAdd);
+                        }
+                        if(dataSnapshot.child("thu").getValue().toString().equals("1")){
+                            displayCourse(thursday, toAdd);
+                        }
+                        if(dataSnapshot.child("fri").getValue().toString().equals("1")){
+                            displayCourse(friday, toAdd);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
       }
     }
 
 
-
-
-
-
-        courseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201910").child("SUBJECTS").child("CSCI").child("COURSES");
-        courseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot csciCourseSnapshot : snapshot.getChildren()) {
-                        if (csciCourseSnapshot.child("10677").child("course_code").getValue().toString().equals("CSCI1105")) {
-                            //(String num, String name, String Sd, String Ed, String Ins, String max)
-                            //currentCourse = new Courses(csciCourseSnapshot.child("10677").getValue().toString(), csciCourseSnapshot.child("course_name").getValue().toString(),
-                            //                            csciCourseSnapshot.child("start_date").getValue().toString(), csciCourseSnapshot.child("end_date").getValue().toString(),
-                            //                            csciCourseSnapshot.child("instructor").getValue().toString(), csciCourseSnapshot.child("max").getValue().toString());
-                            currentCourse = new Courses();
-                            currentCourse.SetNam(csciCourseSnapshot.child("10677").child("course_name").getValue().toString());
-
-
-
-                        }
-                    }
-               }
-           }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("The read failed: ", databaseError.getMessage());
+    public void displayCourse(TextView[] selected, Courses course){
+        for(int i = 0; i < courseListSize; i++) {
+            if(selected[i].getText().length() == 0) {
+                selected[i].setText(course.GetCname() + "\n" + course.GetCode() + "\n" + course.GetSt() + "-" + course.GetEt());
+                break;
             }
-        });
+        }
 
-
-
-    public void displayCourse(TextView selected, Courses course){
-        selected.setText(course.GetCname()+"\n"+course.GetCode()+"\n"+course.GetSt()+"-"+course.GetEt());
     }
 
     public void populateTextViewLists(){
@@ -129,5 +105,9 @@ public class CalendarView extends AppCompatActivity {
         friday[1] = findViewById(R.id.f1_body);
         friday[2] = findViewById(R.id.f2_body);
         friday[3] = findViewById(R.id.f3_body);
+    }
+
+    public int getCourseListSize(){
+        return courseListSize;
     }
 }
