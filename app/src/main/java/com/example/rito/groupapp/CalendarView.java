@@ -45,33 +45,33 @@ public class CalendarView extends AppCompatActivity {
 
 
 
-//        courseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201910").child("SUBJECTS").child("CSCI").child("COURSES");
-//        courseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//
-//                if (snapshot.exists()) {
-//                    for (DataSnapshot csciCourseSnapshot : snapshot.getChildren()) {
-//                        if (csciCourseSnapshot.child("10677").child("course_code").getValue().toString().equals("CSCI1105")) {
-//                            //(String num, String name, String Sd, String Ed, String Ins, String max)
-//                            //currentCourse = new Courses(csciCourseSnapshot.child("10677").getValue().toString(), csciCourseSnapshot.child("course_name").getValue().toString(),
-//                            //                            csciCourseSnapshot.child("start_date").getValue().toString(), csciCourseSnapshot.child("end_date").getValue().toString(),
-//                            //                            csciCourseSnapshot.child("instructor").getValue().toString(), csciCourseSnapshot.child("max").getValue().toString());
-//                            currentCourse = new Courses();
-//                            currentCourse.SetNam(csciCourseSnapshot.child("10677").child("course_name").getValue().toString());
-//
-//
-//
-//                        }
-//                    }
-//               }
-//           }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.e("The read failed: ", databaseError.getMessage());
-//            }
-//        });
+
+        courseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201910").child("SUBJECTS").child("CSCI").child("COURSES");
+        courseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot csciCourseSnapshot : snapshot.getChildren()) {
+                        if (csciCourseSnapshot.child("10677").child("course_code").getValue().toString().equals("CSCI1105")) {
+                            //(String num, String name, String Sd, String Ed, String Ins, String max)
+                            //currentCourse = new Courses(csciCourseSnapshot.child("10677").getValue().toString(), csciCourseSnapshot.child("course_name").getValue().toString(),
+                            //                            csciCourseSnapshot.child("start_date").getValue().toString(), csciCourseSnapshot.child("end_date").getValue().toString(),
+                            //                            csciCourseSnapshot.child("instructor").getValue().toString(), csciCourseSnapshot.child("max").getValue().toString());
+                            currentCourse = new Courses();
+                            currentCourse.SetNam(csciCourseSnapshot.child("10677").child("course_name").getValue().toString());
+
+
+
+                        }
+                    }
+               }
+           }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("The read failed: ", databaseError.getMessage());
+            }
+        });
 
     }
 
