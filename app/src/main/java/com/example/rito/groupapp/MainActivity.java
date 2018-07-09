@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     Button registerButton;
-    Button logout;
 
 
     @Override
