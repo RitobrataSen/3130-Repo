@@ -31,11 +31,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainContentLogin" />
         </activity>
-
-        <activity
-            android:name=".CourseRegistration">
-            android:label="Registration">
-        </activity>
     </application>
 
 </manifest>

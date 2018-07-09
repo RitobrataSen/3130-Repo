@@ -1,10 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.rito.groupapp.MainActivity">
+    tools:context="example.javatpoint.com.optionmenu.MainActivity">
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/go_to_course"
+        android:title="@string/to_course_view" />
+    <item
+        android:id="@+id/go_to_calender"
+        android:checkable="false"
+        android:title="@string/to_Calender_view" />
+    <item
+        android:id="@+id/log_out"
+        android:checkable="false"
+        android:title="@string/log_out_option" />
 </menu>

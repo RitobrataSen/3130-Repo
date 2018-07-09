@@ -28,11 +28,13 @@ public class ReadCourses extends AppCompatActivity {
     public TableLayout tableLayout;
     public TableRow tableRow;
     public TextView id;
+    public Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_load);
+
 
         //Initialize Database
         //Setting the path of the database to read
@@ -44,6 +46,7 @@ public class ReadCourses extends AppCompatActivity {
         tableRow = new TableRow(this);
         TableRow header = new TableRow(this);
         TextView h1 = new TextView(this);
+        logout = findViewById(R.id.logout_button1);
 
         //create a header for the table
         //text view crn
@@ -70,6 +73,12 @@ public class ReadCourses extends AppCompatActivity {
 
         //add the table row to the table
         tableLayout.addView(header);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(ReadCourses.this, Logout_Activity.class));
+            }
+        });
 
         mCourseReference.addValueEventListener( new ValueEventListener() {
             //Reading from database
