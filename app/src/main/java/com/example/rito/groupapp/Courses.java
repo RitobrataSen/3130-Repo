@@ -91,4 +91,8 @@ public class Courses {
     public String GetEt(){
         return this.end_time;
     }
+
+    public int compareTo(Courses other){
+        return this.start_time.compareTo(other.GetSt());
+    }
 }
