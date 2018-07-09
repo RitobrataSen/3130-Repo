@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="terms.array">
+        <item>Select the term you want to register</item>
+        <item>2018 Summer</item>
+        <item>2018 Medicine</item>
+        <item>2019 Fall</item>
+        <item>2019 Winter</item>
+    </string-array>
+</resources>

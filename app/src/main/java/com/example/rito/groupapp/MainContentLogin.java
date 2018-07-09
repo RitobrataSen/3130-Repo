@@ -21,7 +21,7 @@ public class MainContentLogin extends AppCompatActivity {
     EditText userEmail;
     EditText userPassword;
     Button Submit;
-    public User currentUser;
+    User currentUser;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
     /*
@@ -75,7 +75,7 @@ public class MainContentLogin extends AppCompatActivity {
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(MainContentLogin.this, ReadCourses.class));
+                                    startActivity(new Intent(MainContentLogin.this, CourseRegistration.class));
                                 }
 
                                 else {

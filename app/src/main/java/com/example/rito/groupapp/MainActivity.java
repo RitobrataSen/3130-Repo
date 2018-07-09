@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CourseRegistration.class));
+                startActivity(new Intent(MainActivity.this, MainContentLogin.class));
               //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
             }
         });
