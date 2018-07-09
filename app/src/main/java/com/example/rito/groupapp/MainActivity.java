@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
 
 
-//        logout = findViewById(R.id.button2);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -33,11 +32,6 @@ public class MainActivity extends AppCompatActivity {
               //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
             }
         });
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this, Logout_Activity.class));
-//            }
-//        });
 
 
     }
