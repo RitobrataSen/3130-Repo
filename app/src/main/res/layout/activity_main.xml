@@ -6,6 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--<include-->
+        <!--layout="@layout/toolbar_main"-->
+        <!--/>-->
+
     <Button
         android:id="@+id/login_button"
         android:layout_width="233dp"
@@ -38,10 +42,10 @@
         app:layout_constraintVertical_bias="0.1" />
 
     <Button
-        android:id="@+id/view_calendar"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="calendar"
-        tools:layout_editor_absoluteX="257dp"
-        tools:layout_editor_absoluteY="45dp" />
+        android:text="Button"
+        tools:layout_editor_absoluteX="279dp"
+        tools:layout_editor_absoluteY="502dp" />
 </android.support.constraint.ConstraintLayout>
