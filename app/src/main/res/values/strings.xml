@@ -9,4 +9,5 @@
     <string name="to_Calender_view">Calender</string>
     <string name="to_course_view">Courses</string>
     <string name="log_out_option">Log out</string>
+    <string name="logout_action">Exit</string>
 </resources>

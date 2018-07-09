@@ -4,15 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
 
     Button loginButton;
     Button registerButton;
-    Button Submit;
-
+    Button logout;
 
 
     @Override
@@ -23,12 +25,19 @@ public class MainActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
 
 
+//        logout = findViewById(R.id.button2);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
               //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
             }
         });
+//        logout.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this, Logout_Activity.class));
+//            }
+//        });
 
 
     }

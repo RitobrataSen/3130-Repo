@@ -1,6 +1,4 @@
 package com.example.rito.groupapp;
-import java.util.ArrayList;
-import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +16,6 @@ public class Navigation_spinner extends Activity implements AdapterView.OnItemSe
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.spinner_main);
-
             sp = (Spinner)findViewById(R.id.main_spinner);
             ArrayAdapter<String>adapter = new ArrayAdapter<String>(Navigation_spinner.this,
                     android.R.layout.simple_spinner_item,terms);

@@ -2,7 +2,7 @@
     android:id="@+id/toolbar1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#060009"
+    android:background="@android:color/background_light"
     android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:visibility="visible" />
