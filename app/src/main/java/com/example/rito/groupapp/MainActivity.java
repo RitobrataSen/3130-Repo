@@ -12,6 +12,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
 
+    public static User currentUser;
+
     Button loginButton;
     Button registerButton;
     Button logout;
@@ -24,12 +26,10 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         registerButton = findViewById(R.id.register_button);
 
-
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
-              //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
+                //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
             }
         });
 

@@ -79,6 +79,7 @@ public class Courses {
     public String GetMax() {
         return this.max;
     }
+
     public String GetCode(){
         return this.course_code;
     }
@@ -89,5 +90,9 @@ public class Courses {
 
     public String GetEt(){
         return this.end_time;
+    }
+
+    public int compareTo(Courses other){
+        return this.start_time.compareTo(other.GetSt());
     }
 }
