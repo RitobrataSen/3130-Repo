@@ -5,6 +5,15 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+/**
+ * User class is used to store information about a user.
+ * In MainActivity, currentUser is of type User, and is used to populate
+ * the application views.
+ *
+ * @author  Rito, Qu, Gobii
+ * @since   07-09-18
+ */
+
 @IgnoreExtraProperties
 public class User {
 

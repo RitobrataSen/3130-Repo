@@ -1,3 +1,10 @@
+/**
+ * Courses class allows for course objects to be created from our database reference.
+ *
+ * @author  Gobii
+ * @since   06-24-18
+ */
+
 package com.example.rito.groupapp;
 
 public class Courses {

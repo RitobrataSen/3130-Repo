@@ -10,12 +10,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 /**
  * CalendarView Activity displays all courses that a student is registered for sorted by
  * day. Plans exist for expanding this to short all activities based on start time.
- * @author  Dryden and Shane
- * @since   2018-07-08
+ *
+ * @author   Dryden and Shane
+ * @since    2018-07-08
  */
 public class CalendarView extends AppCompatActivity {
 

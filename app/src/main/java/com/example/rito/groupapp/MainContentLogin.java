@@ -16,7 +16,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-/**/
+/**
+ * MainContentLogin handles user authentication to ensure that the user with
+ * the specified email exists, and that the given password matches. When this is
+ * found true, the currentUser in MainActivity is updated, and the logged-in
+ * intent is initialized.
+ *
+ * @author  Shane, Divanno, Dryden
+ * @since   07-06-18
+ */
 public class MainContentLogin extends AppCompatActivity {
 
     Button loginButton;
