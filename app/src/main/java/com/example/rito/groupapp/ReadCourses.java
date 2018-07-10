@@ -20,6 +20,12 @@ import android.widget.TableRow;
 import java.util.ArrayList;
 
 
+/**
+ * ReadCourses for reading all courses under a specific path in the firebase
+ * and display them as a table view
+ * @author Yuze Qu & Yuhao Hu
+ * @since 2018-06-20
+ */
 public class ReadCourses extends AppCompatActivity {
     public DatabaseReference mCourseReference;
 
