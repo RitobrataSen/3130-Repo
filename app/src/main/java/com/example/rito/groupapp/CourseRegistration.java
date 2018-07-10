@@ -72,6 +72,7 @@ public class CourseRegistration extends AppCompatActivity{
                                 if (max > cur) {
                                     //Checking if the current student is enrolled the entered course or not
                                     if (!dataSnapshot.child("STUDENT").child(uid).child("registration").child(input_crn).exists()) {
+                                        //Checking if the number of courses that current student are taking right now is not more than 5
                                         if(dataSnapshot.child("STUDENT").child(uid).child("registration").getChildrenCount() < 5) {
                                             Toast.makeText(getApplicationContext(), "Succeeded! " + input_crn + " is added", Toast.LENGTH_LONG).show();
                                             cur++;
@@ -79,28 +80,29 @@ public class CourseRegistration extends AppCompatActivity{
                                             mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
                                         }
                                         //case for student enroll more than 5 courses
-                                        else{
-                                            Toast.makeText(getApplicationContext(),"You have 5 courses enrolled for this term, please talk to the advisor for taking more than 5 courses",Toast.LENGTH_LONG).show();
-                                        }
+                                        else
+                                            Toast.makeText(getApplicationContext(),"You are not allowed to take more than 5 courses",
+                                                    Toast.LENGTH_LONG).show();
                                     }
                                     //case for duplicate enrollment
-                                    else {
-                                        Toast.makeText(getApplicationContext(),input_crn + " is already enrolled to you list, please do not enroll same course",Toast.LENGTH_LONG).show();
-                                    }
+                                    else
+                                        Toast.makeText(getApplicationContext(),input_crn + " is already enrolled in your list, please do not enroll same course",
+                                                Toast.LENGTH_LONG).show();
                                 }
                                 //case for course is full
-                                else{
-                                    Toast.makeText(getApplicationContext(), input_crn + " is full now, please contact the instructor to add you into the waiting list", Toast.LENGTH_LONG).show();
-                                }
+                                else
+                                    Toast.makeText(getApplicationContext(), input_crn + " is full now, please contact the instructor to add you into the waiting list",
+                                            Toast.LENGTH_LONG).show();
                             }
                             //case for the inputted CRN is not exists
-                            else {
-                                Toast.makeText(getApplicationContext(), input_crn + " is not exist, please try again!", Toast.LENGTH_LONG).show();
-                            }
+                            else
+                                Toast.makeText(getApplicationContext(), input_crn + " is not exist, please try again!",
+                                        Toast.LENGTH_LONG).show();
                         }
+                        //case for term is not selected
                         else
-                            //alert the users that term is not selected
-                            Toast.makeText(getApplicationContext(), "Please select a term", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Please select a term",
+                                    Toast.LENGTH_LONG).show();
                     }
 
                     @Override
