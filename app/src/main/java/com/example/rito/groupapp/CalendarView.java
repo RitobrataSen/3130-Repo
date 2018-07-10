@@ -1,8 +1,11 @@
 package com.example.rito.groupapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Button;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +29,7 @@ public class CalendarView extends AppCompatActivity {
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
     public Courses courseList[];
+    public Button course_button;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
     @Override
@@ -33,6 +37,14 @@ public class CalendarView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
 
+
+        course_button = findViewById(R.id.course_button);
+
+        course_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(CalendarView.this, ReadCourses.class));
+            }
+        });
         populateTextViewLists();
 
         if(MainActivity.currentUser != null) {
@@ -148,6 +160,8 @@ public class CalendarView extends AppCompatActivity {
         friday[2].setText("");
         friday[3].setText("");
     }
+
+
 
     public int getCourseListSize(){
         return courseListSize;

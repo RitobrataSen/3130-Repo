@@ -10,4 +10,6 @@
     <string name="to_course_view">Courses</string>
     <string name="log_out_option">Log out</string>
     <string name="logout_action">Exit</string>
+    <string name="button_cal">Cal</string>
+    <string name="button_course">Courses</string>
 </resources>
