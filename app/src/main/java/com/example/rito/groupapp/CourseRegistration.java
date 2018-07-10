@@ -15,6 +15,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * CourseRegistration for adding course into student's registration list
+ * or remove course from student's registration list
+ * It is able to check if the inputted crn is exists or not,
+ * the course is full or not, the student is taking more than 5 courses or not,
+ * and the student is already taking it or not.
+ * @author Yuhao Hu
+ * @since 2018-7-10
+ */
 public class CourseRegistration extends AppCompatActivity{
     private DatabaseReference mDatabase;
     private Button add,drop;
