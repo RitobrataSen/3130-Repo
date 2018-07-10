@@ -1,3 +1,19 @@
+
+/*
+Java class for Registration activity.
+
+It links with firebase, create custom user object and update it to the daatbase.
+
+This is a child activity of main activity.
+
+Layout xml: activity_registration_form.xml
+additional drawable: background_color_bry.xml
+
+Authour: Yuze Divannno
+Last Modified: July 6th, 2018
+ */
+
+
 package com.example.rito.groupapp;
 
 import android.content.Intent;
@@ -43,8 +59,7 @@ public class Registration_Form extends AppCompatActivity {
                 newUser.setPassword(password_info);
                 newUser.setUsername(name_info);
 
-                String x = databaseRef.push().getKey();
-                databaseRef.child(x).setValue(newUser);
+                databaseRef.child(name_info).setValue(newUser);
             }
         });
 
