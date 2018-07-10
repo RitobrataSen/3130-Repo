@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, Registration_Form.class));
+            }
+        });
 
     }
 }
