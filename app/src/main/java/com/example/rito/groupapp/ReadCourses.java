@@ -44,11 +44,13 @@ public class ReadCourses extends AppCompatActivity {
     public TableRow tableRow;
     public TextView id;
     public Button logout;
+    public Button cal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_load);
+
 
 
         //Initialize Database
@@ -62,6 +64,7 @@ public class ReadCourses extends AppCompatActivity {
         TableRow header = new TableRow(this);
         TextView h1 = new TextView(this);
         logout = findViewById(R.id.logout_button1);
+        cal = findViewById(R.id.cal_button);
 
         //create a header for the table
         //text view crn
@@ -92,6 +95,11 @@ public class ReadCourses extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivity(new Intent(ReadCourses.this, Logout_Activity.class));
+            }
+        });
+        cal.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(ReadCourses.this, CalendarView.class));
             }
         });
 
