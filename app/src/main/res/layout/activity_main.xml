@@ -6,6 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--<include-->
+        <!--layout="@layout/toolbar_main"-->
+        <!--/>-->
+
     <Button
         android:id="@+id/login_button"
         android:layout_width="233dp"
@@ -36,4 +40,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button"
         app:layout_constraintVertical_bias="0.1" />
+
 </android.support.constraint.ConstraintLayout>

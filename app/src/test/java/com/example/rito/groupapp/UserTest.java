@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.HashMap;
+
 
 @RunWith(JUnit4.class)
 
@@ -14,7 +16,10 @@ public class UserTest {
 
     private static int testNum=0;
 
-    private User user1 = new User("Hello@gmail.com",0,"password","Ritobrata");
+    HashMap<String, Boolean> regist = new HashMap<>();
+
+    private User user1 = new User("Hello@gmail.com","Ritobrata","password", regist);
+
 
         @Test
         public void checkSet_GetUserName(){
@@ -36,13 +41,6 @@ public class UserTest {
             String pass= "asdfgh";
             user1.setPassword(pass);
             Assert.assertTrue(user1.getPassword().matches(pass));
-            testNum++;
-        }
-        @Test
-        public void checkSet_GetEnrol(){
-            int enrol =5;
-            user1.setEnrollment(enrol);
-            Assert.assertTrue(user1.getEnrollment() ==(enrol));
             testNum++;
         }
 
