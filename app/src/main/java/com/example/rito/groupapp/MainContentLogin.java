@@ -62,12 +62,7 @@ public class MainContentLogin extends AppCompatActivity {
                         System.out.println(dataSnapshot.getChildrenCount());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
-                                currentUser = new User();
-                                currentUser.setPassword(student.child("password").getValue().toString());
-                                currentUser.setEmail(student.child("email").getValue().toString());
-                                //currentUser.setEnrollment(Integer.parseInt(student.child("enrollment").getValue().toString()));
-                                currentUser.setUsername(student.child("username").getValue().toString());
-
+                                User currentUser = (User) student.getValue(User.class);
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
@@ -75,7 +70,8 @@ public class MainContentLogin extends AppCompatActivity {
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(MainContentLogin.this, ReadCourses.class));
+                                    startActivity(new Intent(MainContentLogin.this, CourseRegistration.class));
+                                    MainActivity.currentUser = currentUser;
                                 }
 
                                 else {

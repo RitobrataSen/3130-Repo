@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class CourseRegistration extends AppCompatActivity{
-    public User currentUser;
     private DatabaseReference mDatabase;
     private Button add,drop;
     private EditText crn;
@@ -36,8 +35,8 @@ public class CourseRegistration extends AppCompatActivity{
         add = findViewById(R.id.add);
         drop = findViewById(R.id.drop);
         crn = findViewById(R.id.crn);
-        currentUser = MainContentLogin.getCurrentUser();
-        uid = currentUser.getUsername();
+        User user = MainActivity.currentUser;
+        uid = user.getUsername();
 
         termSpinner = findViewById(R.id.term);
         ArrayAdapter<CharSequence> adapterTerm = ArrayAdapter.createFromResource(this,
@@ -64,24 +63,38 @@ public class CourseRegistration extends AppCompatActivity{
                             selectTerm = "201910";
                         else if(term.equals("2019 Winter"))
                             selectTerm= "201920";
+
+
                         if (!term.equals("Select the term you want to register")){
                             //Checking the user's inputted crn is exists or not
                             if (dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).exists()) {
                                 //Checking the number of student that enrolled in this course is full or not
                                 if (max > cur) {
-                                    Toast.makeText(getApplicationContext(), "Succeeded! " + input_crn + " is added", Toast.LENGTH_LONG).show();
-                                    cur++;
-                                    mDatabase.child("STUDENT").child(uid).child("registration").setValue(input_crn);
-                                    mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).setValue("true");
-                                    mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
+                                    //Checking if the current student is enrolled the entered course or not
+                                    if (!dataSnapshot.child("STUDENT").child(uid).child("registration").child(input_crn).exists()) {
+                                        if(dataSnapshot.child("STUDENT").child(uid).child("registration").getChildrenCount() < 5) {
+                                            Toast.makeText(getApplicationContext(), "Succeeded! " + input_crn + " is added", Toast.LENGTH_LONG).show();
+                                            cur++;
+                                            mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).setValue("true");
+                                            mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
+                                        }
+                                        //case for student enroll more than 5 courses
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"You have 5 courses enrolled for this term, please talk to the advisor for taking more than 5 courses",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                    //case for duplicate enrollment
+                                    else {
+                                        Toast.makeText(getApplicationContext(),input_crn + " is already enrolled to you list, please do not enroll same course",Toast.LENGTH_LONG).show();
+                                    }
                                 }
+                                //case for course is full
                                 else{
                                     Toast.makeText(getApplicationContext(), input_crn + " is full now, please contact the instructor to add you into the waiting list", Toast.LENGTH_LONG).show();
                                 }
                             }
                             //case for the inputted CRN is not exists
                             else {
-                                //alert the users that the CRN is not exists
                                 Toast.makeText(getApplicationContext(), input_crn + " is not exist, please try again!", Toast.LENGTH_LONG).show();
                             }
                         }
@@ -98,13 +111,25 @@ public class CourseRegistration extends AppCompatActivity{
             }
         });
 
+        //drop button for dropping the course from user's enrollment list
         drop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        cur = Integer.parseInt(dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").getValue().toString()) - 1;
                         input_crn = crn.getText().toString();
+                        //Checking if the inputted course is enrolled by the student or not
+                        if(dataSnapshot.child("STUDENT").child(uid).child("registration").child(input_crn).exists()){
+                            //remove the course from student's enroll list and reset the current enroll student of the course
+                            mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).removeValue();
+                            mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
+                            Toast.makeText(getApplicationContext(),input_crn + " is removed", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"You are not enrolled in "+ input_crn+" please try again", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
