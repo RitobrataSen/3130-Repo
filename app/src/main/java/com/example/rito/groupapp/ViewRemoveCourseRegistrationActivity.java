@@ -22,14 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-/*
-will need to add in the following:
-- activity navigation
-	- go back / cancel
-	- confirm delete
-	- activity titles
--
- */
+
 public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	private ListView lv;
 	private ArrayList<CRN> registeredCourses = new ArrayList<>();
@@ -38,6 +31,8 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("debug.print", "VRCR, onCreate:");
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_remove_course_registration);
 
@@ -51,20 +46,26 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 			}
 		});
 
+		Log.d("debug.print", "VRCR, populateRegisteredCourses CALL:");
 		populateRegisteredCourses();
 	}
 
 	public void populateRegisteredCourses(){
+		Log.d("debug.print", "VRCR, populateRegisteredCourses START:");
+
 		Database db = new Database("STUDENT/" + username);
 		db.getDbRef().addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
+				Log.d("debug.print", "VRCR, onDataChange START:");
 
 				Student std = dataSnapshot.getValue(Student.class);
 				String crn;
 				for (String k : std.getRegistration().keySet()){
 					if (std.getRegistration().get(k)){
 						Database dbCRN = new Database("CRN/" + k);
+						Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
+
 						dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
 							@Override
 							public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,6 +73,11 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 
 								boolean sel = false;
 								ArrayList<CRN> newRegisteredCourses = new ArrayList<>();
+
+								Log.d("debug.print", "VRCR, populateCurrentSelection " +
+										"crn:" + crn);
+								Log.d("debug.print", "VRCR, populateCurrentSelection " +
+										"registeredCourses:" + registeredCourses);
 
 								for (CRN x : registeredCourses) {
 									if(!(x.equals(crn))){
@@ -109,16 +115,25 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	}
 
 	public void populateCurrentSelection(){
+		Log.d("debug.print", "VRCR, populateCurrentSelection START:");
+		Log.d("debug.print", "VRCR, populateCurrentSelection 1:");
+
 		lv = findViewById(R.id.listView2);
+		Log.d("debug.print", "VRCR, populateCurrentSelection 2:");
+
 		lv.setAdapter(new ArrayAdapter<CRN>(
 				this, R.layout.item_registration , registeredCourses){
+
 			@Override
 			public View getView (int position, View view, ViewGroup parent){
+				Log.d("debug.print", "VRCR, populateCurrentSelection 3:");
+
 				if (view == null) {
 					view = LayoutInflater.from(getContext()).inflate(R.layout.item_registration, parent,
 							false);
 				}
 
+				Log.d("debug.print", "VRCR, populateCurrentSelection 4:");
 				CRN crnObj = getItem(position);
 				TextView ccode = (TextView) view.findViewById(R.id.course_code);
 				TextView snumber = (TextView) view.findViewById(R.id.section_number);
@@ -126,6 +141,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 				TextView tcode = (TextView) view.findViewById(R.id.term_code);
 				TextView crn = (TextView) view.findViewById(R.id.crn);
 
+				Log.d("debug.print", "VRCR, populateCurrentSelection 5:");
 				ccode.setText(String.format("Course Code:%s", crnObj.getCourse_code()));
 				snumber.setText(String.format("Section Number:%s", crnObj.getSection_number()));
 				stype.setText(String.format("Section Type:%s", crnObj.getSection_type()));
@@ -140,6 +156,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Log.d("debug.print", "VRCR, populateCurrentSelection 6:");
 				CRN crnObj = (CRN) parent.getItemAtPosition(position);
 				boolean sel = false;
 				ArrayList<CRN> newDeletedCourses = new ArrayList<>();
@@ -167,6 +184,8 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	}
 
 	public void deregisterCourses(){
+		Log.d("debug.print", "VRCR, deregisterCourses START:");
+
 		if(deletedCourses.size() > 0){
 			for (CRN x : deletedCourses){
 				Database db = new Database();

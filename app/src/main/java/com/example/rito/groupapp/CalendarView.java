@@ -2,7 +2,14 @@ package com.example.rito.groupapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
@@ -32,19 +39,48 @@ public class CalendarView extends AppCompatActivity {
     public Button course_button;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
+
+    private Toolbar hdrToolBar;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.go_to_course:
+                startActivity(new Intent(CalendarView.this, CourseFilterActivity.class));
+                return true;
+
+            case R.id.go_to_calender:
+                startActivity(new Intent(CalendarView.this, CalendarView.class));
+                return true;
+
+            case R.id.go_to_view_remove_registered:
+                startActivity(new Intent(CalendarView.this, ViewRemoveCourseRegistrationActivity.class));
+                return true;
+
+            case R.id.log_out:
+                startActivity(new Intent(CalendarView.this, Logout_Activity.class));
+                return true;
+        }
+
+		return super.onOptionsItemSelected(item);
+
+	}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
 
+        hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(hdrToolBar);
 
-        course_button = findViewById(R.id.course_button);
-
-        course_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                startActivity(new Intent(CalendarView.this, ReadCourses.class));
-            }
-        });
         populateTextViewLists();
 
         if(MainActivity.currentUser != null) {

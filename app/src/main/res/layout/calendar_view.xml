@@ -6,14 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--android:listSelector="@color/colorSelected"-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderToolBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/hsv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:elevation="4dp"
+        />
+
     <HorizontalScrollView
         android:id="@+id/hsv"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
         android:fillViewport="true"
         android:measureAllChildren="false"
-        android:scrollbars="none" >
+
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
         <TableLayout
             android:id="@+id/table_layout"
             android:layout_width="368dp"
@@ -21,213 +40,220 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow1" >
-
-            <TextView
-                android:id="@+id/monday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Monday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/tuesday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Tuesday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/wednesday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Wednesday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/thursday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Thursday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/friday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Friday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow2" >
-
-
-            <TextView
-                android:id="@+id/m_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-            <TextView
-                android:id="@+id/t_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/w_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/r_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/f_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow3" >
-
-
-            <TextView
-                android:id="@+id/m1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-            <TextView
-                android:id="@+id/t1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/w1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/r1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/f1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow4" >
-
-
-            <TextView
-                android:id="@+id/m2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-            <TextView
-                android:id="@+id/t2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/w2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/r2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/f2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            </TableRow>
             <TableRow
+                android:id="@+id/tableRow1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tableRow5" >
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/monday"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Monday"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/tuesday"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Tuesday"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/wednesday"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Wednesday"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/thursday"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Thursday"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/friday"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Friday"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/m_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                <TextView
+                    android:id="@+id/t_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/w_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/r_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/f_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/m1_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                <TextView
+                    android:id="@+id/t1_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/w1_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/r1_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/f1_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/m2_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                <TextView
+                    android:id="@+id/t2_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/w2_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/r2_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/f2_body"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/m3_body"
@@ -246,7 +272,7 @@
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/w3_body"
@@ -255,7 +281,7 @@
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/r3_body"
@@ -264,7 +290,8 @@
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
                 <TextView
                     android:id="@+id/f3_body"
                     android:layout_width="110dp"
@@ -272,11 +299,12 @@
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
             </TableRow>
         </TableLayout>
     </HorizontalScrollView>
 
+    <!--
     <Button
         android:id="@+id/course_button"
         android:layout_width="82dp"
@@ -292,4 +320,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+     -->
 </android.support.constraint.ConstraintLayout>
