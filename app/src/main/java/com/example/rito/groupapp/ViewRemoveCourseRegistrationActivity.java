@@ -1,11 +1,16 @@
 package com.example.rito.groupapp;
 
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -22,12 +27,55 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
+/**
+ * This class allows the user to see a list of all courses they are registered
+ * in. It also allows the user to remove any of their registered courses.
+ * Future plans exist o include more course information in this activity. .
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
 public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	private ListView lv;
 	private ArrayList<CRN> registeredCourses = new ArrayList<>();
 	private ArrayList<CRN> deletedCourses = new ArrayList<>();
 	private String username = "Student1";
+	private Toolbar hdrToolBar;
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_main, menu);
+		return true;
+	}
+
+	//refactor toolbar for i3
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.go_to_course:
+				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CourseFilterActivity.class));
+				return true;
+
+			case R.id.go_to_calender:
+				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CalendarView.class));
+				return true;
+
+			case R.id.go_to_add_crn:
+				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CourseRegistration.class));
+				return true;
+
+			case R.id.go_to_view_remove_registered:
+				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, ViewRemoveCourseRegistrationActivity.class));
+				return true;
+
+			case R.id.log_out:
+				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, Logout_Activity.class));
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +83,9 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_remove_course_registration);
+
+		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(hdrToolBar);
 
 		final Button button = findViewById(R.id.deregisterButton);
 		button.setOnClickListener(new View.OnClickListener() {
@@ -79,20 +130,23 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 								Log.d("debug.print", "VRCR, populateCurrentSelection " +
 										"registeredCourses:" + registeredCourses);
 
-								for (CRN x : registeredCourses) {
-									if(!(x.equals(crn))){
-										newRegisteredCourses.add(x);
+								if (!(crn == null)){
+									for (CRN x : registeredCourses) {
+										if(!(x.equals(crn))){
+											newRegisteredCourses.add(x);
+										} else {
+											sel = true;
+										}
+									}
+
+									registeredCourses = newRegisteredCourses;
+
+									if (sel){
 									} else {
-										sel = true;
+										registeredCourses.add(crn);
 									}
 								}
 
-								registeredCourses = newRegisteredCourses;
-
-								if (sel){
-								} else {
-									registeredCourses.add(crn);
-								}
 
 								populateCurrentSelection();
 							}

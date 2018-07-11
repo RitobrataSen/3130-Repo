@@ -1,5 +1,5 @@
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.Filtration.*;
+import com.example.rito.groupapp.*;
 
 
 import org.junit.After;

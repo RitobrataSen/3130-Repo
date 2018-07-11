@@ -1,7 +1,12 @@
 package com.example.rito.groupapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
  * It is able to check if the inputted crn is exists or not,
  * the course is full or not, the student is taking more than 5 courses or not,
  * and the student is already taking it or not.
- * @author Yuhao Hu
+ * @author Yuhao, Gobii, Rito
  * @since 2018-7-10
  */
 public class CourseRegistration extends AppCompatActivity{
@@ -32,12 +37,49 @@ public class CourseRegistration extends AppCompatActivity{
     private int cur;
     private Spinner termSpinner;
     private String uid;
+    private Toolbar hdrToolBar;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.go_to_course:
+                startActivity(new Intent(CourseRegistration.this, CourseFilterActivity.class));
+                return true;
+
+            case R.id.go_to_calender:
+                startActivity(new Intent(CourseRegistration.this, CalendarView.class));
+                return true;
+
+            case R.id.go_to_add_crn:
+                startActivity(new Intent(CourseRegistration.this, CourseRegistration.class));
+                return true;
+
+            case R.id.go_to_view_remove_registered:
+                startActivity(new Intent(CourseRegistration.this, ViewRemoveCourseRegistrationActivity.class));
+                return true;
+
+            case R.id.log_out:
+                startActivity(new Intent(CourseRegistration.this, Logout_Activity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_register);
+
+        hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(hdrToolBar);
 
         //set the reference of the database to the specific location
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com/");
@@ -85,7 +127,7 @@ public class CourseRegistration extends AppCompatActivity{
                                         if(dataSnapshot.child("STUDENT").child(uid).child("registration").getChildrenCount() < 5) {
                                             Toast.makeText(getApplicationContext(), "Succeeded! " + input_crn + " is added", Toast.LENGTH_LONG).show();
                                             cur++;
-                                            mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).setValue("true");
+                                            mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).setValue(true);
                                             mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
                                         }
                                         //case for student enroll more than 5 courses

@@ -1,5 +1,5 @@
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.Filtration.*;
+import com.example.rito.groupapp.*;
 
 
 import org.junit.After;
@@ -48,7 +48,7 @@ public class CRNTest {
     @Test
     public void checkSet_GetCourseCode(){
         String cc = "122234";
-        crn1.setTerm_code(cc);
+        crn1.setCourse_code(cc);
         Assert.assertTrue(crn1.getCourse_code().matches(cc));
         testNum++;
     }

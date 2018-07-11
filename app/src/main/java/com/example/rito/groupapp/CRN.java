@@ -6,6 +6,14 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * CRN class is used to unload firebase data using firebase ui adapter
+ * to process. Holds the same structure as firebase nodes under CRN.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
+
 @IgnoreExtraProperties //only maps fields during serialization
 public class CRN implements Serializable {
 

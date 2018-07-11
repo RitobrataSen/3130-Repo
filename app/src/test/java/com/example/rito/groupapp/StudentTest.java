@@ -1,5 +1,5 @@
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.Filtration.*;
+import com.example.rito.groupapp.*;
 
 
 import org.junit.After;
@@ -31,14 +31,6 @@ public class StudentTest {
     private static int testNum=0;
     private Student s1 = new Student();
 
-
-    @Test
-    public void checkSet_GetUid(){
-        String id = "B00709681";
-        s1.setUid(id);
-        Assert.assertTrue(s1.getUid().matches(id));
-        testNum++;
-    }
     @Test
     public void checkSet_GetEmail(){
         String email = "Hello@gmail.com";

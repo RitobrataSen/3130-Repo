@@ -71,10 +71,15 @@ public class MainContentLogin extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean emailExists = false;
 
-                        System.out.println(dataSnapshot.getChildrenCount());
+                        //System.out.println(dataSnapshot.getChildrenCount());
+                        //System.out.println(dataSnapshot.toString());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
+                                //System.out.println("for loop");
+                                //System.out.println(student.toString());
                                 User currentUser = (User) student.getValue(User.class);
+                                //System.out.println("User: " + currentUser);
+
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }

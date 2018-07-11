@@ -1,11 +1,20 @@
+
+
 package com.example.rito.groupapp;
-//package com.example.rito.groupapp;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
+
+/**
+ * Course_Schedule class is used to unload firebase data using firebase ui adapter
+ * to process. Holds the same structure as firebase nodes under COURSE_SCHEDULE.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
 
 @IgnoreExtraProperties //only maps fields during serialization
 public class Course_Schedule implements Serializable {
@@ -16,22 +25,26 @@ public class Course_Schedule implements Serializable {
 	private String end_date;
 	private String start_time;
 	private String end_time;
-	private String mon; //refactor to boolean
-	private String tue; //refactor to boolean
-	private String wed; //refactor to boolean
-	private String thu; //refactor to boolean
-	private String fri; //refactor to boolean
+	private String mon;
+	private String tue;
+	private String wed;
+	private String thu;
+	private String fri;
 	private String location;
+    private String course_code;
+    private String course_name;
 
 	//constructors
 	public Course_Schedule() {
 	}
 
-	public Course_Schedule(String crn,
+	public Course_Schedule(String crn, String course_code, String course_name,
 						   String start_date, String end_date, String start_time, String end_time,
 						   String mon, String tue, String wed, String thu, String fri,
 						   String location){
 		this.crn = crn;
+		this.course_code= course_code;
+        this.course_name = course_name;
 		this.start_date = start_date;
 		this.end_date = end_date;
 		this.start_time = start_time;
@@ -46,6 +59,12 @@ public class Course_Schedule implements Serializable {
 
 	//methods
 	//getter/ setter methods
+	public String getCourse_code(){
+        return this.course_code;
+    }
+    public String getCourse_name(){
+        return this.course_name;
+    }
 	public String getCRN(){
 		return this.crn;
 	}
@@ -80,6 +99,13 @@ public class Course_Schedule implements Serializable {
 		return this.location;
 	}
 
+    public void setCourse_code(String num){
+        this.course_code = num;
+    }
+
+    public void setCourse_name(String Nam){
+        this.course_name = Nam;
+    }
 	public void setCRN(String crn){
 		this.crn = crn;
 	}

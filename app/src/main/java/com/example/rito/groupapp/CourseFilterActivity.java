@@ -27,6 +27,17 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * CourseFilterActivity allows users to drill down courses. plans exists to
+ * further expand the courses filter to include specific course information
+ * such as schedule, instructor, enrollment, and the option to auto generate
+ * schedules. Currently, clicking on a course row stores a course object inside
+ * an arraylist that can easily be processed.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
+
 public class CourseFilterActivity extends AppCompatActivity {
 	private ListView lv;
 	private ArrayList<Course> selectedCourses = new ArrayList<>();
@@ -86,6 +97,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 			case R.id.go_to_calender:
 				startActivity(new Intent(CourseFilterActivity.this, CalendarView.class));
+				return true;
+
+			case R.id.go_to_add_crn:
+				startActivity(new Intent(CourseFilterActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
@@ -156,6 +171,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_course_filter);
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
 		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(hdrToolBar);
 

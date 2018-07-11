@@ -26,7 +26,7 @@ public class CourseTest{
 
         private static int testNum=0;
 
-        private Courses c1= new Courses();
+        private Course c1= new Course();
 
         @Test
         public void checkSet_GetCourseCode(){
@@ -59,7 +59,7 @@ public class CourseTest{
             testNum++;
         }
         @Test
-        public void checkHasSuppliment(){
+        public void checkHasSupplement(){
             boolean supp = true;
 
             c1.setHas_supplement(supp);
@@ -68,20 +68,22 @@ public class CourseTest{
         }
         @Test
         public void checkEquals(){
-            Courses c2 = new Courses();
+            Course c2 = new Course();
             Assert.assertTrue(c1.equals(c2));
             testNum++;
 
-    }
+        }
         @Test
         public void checkToString(){
             String s = c1.toString();
-            Assert.assertTrue(c1.toString().matches(s));
+            Assert.assertTrue(c1.toString().equals(s));
             testNum++;
         }
         @Test
         public void checkToString2(){
             String s = c1.toString2();
+            System.out.println(s);
+            System.out.println(c1.toString2());
             Assert.assertTrue(c1.toString2().matches(s));
             testNum++;
 
