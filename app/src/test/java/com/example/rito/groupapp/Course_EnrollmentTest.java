@@ -1,6 +1,6 @@
 package com.example.rito.groupapp;
 
-import com.example.rito.groupapp.Filtration.Course_Enrollment;
+import com.example.rito.groupapp.Course_Enrollment;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,7 +45,7 @@ public class Course_EnrollmentTest {
     public void checkSet_GetMax(){
         String max = "100";
         ce1.setMax(max);
-        Assert.assertTrue(ce1.getCrn().matches(max));
+        Assert.assertTrue(ce1.getMax().matches(max));
         testNum++;
     }
     @Test

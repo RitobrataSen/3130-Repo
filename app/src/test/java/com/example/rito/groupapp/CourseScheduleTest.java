@@ -1,6 +1,6 @@
 package com.example.rito.groupapp;
 
-import com.example.rito.groupapp.*;
+import com.example.rito.groupapp.Filtration.*;
 
 
 import org.junit.After;
@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 
  */
-public class Course_ScheduleTest {
+public class CourseScheduleTest {
     private static int testNum=0;
     private Course_Schedule cs1 = new Course_Schedule();
 

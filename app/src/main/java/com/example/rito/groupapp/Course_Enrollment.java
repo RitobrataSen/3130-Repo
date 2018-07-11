@@ -1,11 +1,18 @@
 package com.example.rito.groupapp;
-//package com.example.rito.groupapp;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
+
+/**
+ * Course_Enrollment class is used to unload firebase data using firebase ui adapter
+ * to process. Holds the same structure as firebase nodes under COURSE_ENROLLMENT.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
 
 @IgnoreExtraProperties //only maps fields during serialization
 public class Course_Enrollment implements Serializable {

@@ -1,11 +1,17 @@
 package com.example.rito.groupapp;
-//package com.example.rito.groupapp;
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
+
+/**
+ * Courses class is used to unload firebase data using firebase ui adapter
+ * to process. Holds the same structure as firebase nodes under COURSE.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
 
 @IgnoreExtraProperties //only maps fields during serialization
 public class Course implements Serializable {
@@ -71,13 +77,22 @@ public class Course implements Serializable {
 	}
 
 	public boolean equals(Course c){
-		if((this.course_code.equals(c.getCourse_code())) &&
-				(this.course_name.equals(c.getCourse_name())) &&
-				(this.subject_code.equals(c.getSubject_code())) &&
-				(this.term_code.equals(c.getTerm_code())) &&
-				(this.has_supplement == c.getHas_supplement())){
-			return true;
-		}
+		//if (!(c == null)){
+			if (c == null){
+				return false;
+			} else if(
+					((this.course_code == c.getCourse_code()) || this.course_code.equals(c.getCourse_code())) &&
+					((this.course_name == c.getCourse_code()) || this.course_name.equals(c.getCourse_name())) &&
+					((this.subject_code == c.getSubject_code()) || this.subject_code.equals(c.getSubject_code())) &&
+					((this.term_code == c.getTerm_code()) || this.term_code.equals(c.getTerm_code())) &&
+					((this.has_supplement == c.getHas_supplement()) || this.has_supplement == c.getHas_supplement())){
+				return true;
+			} else if(this.toString().equals(c.toString())){
+				return true;
+			}
+
+
+		//}
 
 		return false;
 	}
@@ -85,8 +100,8 @@ public class Course implements Serializable {
 	@Override
 	public String toString(){
 		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
-		return String.format("[%s, %s, %s, %s]",
-				this.course_code, this.course_name,
+		return String.format("[%s, %s, %s, %s, %s]",
+				this.course_code, this.subject_code, this.course_name,
 				this.term_code, this.has_supplement);
 	}
 

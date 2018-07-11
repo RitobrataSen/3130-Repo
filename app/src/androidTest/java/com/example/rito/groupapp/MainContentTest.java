@@ -1,9 +1,10 @@
 package com.example.rito.groupapp;
 
 
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+//import android.test.suitebuilder.annotation.LargeTest;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class MainContentTest {
         onView(withId(R.id.login_submit_button)).check(matches(isClickable()));
         onView(withId(R.id.login_submit_button)).check(matches(withText(R.string.key_Submit)));
         //text fields
-        onView(withId(R.id.user_number)).perform(typeText("Email_Address2"));
+        onView(withId(R.id.user_number)).perform(typeText("ea2"));
         onView(withId(R.id.user_pw)).perform(typeText("pw2"));
         //submit forms
         onView(withId(R.id.login_submit_button)).perform(click());

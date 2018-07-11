@@ -53,6 +53,7 @@ public class Registration_Form extends AppCompatActivity {
 
                 String x = databaseRef.push().getKey();
                 databaseRef.child(x).setValue(newUser);
+                setContentView(R.layout.activity_main);
             }
         });
 

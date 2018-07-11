@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+/**
+ * CourseFilterActivity allows users to drill down courses. plans exists to
+ * further expand the courses filter to include specific course information
+ * such as schedule, instructor, enrollment, and the option to auto generate
+ * schedules. Currently, clicking on a course row stores a course object inside
+ * an arraylist that can easily be processed.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
 
 public class CourseFilterActivity extends AppCompatActivity {
 	private ListView lv;
@@ -50,7 +63,56 @@ public class CourseFilterActivity extends AppCompatActivity {
 	it through a public variable. for development purposes
 	we will set it as a static variable here.
 	*/
+
+	/*
+	for iteration 3 we will need to do the following:
+	1) go deeper into the course filter where clicking
+	a course lists all crn and they schedules
+
+	2) auto schedule generation that recursively builds
+	non overlapping schedules (ie overlap between courses
+	such that no two courses can occur during the same time
+	for a single user)
+
+	3) allow easy conversion to adding courses by crn. for example
+	add a crn to a pool that is used by the schedule generator.
+	 */
 	private String student = "Student2";
+	private Toolbar hdrToolBar;
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.go_to_course:
+				startActivity(new Intent(CourseFilterActivity.this, CourseFilterActivity.class));
+				return true;
+
+			case R.id.go_to_calender:
+				startActivity(new Intent(CourseFilterActivity.this, CalendarView.class));
+				return true;
+
+			case R.id.go_to_add_crn:
+				startActivity(new Intent(CourseFilterActivity.this, CourseRegistration.class));
+				return true;
+
+			case R.id.go_to_view_remove_registered:
+				startActivity(new Intent(CourseFilterActivity.this, ViewRemoveCourseRegistrationActivity.class));
+				return true;
+
+			case R.id.log_out:
+				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	private BottomNavigationView
 				.OnNavigationItemSelectedListener
@@ -60,6 +122,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 		@Override
 		public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
 			switch (item.getItemId()) {
 				case R.id.navigation_back:
 					if (displayList){
@@ -76,21 +139,25 @@ public class CourseFilterActivity extends AppCompatActivity {
 					displayList = true;
 					return true;
 
+				/*
 				case R.id.navigation_add:
+
 					//mTextMessage.setText(R.string.title_dashboard);//title_my_courses
 					Log.d("debug.print", "NAVI, ADD BY CRN:" + selectedCourses);
 					return true;
+				*/
 
 				case R.id.navigation_reset:
 					selectedCourses.clear();
 					populateTerm();
 					return true;
 
+				/*
 				case R.id.navigation_done:
 					//getPreviousState();
 					Log.d("debug.print", "NAVI, DONE:" + selectedCourses);
 					return true;
-
+				*/
 			}
 
 			return false;
@@ -98,16 +165,16 @@ public class CourseFilterActivity extends AppCompatActivity {
 		}
 	};
 
-
-	//BottomNavigationView
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_filter);
-		//mTextMessage = (TextView) findViewById(R.id.message);
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(hdrToolBar);
+
 		Intent intent = getIntent();
 		//selectedCourses = new ArrayList<>();
 		populateTerm();

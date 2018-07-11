@@ -9,7 +9,6 @@ import org.junit.runners.JUnit4;
 
 import java.util.HashMap;
 
-
 @RunWith(JUnit4.class)
 /*
  This is a JUnit test for the User.Java class. It ensures that all the methods that are going

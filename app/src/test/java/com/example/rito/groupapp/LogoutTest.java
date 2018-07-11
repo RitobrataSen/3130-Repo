@@ -7,9 +7,10 @@ import org.junit.Assert;
 
 
 /**
- *LogoutTest tests if the user is logged out.
- * @author Divanno and Yuze
+ * LogoutTest tests if the user is logged out.
+ *
  * @since 2018-06-26
+ * @author Divanno, Yuze
  */
 public class LogoutTest {
 

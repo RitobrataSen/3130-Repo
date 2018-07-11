@@ -8,6 +8,15 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+/**
+ * Student class is used to unload firebase data using firebase ui adapter
+ * to process. Holds the same structure as firebase nodes under STUDENT.
+ *
+ * @author   Gobii, Rito, Yuhao
+ * @since    2018-07-08
+ */
+
+
 @IgnoreExtraProperties
 public class Student implements Serializable {
 
@@ -59,10 +68,10 @@ public class Student implements Serializable {
 	public void setEmail(String email){
 		this.email = email;
 	}
-	public void setUsername(String un){
-		this.username = password;
+	public void setUsername(String username){
+		this.username = username;
 	}
-	public void setPassword(String p){
+	public void setPassword(String password){
 		this.password = password;
 	}
 
