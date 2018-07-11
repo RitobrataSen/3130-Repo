@@ -14,6 +14,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+/**
+ * Affirming that all of the UI elements can be interacted with, and display as expected.
+ *
+ * @author  Shane, Divanno
+ * @since   06-21-18
+ */
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {

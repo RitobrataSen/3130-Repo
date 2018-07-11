@@ -51,8 +51,6 @@ public class ReadCourses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_load);
 
-
-
         //Initialize Database
         //Setting the path of the database to read
         mCourseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com").child("TERMS").child("201830").child("SUBJECTS").child("CSCI").child("COURSES");

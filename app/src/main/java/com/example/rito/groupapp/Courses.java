@@ -1,7 +1,7 @@
 /**
  * Courses class allows for course objects to be created from our database reference.
  *
- * @author  Gobii
+ * @author  Gobii, Rito, Yuhao
  * @since   06-24-18
  */
 
