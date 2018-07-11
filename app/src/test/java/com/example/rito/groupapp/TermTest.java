@@ -13,19 +13,12 @@ import org.junit.runners.JUnit4;
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
-/*
- This is a JUnit test for the Term.Java class. It ensures that all the methods that are going
- to have a certain purpose and is meeting the expectation.
-
- Authors:
- Ritobrata Sen,
- Yuhao Yu,
- Gobii Vivagananda
-
- Date:
- June 26th, 2018
-
-
+/**
+ * This is a JUnit test for the Term.Java class. It ensures that all the methods that are going
+ * to have a certain purpose and is meeting the expectation.
+ *
+ * @author  Ritobrata Sen, Yuhao Yu, Gobii Vivagananda
+ * @since   06-18-18
  */
 public class TermTest {
     private static int testNum=0;

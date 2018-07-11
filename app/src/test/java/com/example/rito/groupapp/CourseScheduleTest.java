@@ -14,19 +14,12 @@ import java.util.HashMap;
 
 @RunWith(JUnit4.class)
 
-/*
- This is a JUnit test for the CourseSchedule.Java class. It ensures that all the methods that are going
- to have a certain purpose and is meeting the expectation.
-
- Authors:
- Ritobrata Sen,
- Yuhao Yu,
- Gobii Vivagananda
-
- Date:
- June 26th, 2018
-
-
+/**
+ * This is a JUnit test for the CourseSchedule.Java class. It ensures that all the methods that are going
+ * to have a certain purpose and is meeting the expectation.
+ *
+ * @author    Ritobrata Sen, Yuhao Yu, Gobii Vivagananda
+ * @since     06-26-18
  */
 public class CourseScheduleTest {
     private static int testNum=0;
