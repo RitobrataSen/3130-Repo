@@ -2,15 +2,11 @@ package com.example.rito.groupapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,18 +17,15 @@ import com.google.firebase.database.ValueEventListener;
 import android.graphics.Color;
 import android.widget.TableRow;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 
-import java.util.*;
 
+/**
+ * ReadCourses for reading all courses under a specific path in the firebase
+ * and display them as a table view
+ * @author Yuze Qu & Yuhao Hu
+ * @since 2018-06-20
+ */
 public class ReadCourses extends AppCompatActivity {
     public DatabaseReference mCourseReference;
 
