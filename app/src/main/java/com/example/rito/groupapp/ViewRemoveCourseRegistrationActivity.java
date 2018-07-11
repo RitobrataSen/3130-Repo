@@ -39,7 +39,8 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	private ListView lv;
 	private ArrayList<CRN> registeredCourses = new ArrayList<>();
 	private ArrayList<CRN> deletedCourses = new ArrayList<>();
-	private String username = "Student1";
+	private String username = MainActivity.currentUser.getUsername();
+
 	private Toolbar hdrToolBar;
 
 	@Override
