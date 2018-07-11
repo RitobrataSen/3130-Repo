@@ -4,6 +4,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  * User class is used to store information about a user.
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 
 @IgnoreExtraProperties
-public class User {
+public class User implements Serializable {
 
     //fields
     //private String uid;
@@ -28,32 +29,45 @@ public class User {
     public User() {
     }
 
-    public User(/*String u, */String e, String un, String p, HashMap<String, Boolean> re) {
-        //this.uid = u;
-        this.email = e;
-        this.username = un;
-        this.password = p;
+    public User(String email, String username,
+                   String password, HashMap<String, Boolean> registration) {
+
+        this.email = email;
+        this.username = username;
+        this.password = password;
         this.registration = new HashMap<>();
-        this.registration.putAll(re);
+        this.registration.putAll(registration);
     }
 
     //methods
+    public String getEmail(){
+        return this.email;
+    }
+    public String getUsername(){
+        return this.username;
+    }
+    public String getPassword(){
+        return this.password;
+    }
+    public HashMap<String, Boolean> getRegistration(){
+        return this.registration;
+    }
 
-    //public String getUid() {return this.uid;}
-    public String getEmail() {return this.email;}
-    public String getUsername() {return this.username;}
-    public String getPassword() {return this.password;}
-    public HashMap<String, Boolean> getRegistration(){return this.registration;}
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public void setUsername(String username){
+        this.username = username;
+    }
+    public void setPassword(String password){
+        this.password = password;
+    }
 
-    //public void setUid(String u) {this.uid = u;}
-    public void setEmail(String e) {this.email = e;}
-    public void setUsername(String un) {this.username = un;}
-    public void setPassword(String p) {this.password = p;}
-    public void setRegistration(HashMap<String, Boolean> re){
+    public void setRegistration(HashMap<String, Boolean> registration){
         //to add/ remove individual pairs get entire hash map first then call
         //hash map functions: hashMap.put(k, v) or hashMap.remove(k)
         this.registration = new HashMap<>();
-        this.registration.putAll(re);
+        this.registration.putAll(registration);
     }
 
     public String toString(){

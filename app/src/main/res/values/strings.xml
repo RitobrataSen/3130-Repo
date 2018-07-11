@@ -12,4 +12,16 @@
     <string name="logout_action">Exit</string>
     <string name="button_cal">Cal</string>
     <string name="button_course">Courses</string>
+    <string name="title_activity_course_filter">CourseFilterActivity</string>
+    <string name="title_back">Back</string>
+    <string name="title_list">Selection</string>
+    <string name="title_filter">Filter</string>
+    <string name="title_crn">Add CRN</string>
+    <string name="title_add">Add</string>
+    <string name="title_reset">Reset</string>
+    <string name="title_done">Done</string>
+    <string name="title_activity_display_registration">DisplayRegistrationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

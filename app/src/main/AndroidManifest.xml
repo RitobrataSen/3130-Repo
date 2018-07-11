@@ -48,7 +48,16 @@
         </activity>
         
         <activity android:name=".Logout_Activity">
-
         </activity>
+        
+        <activity
+            android:name=".CourseFilterActivity"
+            android:label="@string/title_activity_course_filter">
+        </activity>
+
+        <activity 
+            android:name=".ViewRemoveCourseRegistrationActivity">
+        </activity>
+
     </application>
 </manifest>

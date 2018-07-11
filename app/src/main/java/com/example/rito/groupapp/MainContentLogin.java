@@ -45,6 +45,8 @@ public class MainContentLogin extends AppCompatActivity {
     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("debug.print", "mainContentLogin: onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
