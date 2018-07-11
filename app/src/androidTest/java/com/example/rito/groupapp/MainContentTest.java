@@ -1,7 +1,9 @@
 package com.example.rito.groupapp;
 
 
+
 import android.support.test.filters.LargeTest;
+
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 //import android.test.suitebuilder.annotation.LargeTest;
@@ -17,6 +19,13 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
+/**
+ * Affirming that all of the UI elements display as expected, and that a logged-in state can be reached.
+ *
+ * @author  Shane, Divanno
+ * @since   06-21-18
+ */
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
