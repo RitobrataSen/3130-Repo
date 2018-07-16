@@ -16,7 +16,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-/**/
+/**
+ * MainContentLogin handles user authentication to ensure that the user with
+ * the specified email exists, and that the given password matches. When this is
+ * found true, the currentUser in MainActivity is updated, and the logged-in
+ * intent is initialized.
+ *
+ * @author  Shane, Divanno, Dryden
+ * @since   07-06-18
+ */
 public class MainContentLogin extends AppCompatActivity {
 
     Button loginButton;
@@ -37,6 +45,8 @@ public class MainContentLogin extends AppCompatActivity {
     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("debug.print", "mainContentLogin: onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
@@ -61,10 +71,15 @@ public class MainContentLogin extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean emailExists = false;
 
-                        System.out.println(dataSnapshot.getChildrenCount());
+                        //System.out.println(dataSnapshot.getChildrenCount());
+                        //System.out.println(dataSnapshot.toString());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
+                                //System.out.println("for loop");
+                                //System.out.println(student.toString());
                                 User currentUser = (User) student.getValue(User.class);
+                                //System.out.println("User: " + currentUser);
+
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
@@ -72,8 +87,10 @@ public class MainContentLogin extends AppCompatActivity {
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(MainContentLogin.this, ReadCourses.class));
-                                    MainActivity.currentUser = currentUser;
+
+									MainActivity.currentUser = currentUser;
+									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
+
                                 }
 
                                 else {

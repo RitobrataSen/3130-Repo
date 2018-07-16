@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+this is for the course filter activity bottom navigation view
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_back"
+        android:icon="@drawable/ic_back_black_24dp"
+        android:title="@string/title_back" />
+    <item
+        android:id="@+id/navigation_reset"
+        android:icon="@drawable/ic_reset_black_24dp"
+        android:title="@string/title_reset" />
+    <item
+        android:id="@+id/navigation_list"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:title="@string/title_list" />
+    <item
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/title_crn" />
+    <item
+        android:id="@+id/navigation_done"
+        android:icon="@drawable/ic_done_black_24dp"
+        android:title="@string/title_done" />
+
+</menu>
+
+<!--
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="example.javatpoint.com.optionmenu.MainActivity">
+
+    <item
+        android:id="@+id/go_to_course"
+        android:icon="@drawable/ic_courses_24dp"
+        android:title="@string/to_course_view" />
+
+    <item
+        android:id="@+id/go_to_calender"
+        android:icon="@drawable/ic_calendar_black_24dp"
+        android:title="@string/to_Calender_view" />
+    <item
+        android:id="@+id/go_to_view_remove_registration"
+        android:icon="@drawable/ic_vr_registration_black_24dp"
+        android:title="@string/to_view_remove_registration" />
+    <item
+        android:id="@+id/log_out"
+        android:icon="@drawable/ic_logout_black_24dp"
+        android:title="@string/log_out_option" />
+</menu>
+-->

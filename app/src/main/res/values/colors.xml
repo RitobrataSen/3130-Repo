@@ -3,5 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-
+    <color name="colorSelected">#baffe6</color>
+    <color name="colorSelectedRemoved">#FF4081</color>
+    <color name="transparent">#00000000 </color>
+    <color name="darkText">#323232</color>
 </resources>

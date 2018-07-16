@@ -29,6 +29,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+/**
+ * The Registration_Form activity accepts new-user input which is used to
+ * populate a User object, and then is pushed to the database.
+ *
+ * @author  Qu and Divanno
+ * @since   07-09-18
+ */
+
 public class Registration_Form extends AppCompatActivity {
     public DatabaseReference databaseRef;
     Button submit;
@@ -59,7 +67,13 @@ public class Registration_Form extends AppCompatActivity {
                 newUser.setPassword(password_info);
                 newUser.setUsername(name_info);
 
+
                 databaseRef.child(name_info).setValue(newUser);
+
+                //String x = databaseRef.push().getKey();
+                //databaseRef.child(x).setValue(newUser);
+                //setContentView(R.layout.activity_main);
+
             }
         });
 

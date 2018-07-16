@@ -1,8 +1,9 @@
 package com.example.rito.groupapp;
 
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+//import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.TextView;
 
 import org.junit.Rule;
@@ -10,7 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.Assert;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -31,11 +36,15 @@ public class CalendarViewTest {
     public ActivityTestRule<CalendarView> mActivityTestRule = new ActivityTestRule<>(CalendarView.class);
 
     @Test
-    public void calendarViewTest() {
-        Courses c = new Courses("Error", "User Failed to Login", "", "", "", "");
-        c.SetStime("0:00");
-        c.SetEtime("0:00");
-        onView(withId(R.id.m_body)).check(matches(withText(c.GetCname()+"\n"+c.GetCode()+ "\nTime:"+c.GetSt()+"-"+c.GetEt())));
+    public void calendarViewTest() throws InterruptedException {
+
+        Course_Schedule c = new Course_Schedule("Error", "User Failed to Login",
+                "", "", "", "", "",
+                "", "", "", "", "", "");
+        c.setStartTime("0:00");
+        c.setEndTime("0:00");
+        onView(withId(R.id.m_body)).check(matches(withText(c.getCourse_name()+"\n"+c.getCourse_code()+
+                "\nTime:"+c.getStartTime()+"-"+c.getEndTime())));
     }
     @Test
     public void calendarListTest() {
