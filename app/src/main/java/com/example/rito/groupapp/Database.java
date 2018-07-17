@@ -79,7 +79,7 @@ public class Database extends Application {
 
 		//remove from: COURSE_ENROLLMENT/<crn>/ENROLLMENT/<username> = null
 		String pathEnrollment = String.format(
-				"COURSE_ENROLLMENT/%s/ENROLLMENT/%s", crn, username);
+				"COURSE_ENROLLEMENT/%s/ENROLLMENT/%s", crn, username);
 
 		ref = this.db.getReference(pathEnrollment);
 		ref.setValue(val ? val : null);

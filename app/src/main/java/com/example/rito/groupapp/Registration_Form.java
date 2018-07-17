@@ -72,7 +72,7 @@ public class Registration_Form extends AppCompatActivity {
             public void onClick(View view) {
 
                 final Context context = getApplicationContext();
-                final int duration = Toast.LENGTH_SHORT;
+                final int duration = Toast.LENGTH_LONG;
                 DatabaseReference ref;
 
                 final Database db = new Database();
