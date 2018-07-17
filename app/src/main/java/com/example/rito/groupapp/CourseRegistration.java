@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -98,6 +99,8 @@ public class CourseRegistration extends AppCompatActivity{
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("debug.print", "on click");
+
                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,6 +130,7 @@ public class CourseRegistration extends AppCompatActivity{
                                         if(dataSnapshot.child("STUDENT").child(uid).child("registration").getChildrenCount() < 5) {
                                             Toast.makeText(getApplicationContext(), "Succeeded! " + input_crn + " is added", Toast.LENGTH_LONG).show();
                                             cur++;
+                                            Log.d("debug.print",input_crn);
                                             mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).setValue(true);
                                             mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
                                         }
@@ -171,6 +175,7 @@ public class CourseRegistration extends AppCompatActivity{
                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d("debug.print", "on data change");
                         cur = Integer.parseInt(dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").getValue().toString()) - 1;
                         input_crn = crn.getText().toString();
                         //Checking if the inputted course is enrolled by the student or not

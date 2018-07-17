@@ -111,55 +111,56 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Log.d("debug.print", "VRCR, onDataChange START:");
 
-				Student std = dataSnapshot.getValue(Student.class);
-				String crn;
-				for (String k : std.getRegistration().keySet()){
-					if (std.getRegistration().get(k)){
-						Database dbCRN = new Database("CRN/" + k);
-						Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
+				if (dataSnapshot.child("registration").exists()){
+					Student std = dataSnapshot.getValue(Student.class);
+					String crn;
+					for (String k : std.getRegistration().keySet()){
+						if (std.getRegistration().get(k)){
+							Database dbCRN = new Database("CRN/" + k);
+							Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
 
-						dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
-							@Override
-							public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-								CRN crn = dataSnapshot.getValue(CRN.class);
+							dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
+								@Override
+								public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+									CRN crn = dataSnapshot.getValue(CRN.class);
 
-								boolean sel = false;
-								ArrayList<CRN> newRegisteredCourses = new ArrayList<>();
+									boolean sel = false;
+									ArrayList<CRN> newRegisteredCourses = new ArrayList<>();
 
-								Log.d("debug.print", "VRCR, populateCurrentSelection " +
-										"crn:" + crn);
-								Log.d("debug.print", "VRCR, populateCurrentSelection " +
-										"registeredCourses:" + registeredCourses);
+									Log.d("debug.print", "VRCR, populateCurrentSelection " +
+											"crn:" + crn);
+									Log.d("debug.print", "VRCR, populateCurrentSelection " +
+											"registeredCourses:" + registeredCourses);
 
-								if (!(crn == null)){
-									for (CRN x : registeredCourses) {
-										if(!(x.equals(crn))){
-											newRegisteredCourses.add(x);
+									if (!(crn == null)){
+										for (CRN x : registeredCourses) {
+											if(!(x.equals(crn))){
+												newRegisteredCourses.add(x);
+											} else {
+												sel = true;
+											}
+										}
+
+										registeredCourses = newRegisteredCourses;
+
+										if (sel){
 										} else {
-											sel = true;
+											registeredCourses.add(crn);
 										}
 									}
 
-									registeredCourses = newRegisteredCourses;
-
-									if (sel){
-									} else {
-										registeredCourses.add(crn);
-									}
+									populateCurrentSelection();
 								}
 
-
-								populateCurrentSelection();
-							}
-
-							@Override
-							public void onCancelled(@NonNull DatabaseError databaseError) {
-								Log.d("debug.print", "The read failed: " + databaseError.getCode());
-							}
-						});
-
+								@Override
+								public void onCancelled(@NonNull DatabaseError databaseError) {
+									Log.d("debug.print", "The read failed: " + databaseError.getCode());
+								}
+							});
+						}
 					}
 				}
+
 			}
 
 			@Override
