@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".MainContentLogin"
-            android:label="Login"></activity>
+            android:label="Login" />
         <activity
             android:name=".ReadCourses"
             android:parentActivityName=".MainContentLogin">
@@ -31,27 +31,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainContentLogin" />
         </activity>
-
         <activity
             android:name=".CourseRegistration"
-            android:label="@string/to_add_crn"></activity>
+            android:label="@string/to_add_crn" />
         <activity
             android:name=".Registration_Form"
-            android:parentActivityName=".MainActivity"
             android:label="@string/to_add_crn"
-            ></activity>
-
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".CalendarView"
-            android:label="@string/to_Calender_view"></activity>
-        <activity android:name=".Logout_Activity"></activity>
+            android:label="@string/to_Calender_view" />
+        <activity android:name=".Logout_Activity" />
         <activity
             android:name=".CourseFilterActivity"
-            android:label="@string/to_course_view"></activity>
-
+            android:label="@string/to_course_view" />
         <activity
             android:name=".ViewRemoveCourseRegistrationActivity"
-            android:label="@string/to_view_remove_registration"></activity>
+            android:label="@string/to_view_remove_registration" />
+        <activity android:name=".ViewUser_Information.View_UserInformation"></activity>
     </application>
 
 </manifest>
