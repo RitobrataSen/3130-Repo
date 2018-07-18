@@ -1,10 +1,12 @@
 package com.example.rito.groupapp;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,14 +98,26 @@ public class Database extends Application {
 
 	}
 
+	public void addUser(String email, String username, String password){
+		int result = -1;
+		/*
+		0 = success
+		1 = username exists
+		2 = email exists
+		 */
+		DatabaseReference ref;
 
-	public void readData(){
+		//check if username exists
+		String pathUsername = String.format(
+				"STUDENT/%s", username);
 
-		//this.db.setValue("Hello, World!");
+		Log.d("debug.print", "UPE: " +
+				username + "," + password + "," + email);
 
-		System.out.println("READDATA METHOD");
-		System.out.println(this.dbRef.toString());//.child("TERMS").toString());
-		System.out.println("READDATA SUCCESS");
+		HashMap<String, Boolean> hm = new HashMap<>();
+		User user = new User(email, username, password, hm);
+		ref = this.db.getReference(pathUsername);
+		ref.setValue(user);
 	}
 
 }
