@@ -1,8 +1,10 @@
 package com.example.rito.groupapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +43,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	private ArrayList<CRN> registeredCourses = new ArrayList<>();
 	private ArrayList<CRN> deletedCourses = new ArrayList<>();
 	private String username = MainActivity.currentUser.getUsername();
-
+	private Term currentTerm;
 	private Toolbar hdrToolBar;
 
 	@Override
@@ -78,6 +81,38 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private BottomNavigationView
+			.OnNavigationItemSelectedListener
+			mOnNavigationItemSelectedListener =
+			new BottomNavigationView
+					.OnNavigationItemSelectedListener() {
+
+				@Override
+				public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+					switch (item.getItemId()) {
+						case R.id.navigation_back:
+							Log.d("debug.print", "VRCR, navigation_back:");
+							populateTerm();
+							return true;
+
+						case R.id.navigation_deregister:
+							Log.d("debug.print", "VRCR, navigation_deregister:");
+
+							if (deletedCourses.size() > 0){
+								deregisterCourses();
+								populateTerm();
+								return true;
+							}
+							return true;
+
+					}
+
+					return false;
+
+				}
+			};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("debug.print", "VRCR, onCreate:");
@@ -85,24 +120,47 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_remove_course_registration);
 
+		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation2);
+		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
 		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(hdrToolBar);
 
-		final Button button = findViewById(R.id.deregisterButton);
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				deregisterCourses();
-				registeredCourses.clear();
-				deletedCourses.clear();
+		Log.d("debug.print", "VRCR, populateRegisteredCourses CALL:");
+		populateTerm();
+	}
+
+	public void populateTerm() {
+		currentTerm = null;
+		registeredCourses.clear();
+		deletedCourses.clear();
+
+		final FirebaseListAdapter<Term> firebaseAdapter;
+		Database db = new Database("TERM");
+		lv = findViewById(R.id.listView2);
+		firebaseAdapter = new FirebaseListAdapter<Term>(this, Term.class,
+				android.R.layout.simple_list_item_1, db.getDbRef()) {
+			@Override
+			protected void populateView(View v, Term model, int position) {
+				TextView termRow = (TextView)v.findViewById(android.R.id.text1);
+				termRow.setText(model.toString());
 
 			}
+		};
+		lv.setAdapter(firebaseAdapter);
+		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			// onItemClick method is called everytime a user clicks an item on the list
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Term term = (Term) firebaseAdapter.getItem(position);
+				currentTerm = term;
+				populateRegisteredCourses();
+			}
 		});
-
-		Log.d("debug.print", "VRCR, populateRegisteredCourses CALL:");
-		populateRegisteredCourses();
 	}
 
 	public void populateRegisteredCourses(){
+
 		Log.d("debug.print", "VRCR, populateRegisteredCourses START:");
 
 		Database db = new Database("STUDENT/" + username);
@@ -110,6 +168,9 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Log.d("debug.print", "VRCR, onDataChange START:");
+				CharSequence text;
+				Context context = getApplicationContext();
+				int duration = Toast.LENGTH_LONG;
 
 				if (dataSnapshot.child("registration").exists()){
 					Student std = dataSnapshot.getValue(Student.class);
@@ -143,8 +204,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 
 										registeredCourses = newRegisteredCourses;
 
-										if (sel){
-										} else {
+										if (!(sel) && (crn.getTerm_code().equals(currentTerm.getTerm_code()))){
 											registeredCourses.add(crn);
 										}
 									}
@@ -159,6 +219,8 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 							});
 						}
 					}
+				} else {
+					populateCurrentSelection();
 				}
 
 			}
@@ -173,6 +235,15 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	public void populateCurrentSelection(){
 		Log.d("debug.print", "VRCR, populateCurrentSelection START:");
 		Log.d("debug.print", "VRCR, populateCurrentSelection 1:");
+		CharSequence text;
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_LONG;
+
+		if (registeredCourses.size() == 0) {
+			text = "You are not registered for any courses during this term.";
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+		}
 
 		lv = findViewById(R.id.listView2);
 		Log.d("debug.print", "VRCR, populateCurrentSelection 2:");
