@@ -80,7 +80,7 @@ public class View_UserInformation extends AppCompatActivity {
                         User user1 = new User(et1.getText().toString(),et2.getText().toString(),et3.getText().toString(),MainActivity.currentUser.getRegistration());
                         db.updateUser(MainActivity.currentUser,user1);
                         }
-                    if(tv4.getText().toString().equals(tv5.getText().toString()) && tv4.getText().length()>0 && tv5.getText().length()>0){
+                    if(MainActivity.currentUser.getPassword().toString()!=et4.getText().toString() && et4.getText().toString().equals(et5.getText().toString()) && et4.getText().length()>0 && et5.getText().length()>0){
                         User user1 = new User(et1.getText().toString(),et2.getText().toString(),et5.getText().toString(),MainActivity.currentUser.getRegistration());
                         db.updateUser(MainActivity.currentUser,user1);
 
