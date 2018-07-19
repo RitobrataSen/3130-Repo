@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
 
 import java.util.ArrayList;
@@ -35,7 +36,13 @@ import java.util.Collections;
  * an arraylist that can easily be processed.
  *
  * @author   Gobii, Rito, Yuhao
- * @since    2018-07-08
+ * @completed   2018-07-08
+ *
+ * @since 2018-07-19
+ *
+ * @author Ritobrata Sen, Qu Yuze
+ * @updated: The an added functionality to the menu was added so that the user can now
+ * navigate and view their information.
  */
 
 public class CourseFilterActivity extends AppCompatActivity {
@@ -105,11 +112,14 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 			case R.id.go_to_view_remove_registered:
 				startActivity(new Intent(CourseFilterActivity.this, ViewRemoveCourseRegistrationActivity.class));
-				return true;
+			case R.id.view_user_information:
+				startActivity(new Intent(CourseFilterActivity.this, View_UserInformation.class));
 
+				return true;
 			case R.id.log_out:
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
 				return true;
+
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -1,5 +1,6 @@
 package com.example.rito.groupapp;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +28,14 @@ import com.google.firebase.database.ValueEventListener;
  * It is able to check if the inputted crn is exists or not,
  * the course is full or not, the student is taking more than 5 courses or not,
  * and the student is already taking it or not.
- * @author Yuhao, Gobii, Rito
- * @since 2018-7-10
+ * @author Yuhao, Gobii, Ritobrata Sen
+ * @completed 2018-7-10
+ *
+ * @since 2018-07-19
+ *
+ * @author Ritobrata Sen, Qu Yuze
+ * @updated: The an added functionality to the menu was added so that the user can now
+ * navigate and view their information.
  */
 public class CourseRegistration extends AppCompatActivity{
     private DatabaseReference mDatabase;
@@ -65,6 +73,8 @@ public class CourseRegistration extends AppCompatActivity{
             case R.id.go_to_view_remove_registered:
                 startActivity(new Intent(CourseRegistration.this, ViewRemoveCourseRegistrationActivity.class));
                 return true;
+            case R.id.view_user_information:
+                startActivity(new Intent(CourseRegistration.this, View_UserInformation.class));
 
             case R.id.log_out:
                 startActivity(new Intent(CourseRegistration.this, Logout_Activity.class));
