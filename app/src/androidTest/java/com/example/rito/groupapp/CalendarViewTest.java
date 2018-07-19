@@ -38,13 +38,13 @@ public class CalendarViewTest {
     @Test
     public void calendarViewTest() throws InterruptedException {
 
-        Course_Schedule c = new Course_Schedule("Error", "User Failed to Login",
-                "", "", "", "", "",
-                "", "", "", "", "", "");
-        c.setStartTime("0:00");
-        c.setEndTime("0:00");
-        onView(withId(R.id.m_body)).check(matches(withText(c.getCourse_name()+"\n"+c.getCourse_code()+
-                "\nTime:"+c.getStartTime()+"-"+c.getEndTime())));
+        CRN_Data c = new CRN_Data();
+        c.setCourse_Code("Error");
+        c.setCourse_Name("User Failed to Login");
+        c.setStart_Time("0:00");
+        c.setEnd_Time("0:00");
+        onView(withId(R.id.m_body)).check(matches(withText(c.getCourse_Name()+"\n"+c.getCourse_Code()+
+                "\nTime:"+c.getStart_Time()+"-"+c.getEnd_Time())));
     }
     @Test
     public void calendarListTest() {
