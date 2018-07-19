@@ -24,7 +24,11 @@ import com.google.firebase.database.ValueEventListener;
  of courses.
  *
  * @author   Gobii, Rito, Yuhao
- * @since    2018-07-08
+ * @Completed    2018-07-08
+ *
+ * @since 2018-19-08
+ * @Update : updated functionality which enables database to update the information of an user
+ *
  */
 
 public class Database extends Application {
@@ -96,6 +100,14 @@ public class Database extends Application {
 
 	}
 
+	public void updateUser(User oldusr, User newusr){
+
+		DatabaseReference refOld = this.db.getReference(oldusr.getPath());
+		refOld.setValue(null);
+		DatabaseReference refNew = this.db.getReference(newusr.getPath());
+		refNew.setValue(newusr);
+		MainActivity.currentUser = newusr;
+	}
 
 	public void readData(){
 

@@ -70,6 +70,12 @@ public class User implements Serializable {
         this.registration.putAll(registration);
     }
 
+
+
+    public String getPath(){
+        return String.format("STUDENT/%s", this.username);
+    }
+
     public String toString(){
         return String.format("%s %s %s", this.email, this.username, this.password);
     }
