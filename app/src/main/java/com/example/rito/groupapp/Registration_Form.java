@@ -48,7 +48,7 @@ public class Registration_Form extends AppCompatActivity {
     public DatabaseReference databaseRef;
     Button submit;
     EditText username;
-    EditText password;
+    EditText password, password2;
     EditText email;
     int result;
     String un;
@@ -64,65 +64,73 @@ public class Registration_Form extends AppCompatActivity {
         setContentView(R.layout.activity_registration__form);
         username = (EditText)findViewById(R.id.user_name);
         password = (EditText)findViewById(R.id.password);
+        password2 = (EditText)findViewById(R.id.password_validate);
         email = (EditText)findViewById(R.id.email);
         submit = findViewById(R.id.submit_button);
         result = -1;
 
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+              
+                if (password == password2) {
 
-                final Context context = getApplicationContext();
-                final int duration = Toast.LENGTH_LONG;
-                DatabaseReference ref;
 
-                final Database db = new Database();
-                un = username.getText().toString();
-                pw = password.getText().toString();
-                em = email.getText().toString();
+                    final Context context = getApplicationContext();
+                    final int duration = Toast.LENGTH_SHORT;
+                    DatabaseReference ref;
 
-                ref = db.getDb().getReference("STUDENT");
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //check if username is a child of STUDENT
-                        CharSequence text;
-                        boolean exists = false;
+                    final Database db = new Database();
+                    un = username.getText().toString();
+                    pw = password.getText().toString();
+                    em = email.getText().toString();
 
-                        if (dataSnapshot.child(un).exists()) {
-                            text = "Sorry, username already exists.";
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-                            exists = true;
-                        } else {
-                            //verify if email exists
-                            for(DataSnapshot data: dataSnapshot.getChildren()){
-                                User u = data.getValue(User.class);
+                    ref = db.getDb().getReference("STUDENT");
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //check if username is a child of STUDENT
+                            CharSequence text;
+                            boolean exists = false;
 
-                                if (u.getEmail().equalsIgnoreCase(em)) {
-                                    text = "Sorry, email already exists.";
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
-                                    exists = true;
-                                    break;
+                            if (dataSnapshot.child(un).exists()) {
+                                text = "Sorry, username already exists.";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                                exists = true;
+                            } else {
+                                //verify if email exists
+                                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                                    User u = data.getValue(User.class);
+
+                                    if (u.getEmail().equalsIgnoreCase(em)) {
+                                        text = "Sorry, email already exists.";
+                                        Toast toast = Toast.makeText(context, text, duration);
+                                        toast.show();
+                                        exists = true;
+                                        break;
+                                    }
                                 }
                             }
+                            if (!(exists)) {
+                                db.addUser(em, un, pw);
+                                text = "Success! Added new user!";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                                startActivity(new Intent(Registration_Form.this, MainActivity.class));
+                            }
+
                         }
-                        if (!(exists)){
-                            db.addUser(em, un, pw);
-                            text = "Success! Added new user!";
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-                            startActivity(new Intent(Registration_Form.this, MainActivity.class));
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
+                    });
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+                }
+                if(password != password2){
+                    Toast.makeText(getBaseContext(), "passwords not the same", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
