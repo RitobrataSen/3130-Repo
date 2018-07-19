@@ -48,7 +48,17 @@
         <activity
             android:name=".ViewRemoveCourseRegistrationActivity"
             android:label="@string/to_view_remove_registration" />
-        <activity android:name=".ViewUser_Information.View_UserInformation"></activity>
+        <activity android:name=".ViewUser_Information.View_UserInformation">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
     </application>
 
 </manifest>
