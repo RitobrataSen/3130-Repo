@@ -71,6 +71,7 @@ public class Registration_Form extends AppCompatActivity {
 
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+              
                 if (password == password2) {
 
 
