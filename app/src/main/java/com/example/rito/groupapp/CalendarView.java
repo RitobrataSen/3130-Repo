@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
 
@@ -20,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
 /**
  * CalendarView Activity displays all courses that a student is registered for sorted by
  * day. Plans exist for expanding this to short all activities based on start time.
@@ -30,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 public class CalendarView extends AppCompatActivity {
 
     private int courseListSize = 4;
+    private final ArrayList<String> codeList = new ArrayList<>();
+    private String selectedCourse;
     public TextView monday[] = new TextView[courseListSize];
     public TextView tuesday[] = new TextView[courseListSize];
     public TextView wednesday[] = new TextView[courseListSize];
@@ -37,6 +44,8 @@ public class CalendarView extends AppCompatActivity {
     public TextView friday[] = new TextView[courseListSize];
     public Course courseList[];
     public Button course_button;
+    public Button detail;
+    public static String selectedCRN;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
 
@@ -82,8 +91,11 @@ public class CalendarView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
 
+        detail = (Button) findViewById(R.id.Detail);
         hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(hdrToolBar);
+
+        codeList.add("Select the course you want view the detail");
 
         populateTextViewLists();
 
@@ -104,6 +116,7 @@ public class CalendarView extends AppCompatActivity {
                             toAdd.setCourse_name(dataSnapshot.child("course_name").getValue().toString());
                             toAdd.setEndTime(dataSnapshot.child("end_time").getValue().toString());
                             toAdd.setStartTime(dataSnapshot.child("start_time").getValue().toString());
+                            codeList.add(dataSnapshot.child("course_code").getValue().toString());
 
                             if (dataSnapshot.child("mon").getValue().toString().equals("1")) {
                                 displayCourse(monday, toAdd);
@@ -128,6 +141,23 @@ public class CalendarView extends AppCompatActivity {
                     }
                 });
             }
+            Spinner codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
+            ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
+            codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            codeSpinner.setAdapter(codeAdapter);
+
+            selectedCourse = codeSpinner.getSelectedItem().toString();
+            int index = codeList.indexOf(selectedCourse) - 1;
+            if (index >= 0) {
+                selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
+            }
+            detail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("debug.print", "main_activity: Submit clicked");
+
+                }
+            });
         }
         else{
             Course_Schedule c = new Course_Schedule("Error", "User Failed to Login",
