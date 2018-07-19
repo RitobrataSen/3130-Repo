@@ -42,6 +42,8 @@ public class View_UserInformation extends AppCompatActivity {
 
             tv3.setText("Password");
             et3.setText(MainActivity.currentUser.getPassword().toString());
+
+            
         }
         //setContentView(R.layout.activity_view__user_information);
     }

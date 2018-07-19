@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +34,14 @@ import java.util.ArrayList;
  * Future plans exist o include more course information in this activity. .
  *
  * @author   Gobii, Rito, Yuhao
- * @since    2018-07-08
+ *
+ * @Completed   2018-07-08
+ *
+ * @since 2018-07-19
+ *
+ * @author Ritobrata Sen, Qu Yuze
+ * @updated: The an added functionality to the menu was added so that the user can now
+ * navigate and view their information.
  */
 public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	private ListView lv;
@@ -70,6 +78,9 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 			case R.id.go_to_view_remove_registered:
 				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, ViewRemoveCourseRegistrationActivity.class));
 				return true;
+			case R.id.view_user_information:
+				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, View_UserInformation.class));
+
 
 			case R.id.log_out:
 				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, Logout_Activity.class));
