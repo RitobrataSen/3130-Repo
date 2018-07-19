@@ -39,7 +39,11 @@ public class ViewRemoveCourseRegistrationActivityTest {
 		onView(withText("My Courses")).perform(click());
 		Thread.sleep(1000);
 
-		onView(withId(R.id.deregisterButton)).check(matches(isClickable()));
-		onView(withId(R.id.deregisterButton)).check(matches(withText("DEREGISTER")));
+		onView(withId(R.id.navigation_back)).check(matches(isClickable()));
+		onView(withId(R.id.navigation_back)).perform(click());
+
+		onView(withId(R.id.navigation_deregister)).check(matches(isClickable()));
+		onView(withId(R.id.navigation_deregister)).perform(click());
+
 	}
 }
