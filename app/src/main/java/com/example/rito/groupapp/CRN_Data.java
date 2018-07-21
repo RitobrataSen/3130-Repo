@@ -1,11 +1,16 @@
 package com.example.rito.groupapp;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.text.TextUtils;
 import android.widget.Switch;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+=======
+		import com.google.firebase.database.Exclude;
+		import com.google.firebase.database.IgnoreExtraProperties;
+>>>>>>> 9295fc2832a53ea52924dd5a5eb21f472e375c1a
 =======
 		import com.google.firebase.database.Exclude;
 		import com.google.firebase.database.IgnoreExtraProperties;
@@ -203,6 +208,10 @@ public class CRN_Data implements Serializable {
 		this.max = max;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9295fc2832a53ea52924dd5a5eb21f472e375c1a
 =======
 
 >>>>>>> 9295fc2832a53ea52924dd5a5eb21f472e375c1a
@@ -242,6 +251,7 @@ public class CRN_Data implements Serializable {
 		result.put("subject_code", this.subject_code);
 		result.put("has_supplement", this.has_supplement);
 		return result;
+<<<<<<< HEAD
 <<<<<<< HEAD
 	}
 
@@ -340,6 +350,22 @@ public class CRN_Data implements Serializable {
 //		return this.start_time.compareTo(c.getStart_Time());
 //	}
 
+=======
+	}
+
+	@Override
+	public String toString(){
+		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+		return String.format("%s\n%s\n%s, %s %s\n%s", crn, term_code, course_code,
+				section_number, section_type);
+		//return this.crn;
+	}
+
+//	public int compareTo(CRN_Data c){
+//		return this.start_time.compareTo(c.getStart_Time());
+//	}
+
+>>>>>>> 9295fc2832a53ea52924dd5a5eb21f472e375c1a
 	public boolean equals(CRN_Data c) {
 		if ((this.crn.equals(c.getCrn())) &&
 				((this.crn == c.getCrn()) || (this.crn.equals(c.getCrn()))) &&
@@ -368,5 +394,8 @@ public class CRN_Data implements Serializable {
 		}
 		return false;
 	}
+<<<<<<< HEAD
+>>>>>>> 9295fc2832a53ea52924dd5a5eb21f472e375c1a
+=======
 >>>>>>> 9295fc2832a53ea52924dd5a5eb21f472e375c1a
 }
