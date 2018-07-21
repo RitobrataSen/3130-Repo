@@ -1,4 +1,4 @@
-package com.example.rito.groupapp;
+package com.example.rito.groupapp.old;
 //package com.example.rito.groupapp;
 
 import com.google.firebase.database.Exclude;
@@ -6,7 +6,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 /**
  * Student class is used to unload firebase data using firebase ui adapter

@@ -1,6 +1,6 @@
 package com.example.rito.groupapp;
 
-import com.example.rito.groupapp.Course_Enrollment;
+import com.example.rito.groupapp.old.Course_Enrollment;
 
 import org.junit.After;
 import org.junit.AfterClass;

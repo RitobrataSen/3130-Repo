@@ -28,11 +28,7 @@ public class CRN_Data implements Serializable {
 	private String end_date;
 	private String start_time;
 	private String end_time;
-	private String mon;
-	private String tue;
-	private String wed;
-	private String thu;
-	private String fri;
+	private HashMap<String, Boolean> days;
 	private String location;
 	private String course_name;
 	private String max;
@@ -70,20 +66,8 @@ public class CRN_Data implements Serializable {
 	public String getEnd_Time() {
 		return this.end_time;
 	}
-	public String getMon() {
-		return this.mon;
-	}
-	public String getTue() {
-		return this.tue;
-	}
-	public String getWed() {
-		return this.wed;
-	}
-	public String getThu() {
-		return this.thu;
-	}
-	public String getFri() {
-		return this.fri;
+	public HashMap<String, Boolean> getDays() {
+		return this.enrollment;
 	}
 	public String getLocation() {
 		return this.location;
@@ -134,20 +118,8 @@ public class CRN_Data implements Serializable {
 	public void setEnd_Time(String end_time) {
 		this.end_time = end_time;
 	}
-	public void setMon(String mon) {
-		this.mon = mon;
-	}
-	public void setTue(String tue) {
-		this.tue = tue;
-	}
-	public void setWed(String wed) {
-		this.wed = wed;
-	}
-	public void setThu(String thu) {
-		this.thu = thu;
-	}
-	public void setFri(String fri) {
-		this.fri = fri;
+	public void setDays(HashMap<String, Boolean> days) {
+		this.days = days;
 	}
 	public void setLocation(String location) {
 		this.location = location;
@@ -180,11 +152,7 @@ public class CRN_Data implements Serializable {
 		result.put("end_date", this.end_date);
 		result.put("start_time", this.start_time);
 		result.put("end_time", this.end_time);
-		result.put("mon", this.mon);
-		result.put("tue", this.tue);
-		result.put("wed", this.wed);
-		result.put("thu", this.thu);
-		result.put("fri", this.fri);
+		result.put("days", this.days);
 		result.put("location", this.location);
 		result.put("course_name", this.course_name);
 		result.put("max", this.max);
@@ -206,11 +174,7 @@ public class CRN_Data implements Serializable {
 				((this.end_date == c.getEnd_Date()) || (this.end_date.equals(c.getEnd_Date()))) &&
 				((this.start_time == c.getStart_Time()) || (this.start_time.equals(c.getStart_Time()))) &&
 				((this.end_time == c.getEnd_Time()) || (this.end_time.equals(c.getEnd_Time()))) &&
-				((this.mon == c.getMon()) || (this.mon.equals(c.getMon()))) &&
-				((this.tue == c.getTue()) || (this.tue.equals(c.getTue()))) &&
-				((this.wed == c.getWed()) || (this.wed.equals(c.getWed()))) &&
-				((this.thu == c.getThu()) || (this.thu.equals(c.getThu()))) &&
-				((this.fri == c.getFri()) || (this.fri.equals(c.getFri()))) &&
+				((this.days == c.getDays()) || (this.days.equals(c.getDays()))) &&
 				((this.location == c.getLocation()) || (this.location.equals(c.getLocation()))) &&
 				((this.course_name == c.getCourse_Name()) || (this.course_name.equals(c.getCourse_Name()))) &&
 				((this.max == c.getMax()) || (this.max.equals(c.getMax()))) &&
@@ -237,11 +201,11 @@ public class CRN_Data implements Serializable {
 		String str;
 
 		String [] arr = {
-			this.mon.equals("1") ? "M" : "",
-			this.tue.equals("1") ? "T" : "",
-			this.wed.equals("1") ? "W" : "",
-			this.thu.equals("1") ? "R" : "",
-			this.fri.equals("1") ? "F" : ""
+			this.days.get("mon") ? "M" : "",
+			this.days.get("tue") ? "T" : "",
+			this.days.get("wed") ? "W" : "",
+			this.days.get("thu") ? "R" : "",
+			this.days.get("fri") ? "F" : ""
 		};
 
 		String days = TextUtils.join("-", arr);

@@ -106,26 +106,24 @@ public class CalendarView extends AppCompatActivity {
                       //  Log.d("Dryden", "checking to see if exists");
                         if (dataSnapshot.exists()) {
 
-                                CRN_Data toAdd = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
-                                calendarCourses[counter] = toAdd;
+                            CRN_Data toAdd = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                            calendarCourses[counter] = toAdd;
 
-                                if (toAdd.getMon() == 1) {
-                                    displayCourse(monday, toAdd);
-                                }
-                                if (toAdd.getTue() == 1) {
-                                    displayCourse(tuesday, toAdd);
-                                }
-                                if (toAdd.getWed() == 1) {
-                                    displayCourse(wednesday, toAdd);
-                                }
-                                if (toAdd.getThu() == 1) {
-                                    displayCourse(thursday, toAdd);
-                                }
-                                if (toAdd.getFri() == 1) {
-                                    displayCourse(friday, toAdd);
-                                }
-
-
+                            if (toAdd.getDays().get("mon")) {
+                                displayCourse(monday, toAdd);
+                            }
+                            if (toAdd.getDays().get("tue")) {
+                                displayCourse(tuesday, toAdd);
+                            }
+                            if (toAdd.getDays().get("wed")) {
+                                displayCourse(wednesday, toAdd);
+                            }
+                            if (toAdd.getDays().get("thu")) {
+                                displayCourse(thursday, toAdd);
+                            }
+                            if (toAdd.getDays().get("fri")) {
+                                displayCourse(friday, toAdd);
+                            }
                         }
                     }
 

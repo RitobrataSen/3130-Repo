@@ -1,6 +1,6 @@
 package com.example.rito.groupapp;
 
-import com.example.rito.groupapp.*;
+import com.example.rito.groupapp.old.Course_Schedule;
 
 
 import org.junit.After;
