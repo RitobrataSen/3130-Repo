@@ -53,6 +53,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 	private Term filterTerm = null;
 	private Subject filterSubject = null;
 	private Course filterCourse = null;
+	private CRN_Data filterCRN = null;
+
 	private boolean displayList = true;
 	// flag to determine the current view type,
 	// true = course selection display,
@@ -255,6 +257,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 				filterTerm = new Term(course.getTerm_code(), "", "");
 				filterSubject = new Subject(course.getSubject_code(), "", course.getTerm_code());
 				filterCourse = null;
+				filterCRN = null;
+
 				populateCourse(filterSubject);
 			}
 		});
@@ -265,6 +269,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 		filterTerm = null;
 		filterSubject = null;
 		filterCourse = null;
+		filterCRN = null;
+
 		final FirebaseListAdapter<Term> firebaseAdapter;
 		Database db = new Database("TERM");
 		lv = findViewById(R.id.listView);
@@ -305,6 +311,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 		filterTerm = term;
 		filterSubject = null;
 		filterCourse = null;
+		filterCRN = null;
+
 		final FirebaseListAdapter<Subject> firebaseAdapter;
 		Database db = new Database("SUBJECT/" + term.getTerm_code());
 //		Database db = new Database("SUBJECT");
@@ -348,6 +356,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 		//filterTerm = null;
 		filterSubject = subject;
 		filterCourse = null;
+		filterCRN = null;
 
 		final FirebaseListAdapter<Course> firebaseAdapter;
 		Database db = new Database("COURSE/" +
@@ -420,9 +429,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
-
-
-
+	//resume here
+	//public void populateCRN(Course course){// params: listview reference, selected object
 
 
 }

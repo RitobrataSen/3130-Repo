@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 
 //change db:    COURSE_ENROLLEMENT to COURSE_ENROLLMENT
+//uses User and Database object
 
 public class CourseRegistration extends AppCompatActivity{
     private DatabaseReference mDatabase;
@@ -107,7 +108,7 @@ public class CourseRegistration extends AppCompatActivity{
                 Log.d("debug.print", "on click add");
                 Database db_ce = new Database();
                 input_crn = crn.getText().toString();
-                DatabaseReference ref_ce = db_ce.getDb().getReference("COURSE_ENROLLEMENT/" +
+                DatabaseReference ref_ce = db_ce.getDb().getReference("CRN_DATA/" +
                         input_crn);
                 Log.d("debug.print",ref_ce.toString());
                 ref_ce.addListenerForSingleValueEvent(new ValueEventListener() {
