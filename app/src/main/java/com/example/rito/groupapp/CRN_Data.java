@@ -34,7 +34,6 @@ public class CRN_Data implements Serializable {
 	private String max;
 	private HashMap<String, Boolean> enrollment;
 	private String subject_code;
-	private boolean has_supplement;
 
 	public String getCrn() {
 		return this.crn;
@@ -83,9 +82,6 @@ public class CRN_Data implements Serializable {
 	}
 	public String getSubject_Code() {
 		return this.subject_code;
-	}
-	public boolean getHas_Supplement() {
-		return this.has_supplement;
 	}
 
 	public void setCrn(String crn) {
@@ -136,9 +132,6 @@ public class CRN_Data implements Serializable {
 	public void setSubject_Code(String subject_code) {
 		this.subject_code = subject_code;
 	}
-	public void setHas_Supplement(boolean has_supplement) {
-		this.has_supplement = has_supplement;
-	}
 
 	public HashMap<String, Object> toMap() {
 		HashMap<String, Object> result = new HashMap<>();
@@ -158,7 +151,6 @@ public class CRN_Data implements Serializable {
 		result.put("max", this.max);
 		result.put("enrollment", this.enrollment);
 		result.put("subject_code", this.subject_code);
-		result.put("has_supplement", this.has_supplement);
 		return result;
 	}
 
@@ -179,14 +171,19 @@ public class CRN_Data implements Serializable {
 				((this.course_name == c.getCourse_Name()) || (this.course_name.equals(c.getCourse_Name()))) &&
 				((this.max == c.getMax()) || (this.max.equals(c.getMax()))) &&
 				((this.enrollment == c.getEnrollment()) || (this.enrollment.equals(c.getEnrollment()))) &&
-				((this.subject_code == c.getSubject_Code()) || (this.subject_code.equals(c.getSubject_Code()))) &&
-				(this.has_supplement == c.getHas_Supplement())
+				((this.subject_code == c.getSubject_Code()) || (this.subject_code.equals(c.getSubject_Code())))
 				){
 			return true;
 		}
 		return false;
 	}
 
+	public boolean isCore(){
+		return (
+				this.section_type.equalsIgnoreCase("lab") ||
+						this.section_type.equalsIgnoreCase("tut")
+		);
+	}
 
 	@Override
 	public String toString(){
@@ -211,7 +208,8 @@ public class CRN_Data implements Serializable {
 		String days = TextUtils.join("-", arr);
 		int curr = this.enrollment.size();
 
-		str = String.format("CRN: %s\n" +
+		str = String.format(
+				"CRN: %s\n" +
 				"Course: %s (%s)\n" +
 				"Section: %s - %s\n" +
 				"Start/ End Times: %s to %s\n" +
@@ -231,6 +229,10 @@ public class CRN_Data implements Serializable {
 
 				;
 		return str;
+	}
+
+	public String[] getToStringArray(){
+		return this.toString_CFA().split("\n");
 	}
 
 }

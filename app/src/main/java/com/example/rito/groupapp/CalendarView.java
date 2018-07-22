@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
@@ -69,7 +67,7 @@ public class CalendarView extends AppCompatActivity {
                 return true;
 
             case R.id.go_to_view_remove_registered:
-                startActivity(new Intent(CalendarView.this, ViewRemoveCourseRegistrationActivity.class));
+                startActivity(new Intent(CalendarView.this, MyCoursesActivity.class));
                 return true;
 
             case R.id.log_out:
@@ -207,8 +205,6 @@ public class CalendarView extends AppCompatActivity {
         friday[2].setText("");
         friday[3].setText("");
     }
-
-
 
     public int getCourseListSize(){
         return courseListSize;

@@ -50,7 +50,7 @@
             android:label="@string/to_course_view"></activity>
 
         <activity
-            android:name=".ViewRemoveCourseRegistrationActivity"
+            android:name=".MyCoursesActivity"
             android:label="@string/to_view_remove_registration"></activity>
     </application>
 

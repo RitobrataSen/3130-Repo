@@ -30,8 +30,23 @@ public class Course implements Serializable {
 	//constructors
 	public Course() {
 	}
-	//removed second constructor
+	public Course(String course_code,
+				  String course_name,
+				  String subject_code,
+				  String term_code,
+				  boolean has_supplement,
+				  HashMap<String, Boolean> core,
+				  HashMap<String, Boolean> supplement) {
 
+		this.course_code = course_code;
+		this.course_name = course_name;
+		this.subject_code = subject_code;
+		this.term_code = term_code;
+		this.has_supplement = has_supplement;
+		this.core = core;
+		this.supplement = supplement;
+
+	}
 	//methods
 
 	//getter/ setter methods

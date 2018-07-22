@@ -68,7 +68,7 @@ public class CourseRegistration extends AppCompatActivity{
                 return true;
 
             case R.id.go_to_view_remove_registered:
-                startActivity(new Intent(CourseRegistration.this, ViewRemoveCourseRegistrationActivity.class));
+                startActivity(new Intent(CourseRegistration.this, MyCoursesActivity.class));
                 return true;
 
             case R.id.log_out:

@@ -37,7 +37,8 @@ import java.util.ArrayList;
  * @author   Gobii, Rito, Yuhao
  * @since    2018-07-08
  */
-public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
+public class MyCoursesActivity extends AppCompatActivity {
+	//MyCoursesActivity
 	private ListView lv;
 	private ArrayList<CRN> registeredCourses = new ArrayList<>();
 	private ArrayList<CRN> deletedCourses = new ArrayList<>();
@@ -58,23 +59,23 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CourseFilterActivity.class));
+				startActivity(new Intent(MyCoursesActivity.this, CourseFilterActivity.class));
 				return true;
 
 			case R.id.go_to_calender:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CalendarView.class));
+				startActivity(new Intent(MyCoursesActivity.this, CalendarView.class));
 				return true;
 
 			case R.id.go_to_add_crn:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CourseRegistration.class));
+				startActivity(new Intent(MyCoursesActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, ViewRemoveCourseRegistrationActivity.class));
+				startActivity(new Intent(MyCoursesActivity.this, MyCoursesActivity.class));
 				return true;
 
 			case R.id.log_out:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, Logout_Activity.class));
+				startActivity(new Intent(MyCoursesActivity.this, Logout_Activity.class));
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -117,7 +118,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 		Log.d("debug.print", "VRCR, onCreate:");
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view_remove_course_registration);
+		setContentView(R.layout.activity_my_courses);
 
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation2);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

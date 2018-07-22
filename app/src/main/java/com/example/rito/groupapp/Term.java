@@ -21,7 +21,7 @@ public class Term implements Serializable {
 	public Term(){
 	}
 
-	public Term(String term_code, String term_description, String uid){
+	public Term(String term_code, String term_description){
 		this.term_code = term_code;
 		this.term_description = term_description;
 		//this.uid = uid;
