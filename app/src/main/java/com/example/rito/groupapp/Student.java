@@ -1,4 +1,4 @@
-package com.example.rito.groupapp.old;
+package com.example.rito.groupapp;
 //package com.example.rito.groupapp;
 
 import com.google.firebase.database.Exclude;
@@ -28,6 +28,7 @@ public class Student implements Serializable {
 
 	//constructors
 	public Student() {
+		this.registration = new HashMap<String, Boolean>();
 	}
 
 	public Student(/*String uid,*/ String email, String username,

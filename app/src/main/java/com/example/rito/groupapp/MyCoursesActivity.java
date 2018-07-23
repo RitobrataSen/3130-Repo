@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rito.groupapp.old.CRN;
-import com.example.rito.groupapp.old.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

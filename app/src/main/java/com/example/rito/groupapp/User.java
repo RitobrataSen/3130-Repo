@@ -29,6 +29,7 @@ public class User implements Serializable {
 
     //constructors
     public User() {
+        this.registration = new HashMap<String, Boolean>();
     }
 
     public User(String email, String username,

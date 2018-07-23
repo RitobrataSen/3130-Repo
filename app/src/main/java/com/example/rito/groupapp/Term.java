@@ -48,6 +48,18 @@ public class Term implements Serializable {
 		return String.format("TERMS/%s", this.term_code);
 	}
 
+
+	public boolean equals(Term t){
+		if (t == null){
+			return false;
+		} else if (
+				this.term_code.equals(t.getTerm_code())
+				){
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString(){
 		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);

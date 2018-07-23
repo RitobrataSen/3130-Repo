@@ -1,5 +1,4 @@
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.old.Student;
 
 
 import org.junit.After;

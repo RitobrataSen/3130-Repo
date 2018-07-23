@@ -1,5 +1,6 @@
 package com.example.rito.groupapp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,20 +17,18 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.example.rito.groupapp.old.CRN;
-import com.example.rito.groupapp.old.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * CourseFilterActivity allows users to drill down courses. plans exists to
@@ -52,10 +51,16 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	private TextView mTextMessage;
 
+	private Context context = getApplicationContext(); //this
+	private int duration = Toast.LENGTH_LONG;
+	private String text = "";
+
 	/*
 	0 = term selection
 	1 = subject selection
 	2 = course selection
+	1 = course type selection
+	2 = crn selection
 	*/
 	private int filterState = 0;
 	private Term filterTerm = null;
@@ -64,7 +69,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 	private CourseType filterCourseType = null;
 	private CRN_Data filterCRN = null;
 
-	private boolean displayList = true;
+	private boolean displaySelection = false;
 	// flag to determine the current view type,
 	// true = course selection display,
 	// false = selected courses display;
@@ -141,18 +146,18 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 			switch (item.getItemId()) {
 				case R.id.navigation_back:
-					if (displayList){
+					if (displaySelection){
 						getCurrentState();
 					} else {
 						getPreviousState();
 					}
 
-					displayList = false;
+					displaySelection = false;
 					return true;
 
 				case R.id.navigation_list:
 					populateCurrentSelection(1);
-					displayList = true;
+					displaySelection = true;
 					return true;
 
 				/*
@@ -186,6 +191,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_filter);
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -247,6 +254,13 @@ public class CourseFilterActivity extends AppCompatActivity {
 	}
 
 	public void populateCurrentSelection(int type){
+		//0 = view crn
+		//1 = view selected crn
+		filterCRN = null;
+		Log.d("debug.print", "selected CORE" + selectedCoreCourses.toString());
+		Log.d("debug.print", "selected SUPPLEMENT" + selectedSupplementCourses.toString());
+		Log.d("debug.print", "view CORE" + viewCoreCourses.toString());
+		Log.d("debug.print", "view SUPPLEMENT" + viewSupplementCourses.toString());
 
 		lv = findViewById(R.id.listView);
 
@@ -256,76 +270,65 @@ public class CourseFilterActivity extends AppCompatActivity {
 		if (type == 0) { //view crns
 			selectedCRN = filterCourseType.getCore() ?
 					viewCoreCourses : viewSupplementCourses;
-		} else { //selected crns
-			selectedCRN = filterCourseType.getCore() ?
-					selectedCoreCourses : selectedSupplementCourses;
-		}
 
-		//set arraylist to adapter
-		lv.setAdapter(new ArrayAdapter<CRN_Data>(
-				this, R.layout.item_crn_selection , selectedCRN){
-			@Override
-			public View getView (int position, View view, ViewGroup parent){
-				if (view == null) {
-					view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection, parent,
-							false);
-				}
-
-				CRN_Data crn_data = getItem(position);
-				String []  arr = crn_data.getToStringArray();
-
-				TextView line1 = (TextView) view.findViewById(R.id.line1);
-				TextView line2 = (TextView) view.findViewById(R.id.line2);
-				TextView line3 = (TextView) view.findViewById(R.id.line3);
-				TextView line4 = (TextView) view.findViewById(R.id.line4);
-				TextView line5 = (TextView) view.findViewById(R.id.line5);
-				TextView line6 = (TextView) view.findViewById(R.id.line6);
-				TextView line7 = (TextView) view.findViewById(R.id.line7);
-				TextView line8 = (TextView) view.findViewById(R.id.line8);
-
-				line1.setText(arr[0]);
-				line2.setText(arr[1]);
-				line3.setText(arr[2]);
-				line4.setText(arr[3]);
-				line5.setText(arr[4]);
-				line6.setText(arr[5]);
-				line7.setText(arr[6]);
-				line8.setText(arr[7]);
-
-				boolean cc = false;
-				for (CRN_Data x : selectedCoreCourses) {
-					if(x.equals(crn_data)){
-						view.setBackgroundResource(R.color.colorSelected);
-						cc = true;
-						break;
+			//set arraylist to adapter
+			lv.setAdapter(new ArrayAdapter<CRN_Data>(
+					this, R.layout.item_crn_selection_basic, selectedCRN){
+				@Override
+				public View getView (int position, View view, ViewGroup parent){
+					if (view == null) {
+						view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection_basic, parent,
+								false);
 					}
-				}
 
-				if (!(cc)){
-					for (CRN_Data x : selectedSupplementCourses) {
+					CRN_Data crn_data = getItem(position);
+					String []  arr = crn_data.getToStringArray(0);
+
+					TextView line1 = (TextView) view.findViewById(R.id.line1);
+					TextView line2 = (TextView) view.findViewById(R.id.line2);
+					TextView line3 = (TextView) view.findViewById(R.id.line3);
+					TextView line4 = (TextView) view.findViewById(R.id.line4);
+
+					line1.setText(arr[0]);
+					line2.setText(arr[1]);
+					line3.setText(arr[2]);
+					line4.setText(arr[3]);
+
+					boolean cc = false;
+					for (CRN_Data x : selectedCoreCourses) {
 						if(x.equals(crn_data)){
 							view.setBackgroundResource(R.color.colorSelected);
 							cc = true;
 							break;
 						}
 					}
+
+					if (!(cc)){
+						for (CRN_Data x : selectedSupplementCourses) {
+							if(x.equals(crn_data)){
+								view.setBackgroundResource(R.color.colorSelected);
+								cc = true;
+								break;
+							}
+						}
+					}
+
+
+					if (!(cc)){
+						view.setBackgroundResource(R.color.transparent);
+					}
+
+					return view;
 				}
+			});
 
-
-				if (!(cc)){
-					view.setBackgroundResource(R.color.transparent);
-				}
-
-				return view;
-			}
-		});
-		// set On Item Click Listener for the listview
-
-		if (type == 0){// view
+			// set On Item Click Listener for the listview
 			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					CRN_Data crn_data = (CRN_Data) parent.getItemAtPosition(position);
+					filterCRN = crn_data;
+					/*
 					boolean core = filterCourseType.getCore();
 					boolean sel = markSelection(crn_data, core);
 
@@ -334,10 +337,101 @@ public class CourseFilterActivity extends AppCompatActivity {
 					} else {
 						view.setBackgroundResource(R.color.colorSelected);
 					}
+					*/
+
+
+					// custom dialog
+					final Dialog dialog = new Dialog(context);
+					dialog.setContentView(R.layout.item_crn_selection_full);
+					//dialog.setTitle("Title...");
+
+					// set the custom dialog components - text, image and button
+					String []  arr = crn_data.getToStringArray(1);
+
+					TextView title = (TextView) dialog.findViewById(R.id.title);
+
+					TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+					TextView line2 = (TextView) dialog.findViewById(R.id.line2);
+					TextView line3 = (TextView) dialog.findViewById(R.id.line3);
+					TextView line4 = (TextView) dialog.findViewById(R.id.line4);
+					TextView line5 = (TextView) dialog.findViewById(R.id.line5);
+					TextView line6 = (TextView) dialog.findViewById(R.id.line6);
+					TextView line7 = (TextView) dialog.findViewById(R.id.line7);
+					TextView line8 = (TextView) dialog.findViewById(R.id.line8);
+
+					title.setText("Add Course");
+
+					line1.setText(arr[0]);
+					line2.setText(arr[1]);
+					line3.setText(arr[2]);
+					line4.setText(arr[3]);
+					line5.setText(arr[4]);
+					line6.setText(arr[5]);
+					line7.setText(arr[6]);
+					line8.setText(arr[7]);
+
+					Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+					// if button is clicked, close the custom dialog
+					dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							dialog.dismiss();
+						}
+					});
+
+					Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+					// if button is clicked, close the custom dialog
+					dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							boolean sel = markSelection(true);
+							//view.setBackgroundResource(R.color.transparent);
+							//view.setBackgroundResource(R.color.colorSelected);
+							dialog.dismiss();
+							populateCurrentSelection(0);
+						}
+					});
+
+					dialog.show();
 
 				}
 			});
-		} else { // selection
+
+			lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+		} else if (type == 1) { //selected crns
+			selectedCRN = new ArrayList<>(selectedCoreCourses);
+			selectedCRN.removeAll(selectedSupplementCourses);
+			selectedCRN.addAll(selectedSupplementCourses);
+
+			//set arraylist to adapter
+			lv.setAdapter(new ArrayAdapter<CRN_Data>(
+					this, R.layout.item_crn_selection_basic, selectedCRN){
+				@Override
+				public View getView (int position, View view, ViewGroup parent){
+					if (view == null) {
+						view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection_basic, parent,
+								false);
+					}
+
+					CRN_Data crn_data = getItem(position);
+					String []  arr = crn_data.getToStringArray(0);
+
+					TextView line1 = (TextView) view.findViewById(R.id.line1);
+					TextView line2 = (TextView) view.findViewById(R.id.line2);
+					TextView line3 = (TextView) view.findViewById(R.id.line3);
+					TextView line4 = (TextView) view.findViewById(R.id.line4);
+
+					line1.setText(arr[0]);
+					line2.setText(arr[1]);
+					line3.setText(arr[2]);
+					line4.setText(arr[3]);
+
+					return view;
+				}
+			});
+
+			// set On Item Click Listener for the listview
 			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -346,9 +440,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 					navigateToSelection(crn_data);
 				}
 			});
+			lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
 		}
 
-		lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 	}
 
@@ -425,7 +520,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 				boolean cc = false;
 
 				for (CRN_Data x : selectedCoreCourses) {
-					if((x.getSubject_Code().equals(model.getSubject_code()))){
+					if(
+							x.getTerm_Code().equals(model.getTerm_code())
+							&& x.getSubject_Code().equals(model.getSubject_code())
+					){
 						v.setBackgroundResource(R.color.colorSelected);
 						cc = true;
 						break;
@@ -434,7 +532,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 				if (!(cc)) {
 					for (CRN_Data x : selectedSupplementCourses) {
-						if ((x.getSubject_Code().equals(model.getSubject_code()))) {
+						if(
+								x.getTerm_Code().equals(model.getTerm_code())
+								&& x.getSubject_Code().equals(model.getSubject_code())
+						){
 							v.setBackgroundResource(R.color.colorSelected);
 							cc = true;
 							break;
@@ -454,7 +555,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Subject subject = (Subject) parent.getItemAtPosition(position);
-
 				populateCourse(subject);
 			}
 		});
@@ -494,7 +594,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 				csupp.setText(String.format("Has Supplement:%s", course.getHas_supplement()));
 
 				for (CRN_Data x : selectedCoreCourses) {
-					if((x.getCourse_Code().equals(model.getCourse_code()))){
+					if(
+							x.getTerm_Code().equals(model.getTerm_code())
+							&& x.getSubject_Code().equals(model.getSubject_code())
+							&& x.getCourse_Code().equals(model.getCourse_code())
+
+					){
 						v.setBackgroundResource(R.color.colorSelected);
 						cc = true;
 						break;
@@ -503,7 +608,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 				if (!(cc)) {
 					for (CRN_Data x : selectedSupplementCourses) {
-						if ((x.getCourse_Code().equals(model.getCourse_code()))) {
+						if(
+								x.getTerm_Code().equals(model.getTerm_code())
+								&& x.getSubject_Code().equals(model.getSubject_code())
+								&& x.getCourse_Code().equals(model.getCourse_code())
+						){
 							v.setBackgroundResource(R.color.colorSelected);
 							cc = true;
 							break;
@@ -539,8 +648,17 @@ public class CourseFilterActivity extends AppCompatActivity {
 		filterCRN = null;
 
 		ArrayList<CourseType> al = new ArrayList<>();
-		al.add(new CourseType(true, course.getCore().keySet()));
-		al.add(new CourseType(false, course.getSupplement().keySet()));
+
+		al.add(new CourseType(
+				course.getTerm_code(), course.getSubject_code(), course.getCourse_code(), true,
+				course.getCore()
+		));
+
+		al.add(new CourseType(
+				course.getTerm_code(), course.getSubject_code(), course.getCourse_code(), false,
+				course.getSupplement()
+		));
+
 		lv = findViewById(R.id.listView);
 		lv.setAdapter(new ArrayAdapter<CourseType>(
 				this, android.R.layout.simple_list_item_1 , al){
@@ -554,10 +672,20 @@ public class CourseFilterActivity extends AppCompatActivity {
 				CourseType coursetype = getItem(position);
 				TextView row = (TextView)view.findViewById(android.R.id.text1);
 				row.setText(coursetype.toString());
+
+				Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
 				boolean cc = false;
 
 				for (CRN_Data x : selectedCoreCourses) {
-					if(x.isCore() == coursetype.getCore()){
+					Log.d("debug.print", String.format("%s %s", x.isCore(), x.toString()));
+					Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
+
+					if(
+							x.getTerm_Code().equals(coursetype.getTerm_code())
+							&& x.getSubject_Code().equals(coursetype.getSubject_code())
+							&& x.getCourse_Code().equals(coursetype.getCourse_code())
+							&& x.isCore() == coursetype.getCore()
+					){
 						view.setBackgroundResource(R.color.colorSelected);
 						cc = true;
 						break;
@@ -566,7 +694,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 				if (!(cc)) {
 					for (CRN_Data x : selectedSupplementCourses) {
-						if (x.isCore() == coursetype.getCore()) {
+						if(
+								x.getTerm_Code().equals(coursetype.getTerm_code())
+								&& x.getSubject_Code().equals(coursetype.getSubject_code())
+								&& x.getCourse_Code().equals(coursetype.getCourse_code())
+								&& x.isCore() == coursetype.getCore()
+						){
 							view.setBackgroundResource(R.color.colorSelected);
 							cc = true;
 							break;
@@ -594,26 +727,42 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 
 	public void populateCRN(CourseType coursetype){// params: listview reference,
-		// selected
-		// object
+
 		filterState = 4;
 		//filterTerm = null;
 		//filterSubject = null;
 		//filterCourse = course;
 		filterCourseType = coursetype;
 		filterCRN = null;
+
 		boolean core = coursetype.getCore();
+
 		viewCoreCourses = new ArrayList<>();
 		viewSupplementCourses = new ArrayList<>();
 
+		Log.d("debug.print", String.format("%s\n%s\n%s\n%s\n%s\n%s\n",
+				coursetype.getCore(),
+				coursetype.getDescrip(),
+				coursetype.getTerm_code(),
+				coursetype.getSubject_code(),
+				coursetype.getCourse_code(),
+				coursetype.getKeys()
+		));
+
 		for (String k : coursetype.getKeys()){
 			Database dbCRN = new Database("CRN_DATA/" + k);
-
-			dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+			dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 					CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
-					viewCoreCourses.add(crn_data);
+					Log.d("debug.print", crn_data.toString());
+
+					if (filterCourseType.getCore()){
+						viewCoreCourses.add(crn_data);
+
+					} else {
+						viewSupplementCourses.add(crn_data);
+					}
 					populateCurrentSelection(0);
 				}
 
@@ -626,8 +775,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
-	public boolean markSelection(CRN_Data crn, boolean core){
-		boolean sel = false;
+	public boolean markSelection(boolean add){
+		CRN_Data crn = filterCRN;
+		boolean core = filterCourseType.getCore();
+
 		ArrayList<CRN_Data> newSelectedCourses = new ArrayList<>();
 		ArrayList<CRN_Data> selectedCourses = core ? selectedCoreCourses :
 				selectedSupplementCourses;
@@ -636,87 +787,104 @@ public class CourseFilterActivity extends AppCompatActivity {
 			for (CRN_Data x : selectedCourses) {
 				if(!(x.equals(crn))){
 					newSelectedCourses.add(x);
-				} else {
-					sel = true;
 				}
 			}
 
 			if (core){
 				selectedCoreCourses = newSelectedCourses;
-				if (!(sel)){
+				if (add){
 					selectedCoreCourses.add(crn);
 				}
 			} else {
 				selectedSupplementCourses = newSelectedCourses;
-				if (!(sel)){
+				if (add){
 					selectedSupplementCourses.add(crn);
 				}
 			}
 		}
 
-		return sel;
+		return add;
 	}
 
 	public void navigateToSelection(CRN_Data crn_data){
+		filterTerm = null;
+		filterSubject = null;
+		filterCourse = null;
+		filterCourseType = null;
 		filterCRN = crn_data;
 		Database db = new Database(
 				"TERM/" +
 				filterCRN.getTerm_Code()
 		);
-
 		//set filterTerm
 		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				filterTerm = dataSnapshot.getValue(Term.class);
-				Database db = new Database(
-						"SUBJECT/"  +
-						filterCRN.getTerm_Code() + "/" +
-						filterCRN.getSubject_Code()
-				);
-
-				//set filterSubject
-				db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
-					@Override
-					public void onDataChange(DataSnapshot dataSnapshot) {
-						filterSubject = dataSnapshot.getValue(Subject.class);
-						Database db = new Database(
-								"COURSE/" +
-								filterCRN.getSubject_Code()
-						);
-
-						//set filterCourse
-						db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
-							@Override
-							public void onDataChange(DataSnapshot dataSnapshot) {
-								filterCourse = dataSnapshot.getValue(Course.class);
-								boolean is_core = filterCRN.isCore();
-
-								//set filterCourseType
-								filterCourseType = new CourseType(
-										is_core,
-										is_core ?
-												filterCourse.getCore().keySet() :
-												filterCourse.getSupplement().keySet()
+				if (filterSubject != null){
+					Database db = new Database(
+							"SUBJECT/"  +
+									filterCRN.getTerm_Code() + "/" +
+									filterCRN.getSubject_Code()
+					);
+					//set filterSubject
+					db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(DataSnapshot dataSnapshot) {
+							filterSubject = dataSnapshot.getValue(Subject.class);
+							if (filterSubject != null){
+								Database db = new Database(
+										"COURSE/"  +
+												filterCRN.getTerm_Code() + "/" +
+												filterCRN.getSubject_Code() + "/" +
+												filterCRN.getCourse_Code()
 								);
-								populateCRN(filterCourseType);
-
+								//set filterCourse
+								db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+									@Override
+									public void onDataChange(DataSnapshot dataSnapshot) {
+										filterCourse = dataSnapshot.getValue(Course.class);
+										if (filterCourse != null){
+											boolean is_core = filterCRN.isCore();
+											//set filterCourseType
+											filterCourseType = new CourseType(
+													filterCourse.getTerm_code(), filterCourse.getSubject_code(), filterCourse.getCourse_code(), is_core,
+													is_core ?
+															filterCourse.getCore() :
+															filterCourse.getSupplement()
+											);
+											populateCRN(filterCourseType);
+										} else {
+											text = "Error loading course. Restarting Course Filter";
+											Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+											toast.show();
+											populateTerm();
+										}
+									}
+									@Override
+									public void onCancelled(DatabaseError databaseError) {
+										Log.d("debug.print", "The read failed: " + databaseError.getCode());
+									}
+								});
+							} else {
+								text = "Error loading subject. Restarting Course Filter";
+								Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+								toast.show();
+								populateTerm();
 							}
-
-							@Override
-							public void onCancelled(DatabaseError databaseError) {
-								Log.d("debug.print", "The read failed: " + databaseError.getCode());
-							}
-						});
-					}
-
-					@Override
-					public void onCancelled(DatabaseError databaseError) {
-						Log.d("debug.print", "The read failed: " + databaseError.getCode());
-					}
-				});
+						}
+						@Override
+						public void onCancelled(DatabaseError databaseError) {
+							Log.d("debug.print", "The read failed: " + databaseError.getCode());
+						}
+					});
+				} else {
+					text = "Error loading term. Restarting Course Filter";
+					Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+					toast.show();
+					populateTerm();
+				}
 			}
-
 			@Override
 			public void onCancelled(DatabaseError databaseError) {
 				Log.d("debug.print", "The read failed: " + databaseError.getCode());
