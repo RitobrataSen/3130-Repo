@@ -155,7 +155,7 @@ public class CalendarView extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Log.d("debug.print", "main_activity: Submit clicked");
-
+                    startActivity(new Intent(CalendarView.this, Detail_Page.class));
                 }
             });
         }
