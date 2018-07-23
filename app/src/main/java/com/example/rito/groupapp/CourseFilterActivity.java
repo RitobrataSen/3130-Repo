@@ -112,6 +112,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 			case R.id.go_to_view_remove_registered:
 				startActivity(new Intent(CourseFilterActivity.this, ViewRemoveCourseRegistrationActivity.class));
+
 			case R.id.view_user_information:
 				startActivity(new Intent(CourseFilterActivity.this, View_UserInformation.class));
 

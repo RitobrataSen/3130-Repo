@@ -55,17 +55,17 @@ public class View_UserInformation extends AppCompatActivity {
 
 
             //displaying the information
-            tv1.setText("Email");
+            tv1.setText(String.valueOf("Email"));
             et1.setText(MainActivity.currentUser.getEmail().toString());
 
-            tv2.setText("Username");
+            tv2.setText(String.valueOf("Username"));
             et2.setText(MainActivity.currentUser.getUsername().toString());
 
-            tv3.setText("Password");
+            tv3.setText(String.valueOf("Password"));
             et3.setText(MainActivity.currentUser.getPassword().toString());
 
-            tv4.setText("New Password");
-            tv5.setText("Confirm Password");
+            tv4.setText(String.valueOf("New Password"));
+            tv5.setText(String.valueOf("Confirm Password"));
 
 
             //updating the information
