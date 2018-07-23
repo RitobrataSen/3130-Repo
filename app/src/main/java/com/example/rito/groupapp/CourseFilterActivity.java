@@ -51,7 +51,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	private TextView mTextMessage;
 
-	private Context context = getApplicationContext(); //this
+	private Context context = this;
 	private int duration = Toast.LENGTH_LONG;
 	private String text = "";
 
@@ -751,11 +751,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 		for (String k : coursetype.getKeys()){
 			Database dbCRN = new Database("CRN_DATA/" + k);
-			dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
+			dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 					CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
 					Log.d("debug.print", crn_data.toString());
+					Log.d("debug.print", "days: " + crn_data.getDays().toString());
 
 					if (filterCourseType.getCore()){
 						viewCoreCourses.add(crn_data);
@@ -821,7 +822,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				filterTerm = dataSnapshot.getValue(Term.class);
-				if (filterSubject != null){
+				if (filterTerm != null){
 					Database db = new Database(
 							"SUBJECT/"  +
 									filterCRN.getTerm_Code() + "/" +

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -95,7 +96,12 @@ public class CalendarView extends AppCompatActivity {
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
                         //Recall, this wont work unless a user is signed in.
                 String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
-                Query courseSchedule = databaseRef.child("CRN_DATA").child(crn);
+
+                //Query courseSchedule = databaseRef.child("CRN_DATA").child(crn);
+                Database db = new Database("CRN_DATA/" + crn);
+                DatabaseReference courseSchedule = db.getDbRef();
+                Log.d("debug.print", courseSchedule.toString());
+
                 counter = i;
                 //Log.d("Dryden", courseSchedule.toString());
                 courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {

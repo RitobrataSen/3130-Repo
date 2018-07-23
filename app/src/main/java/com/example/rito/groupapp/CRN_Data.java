@@ -71,7 +71,7 @@ public class CRN_Data implements Serializable {
 		return this.end_time;
 	}
 	public HashMap<String, Boolean> getDays() {
-		return this.enrollment;
+		return this.days;
 	}
 	public String getLocation() {
 		return this.location;

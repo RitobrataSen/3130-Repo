@@ -163,7 +163,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 		Log.d("debug.print", "VRCR, populateRegisteredCourses START:");
 
 		Database db = new Database("STUDENT/" + username);
-		db.getDbRef().addValueEventListener(new ValueEventListener() {
+		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Log.d("debug.print", "VRCR, onDataChange START:");
@@ -179,7 +179,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 							Database dbCRN = new Database("CRN/" + k);
 							Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
 
-							dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
+							dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 								@Override
 								public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 									CRN crn = dataSnapshot.getValue(CRN.class);
