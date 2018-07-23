@@ -99,18 +99,22 @@ public class CourseFilterActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
+				Log.d("debug.print", "CFA, MENU CourseFilterActivity:");
 				startActivity(new Intent(CourseFilterActivity.this, CourseFilterActivity.class));
 				return true;
 
 			case R.id.go_to_calender:
+				Log.d("debug.print", "CFA, MENU CalendarView:");
 				startActivity(new Intent(CourseFilterActivity.this, CalendarView.class));
 				return true;
 
 			case R.id.go_to_add_crn:
+				Log.d("debug.print", "CFA, MENU CourseRegistration:");
 				startActivity(new Intent(CourseFilterActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
+				Log.d("debug.print", "CFA, MENU ViewRemoveCourseRegistrationActivity:");
 				startActivity(new Intent(CourseFilterActivity.this, ViewRemoveCourseRegistrationActivity.class));
 
 			case R.id.view_user_information:
@@ -118,6 +122,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 				return true;
 			case R.id.log_out:
+				Log.d("debug.print", "CFA, MENU Logout_Activity:");
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
 				return true;
 

@@ -1,10 +1,12 @@
 package com.example.rito.groupapp;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,11 +26,7 @@ import com.google.firebase.database.ValueEventListener;
  of courses.
  *
  * @author   Gobii, Rito, Yuhao
- * @Completed    2018-07-08
- *
- * @since 2018-19-08
- * @Update : updated functionality which enables database to update the information of an user
- *
+ * @since    2018-07-08
  */
 
 public class Database extends Application {
@@ -81,7 +79,7 @@ public class Database extends Application {
 
 		//remove from: COURSE_ENROLLMENT/<crn>/ENROLLMENT/<username> = null
 		String pathEnrollment = String.format(
-				"COURSE_ENROLLMENT/%s/ENROLLMENT/%s", crn, username);
+				"COURSE_ENROLLEMENT/%s/ENROLLMENT/%s", crn, username);
 
 		ref = this.db.getReference(pathEnrollment);
 		ref.setValue(val ? val : null);
@@ -100,22 +98,26 @@ public class Database extends Application {
 
 	}
 
-	public void updateUser(User oldusr, User newusr){
+	public void addUser(String email, String username, String password){
+		int result = -1;
+		/*
+		0 = success
+		1 = username exists
+		2 = email exists
+		 */
+		DatabaseReference ref;
 
-		DatabaseReference refOld = this.db.getReference(oldusr.getPath());
-		refOld.setValue(null);
-		DatabaseReference refNew = this.db.getReference(newusr.getPath());
-		refNew.setValue(newusr);
-		MainActivity.currentUser = newusr;
-	}
+		//check if username exists
+		String pathUsername = String.format(
+				"STUDENT/%s", username);
 
-	public void readData(){
+		Log.d("debug.print", "UPE: " +
+				username + "," + password + "," + email);
 
-		//this.db.setValue("Hello, World!");
-
-		System.out.println("READDATA METHOD");
-		System.out.println(this.dbRef.toString());//.child("TERMS").toString());
-		System.out.println("READDATA SUCCESS");
+		HashMap<String, Boolean> hm = new HashMap<>();
+		User user = new User(email, username, password, hm);
+		ref = this.db.getReference(pathUsername);
+		ref.setValue(user);
 	}
 
 }

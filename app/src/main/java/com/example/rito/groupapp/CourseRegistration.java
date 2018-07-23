@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,12 +38,15 @@ import com.google.firebase.database.ValueEventListener;
  * @updated: The an added functionality to the menu was added so that the user can now
  * navigate and view their information.
  */
+
+//change db:    COURSE_ENROLLEMENT to COURSE_ENROLLMENT
+
 public class CourseRegistration extends AppCompatActivity{
     private DatabaseReference mDatabase;
     private Button add,drop;
     private EditText crn;
     private String input_crn, term, selectTerm;
-    private int cur;
+    //private int cur;
     private Spinner termSpinner;
     private String uid;
     private Toolbar hdrToolBar;
@@ -99,6 +103,8 @@ public class CourseRegistration extends AppCompatActivity{
         User user = MainActivity.currentUser;
         uid = user.getUsername();
 
+        Log.d("debug.print", user.toString());
+
         termSpinner = findViewById(R.id.term);
         ArrayAdapter<CharSequence> adapterTerm = ArrayAdapter.createFromResource(this,
                 R.array.terms_array, android.R.layout.simple_spinner_item);
@@ -108,62 +114,75 @@ public class CourseRegistration extends AppCompatActivity{
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                Log.d("debug.print", "on click add");
+                Database db_ce = new Database();
+                input_crn = crn.getText().toString();
+                DatabaseReference ref_ce = db_ce.getDb().getReference("COURSE_ENROLLEMENT/" +
+                        input_crn);
+                Log.d("debug.print",ref_ce.toString());
+                ref_ce.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Read the inputed string from users
-                        input_crn = crn.getText().toString();
-                        int max = Integer.parseInt(dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).child("max").getValue().toString());
-                        cur = Integer.parseInt(dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").getValue().toString());
-                        term = termSpinner.getSelectedItem().toString();
-                        if (term.equals("2018 Summer"))
-                            selectTerm = "201830";
-                        else if(term.equals("2018 Medicine"))
-                            selectTerm = "201900";
-                        else if(term.equals("2019 Fall"))
-                            selectTerm = "201910";
-                        else if(term.equals("2019 Winter"))
-                            selectTerm= "201920";
+                        Log.d("debug.print", "onDataChange START");
 
+                        Log.d("debug.print", "1");
+                        //Checking if crn exists
+                        if (dataSnapshot.exists()) {
+                            Log.d("debug.print", "2");
+                            long max = Integer.parseInt(dataSnapshot.child("max").getValue()
+                                    .toString());
+                            long cur = dataSnapshot.child("ENROLLMENT").exists() ?
+                                    dataSnapshot.child("ENROLLMENT").getChildrenCount() : 0;
 
-                        if (!term.equals("Select the term you want to register")){
-                            //Checking the user's inputted crn is exists or not
-                            if (dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).exists()) {
-                                //Checking the number of student that enrolled in this course is full or not
-                                if (max > cur) {
-                                    //Checking if the current student is enrolled the entered course or not
-                                    if (!dataSnapshot.child("STUDENT").child(uid).child("registration").child(input_crn).exists()) {
-                                        //Checking if the number of courses that current student are taking right now is not more than 5
-                                        if(dataSnapshot.child("STUDENT").child(uid).child("registration").getChildrenCount() < 5) {
-                                            Toast.makeText(getApplicationContext(), "Succeeded! " + input_crn + " is added", Toast.LENGTH_LONG).show();
-                                            cur++;
-                                            mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).setValue(true);
-                                            mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
-                                        }
-                                        //case for student enroll more than 5 courses
-                                        else
-                                            Toast.makeText(getApplicationContext(),"You are not allowed to take more than 5 courses",
+                            //Checking the number of student that enrolled in this course is full or not
+                            if (max > cur) {
+                                Log.d("debug.print", "3");
+                                final Database db_st = new Database("STUDENT/" + uid);
+                                DatabaseReference ref_st = db_st.getDbRef();
+
+                                //Checking if the current student is enrolled the entered course or not
+                                ref_st.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (!(dataSnapshot.hasChild("registration")) ||
+                                                !(dataSnapshot.child("registration").hasChild(input_crn))) {
+
+                                            //save data
+                                            db_st.addRemoveCourse(input_crn, uid, true);
+                                            Toast.makeText(
+                                                    getApplicationContext(),
+                                                    "Success! " + input_crn + " has been added.",
                                                     Toast.LENGTH_LONG).show();
+                                        } else {
+                                            //case for duplicate enrollment
+                                            Toast.makeText(
+                                                    getApplicationContext(),
+                                                    "You are already enrolled for " +
+                                                            input_crn + "!",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
                                     }
-                                    //case for duplicate enrollment
-                                    else
-                                        Toast.makeText(getApplicationContext(),input_crn + " is already enrolled in your list, please do not enroll same course",
-                                                Toast.LENGTH_LONG).show();
-                                }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                            } else {
                                 //case for course is full
-                                else
-                                    Toast.makeText(getApplicationContext(), input_crn + " is full now, please contact the instructor to add you into the waiting list",
-                                            Toast.LENGTH_LONG).show();
-                            }
-                            //case for the inputted CRN is not exists
-                            else
-                                Toast.makeText(getApplicationContext(), input_crn + " is not exist, please try again!",
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        input_crn +" is full now, please contact the " +
+                                                "instructor.",
                                         Toast.LENGTH_LONG).show();
-                        }
-                        //case for term is not selected
-                        else
-                            Toast.makeText(getApplicationContext(), "Please select a term",
+                            }
+                        } else {
+                            //case for the inputted CRN is not exists
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    input_crn + " does not exist, please try again!",
                                     Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
@@ -178,20 +197,31 @@ public class CourseRegistration extends AppCompatActivity{
         drop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                final Database db_st = new Database("STUDENT/" + uid);
+                DatabaseReference ref_st =  db_st.getDbRef();
+                ref_st.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        cur = Integer.parseInt(dataSnapshot.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").getValue().toString()) - 1;
+                        Log.d("debug.print", "on data change");
                         input_crn = crn.getText().toString();
+
                         //Checking if the inputted course is enrolled by the student or not
-                        if(dataSnapshot.child("STUDENT").child(uid).child("registration").child(input_crn).exists()){
-                            //remove the course from student's enroll list and reset the current enroll student of the course
-                            mDatabase.child("STUDENT").child(uid).child("registration").child(input_crn).removeValue();
-                            mDatabase.child("COURSE_ENROLLEMENT").child(input_crn).child("cur").setValue(cur);
-                            Toast.makeText(getApplicationContext(),input_crn + " is removed", Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(),"You are not enrolled in "+ input_crn+" please try again", Toast.LENGTH_LONG).show();
+                        if(dataSnapshot.hasChild("registration") ||
+                                dataSnapshot.child("registration").hasChild(input_crn)){
+
+                            //remove the course from student's enroll list
+                            db_st.addRemoveCourse(input_crn, uid, false);
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    input_crn + " is removed!",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "You are not enrolled in "+
+                                            input_crn +
+                                            ", please try again.",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
 
