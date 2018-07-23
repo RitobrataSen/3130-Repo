@@ -1,12 +1,11 @@
 package com.example.rito.groupapp;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,15 +17,19 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * CourseFilterActivity allows users to drill down courses. plans exists to
@@ -36,31 +39,38 @@ import java.util.Collections;
  * an arraylist that can easily be processed.
  *
  * @author   Gobii, Rito, Yuhao
- * @completed   2018-07-08
- *
- * @since 2018-07-19
- *
- * @author Ritobrata Sen, Qu Yuze
- * @updated: The an added functionality to the menu was added so that the user can now
- * navigate and view their information.
+ * @since    2018-07-08
  */
 
 public class CourseFilterActivity extends AppCompatActivity {
 	private ListView lv;
-	private ArrayList<Course> selectedCourses = new ArrayList<>();
+	private ArrayList<CRN_Data> selectedCoreCourses = new ArrayList<>();
+	private ArrayList<CRN_Data> selectedSupplementCourses = new ArrayList<>();
+
+	private ArrayList<CRN_Data> viewCoreCourses = new ArrayList<>();
+	private ArrayList<CRN_Data> viewSupplementCourses = new ArrayList<>();
 
 	private TextView mTextMessage;
+
+	private Context context = this;
+	private int duration = Toast.LENGTH_LONG;
+	private String text = "";
 
 	/*
 	0 = term selection
 	1 = subject selection
 	2 = course selection
+	1 = course type selection
+	2 = crn selection
 	*/
 	private int filterState = 0;
 	private Term filterTerm = null;
 	private Subject filterSubject = null;
 	private Course filterCourse = null;
-	private boolean displayList = true;
+	private CourseType filterCourseType = null;
+	private CRN_Data filterCRN = null;
+
+	private boolean displaySelection = false;
 	// flag to determine the current view type,
 	// true = course selection display,
 	// false = selected courses display;
@@ -114,18 +124,17 @@ public class CourseFilterActivity extends AppCompatActivity {
 				return true;
 
 			case R.id.go_to_view_remove_registered:
-				Log.d("debug.print", "CFA, MENU ViewRemoveCourseRegistrationActivity:");
-				startActivity(new Intent(CourseFilterActivity.this, ViewRemoveCourseRegistrationActivity.class));
-
+				Log.d("debug.print", "CFA, MENU MyCoursesActivity:");
+				startActivity(new Intent(CourseFilterActivity.this, MyCoursesActivity.class));
+				return true;
 			case R.id.view_user_information:
+				Log.d("debug.print","CFA, MENU View_Information");
 				startActivity(new Intent(CourseFilterActivity.this, View_UserInformation.class));
-
 				return true;
 			case R.id.log_out:
 				Log.d("debug.print", "CFA, MENU Logout_Activity:");
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
 				return true;
-
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -141,18 +150,18 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 			switch (item.getItemId()) {
 				case R.id.navigation_back:
-					if (displayList){
+					if (displaySelection){
 						getCurrentState();
 					} else {
 						getPreviousState();
 					}
 
-					displayList = false;
+					displaySelection = false;
 					return true;
 
 				case R.id.navigation_list:
-					populateCurrentSelection();
-					displayList = true;
+					populateCurrentSelection(1);
+					displaySelection = true;
 					return true;
 
 				/*
@@ -164,7 +173,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 				*/
 
 				case R.id.navigation_reset:
-					selectedCourses.clear();
+					selectedCoreCourses.clear();
+					selectedSupplementCourses.clear();
+					viewCoreCourses.clear();
+					viewSupplementCourses.clear();
 					populateTerm();
 					return true;
 
@@ -183,6 +195,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_filter);
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -208,6 +222,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 			case 2:
 				populateCourse(filterSubject);
 				break;
+			case 3:
+				populateCourseType(filterCourse);
+				break;
+			case 4:
+				populateCRN(filterCourseType);
+				break;
 			default:
 				populateTerm();
 				break;
@@ -225,50 +245,210 @@ public class CourseFilterActivity extends AppCompatActivity {
 			case 2:
 				populateSubject(filterTerm);
 				break;
+			case 3:
+				populateCourse(filterSubject);
+				break;
+			case 4:
+				populateCourseType(filterCourse);
+				break;
 			default:
 				populateTerm();
 				break;
 		}
 	}
 
-	public void populateCurrentSelection(){
+	public void populateCurrentSelection(int type){
+		//0 = view crn
+		//1 = view selected crn
+		filterCRN = null;
+		Log.d("debug.print", "selected CORE" + selectedCoreCourses.toString());
+		Log.d("debug.print", "selected SUPPLEMENT" + selectedSupplementCourses.toString());
+		Log.d("debug.print", "view CORE" + viewCoreCourses.toString());
+		Log.d("debug.print", "view SUPPLEMENT" + viewSupplementCourses.toString());
+
 		lv = findViewById(R.id.listView);
-		lv.setAdapter(new ArrayAdapter<Course>(
-				this, R.layout.item_course_selection , selectedCourses){
-				//R.layout.**** IS THE DESIGN FOR THE ROW
-			@Override
-			public View getView (int position, View view, ViewGroup parent){
-				if (view == null) {
-					view = LayoutInflater.from(getContext()).inflate(R.layout.item_course_selection, parent,
-							false);
+
+		ArrayList<CRN_Data> selectedCRN;
+
+		//get arraylist
+		if (type == 0) { //view crns
+			selectedCRN = filterCourseType.getCore() ?
+					viewCoreCourses : viewSupplementCourses;
+
+			//set arraylist to adapter
+			lv.setAdapter(new ArrayAdapter<CRN_Data>(
+					this, R.layout.item_crn_selection_basic, selectedCRN){
+				@Override
+				public View getView (int position, View view, ViewGroup parent){
+					if (view == null) {
+						view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection_basic, parent,
+								false);
+					}
+
+					CRN_Data crn_data = getItem(position);
+					String []  arr = crn_data.getToStringArray(0);
+
+					TextView line1 = (TextView) view.findViewById(R.id.line1);
+					TextView line2 = (TextView) view.findViewById(R.id.line2);
+					TextView line3 = (TextView) view.findViewById(R.id.line3);
+					TextView line4 = (TextView) view.findViewById(R.id.line4);
+
+					line1.setText(arr[0]);
+					line2.setText(arr[1]);
+					line3.setText(arr[2]);
+					line4.setText(arr[3]);
+
+					boolean cc = false;
+					for (CRN_Data x : selectedCoreCourses) {
+						if(x.equals(crn_data)){
+							view.setBackgroundResource(R.color.colorSelected);
+							cc = true;
+							break;
+						}
+					}
+
+					if (!(cc)){
+						for (CRN_Data x : selectedSupplementCourses) {
+							if(x.equals(crn_data)){
+								view.setBackgroundResource(R.color.colorSelected);
+								cc = true;
+								break;
+							}
+						}
+					}
+
+
+					if (!(cc)){
+						view.setBackgroundResource(R.color.transparent);
+					}
+
+					return view;
 				}
+			});
 
-				Course course = getItem(position);
-				TextView ccode = (TextView) view.findViewById(R.id.courseCode);
-				TextView cname = (TextView) view.findViewById(R.id.courseName);
-				TextView cterm = (TextView) view.findViewById(R.id.courseTerm);
-				TextView csupp = (TextView) view.findViewById(R.id.courseSupplement);
+			// set On Item Click Listener for the listview
+			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					CRN_Data crn_data = (CRN_Data) parent.getItemAtPosition(position);
+					filterCRN = crn_data;
+					/*
+					boolean core = filterCourseType.getCore();
+					boolean sel = markSelection(crn_data, core);
 
-				ccode.setText(String.format("Course Code:%s", course.getCourse_code()));
-				cname.setText(String.format("Course Name:%s", course.getCourse_name()));
-				cterm.setText(String.format("Term Code:%s", course.getTerm_code()));
-				csupp.setText(String.format("Has Supplement:%s", course.getHas_supplement()));
+					if (sel){
+						view.setBackgroundResource(R.color.transparent);
+					} else {
+						view.setBackgroundResource(R.color.colorSelected);
+					}
+					*/
 
-				return view;
-			}
-		});
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			// onItemClick method is called everytime a user clicks an item on the list
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Course course = (Course) parent.getItemAtPosition(position);
-				filterState = 2;
-				filterTerm = new Term(course.getTerm_code(), "", "");
-				filterSubject = new Subject(course.getSubject_code(), "", course.getTerm_code());
-				filterCourse = null;
-				populateCourse(filterSubject);
-			}
-		});
+
+					// custom dialog
+					final Dialog dialog = new Dialog(context);
+					dialog.setContentView(R.layout.item_crn_selection_full);
+					//dialog.setTitle("Title...");
+
+					// set the custom dialog components - text, image and button
+					String []  arr = crn_data.getToStringArray(1);
+
+					TextView title = (TextView) dialog.findViewById(R.id.title);
+
+					TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+					TextView line2 = (TextView) dialog.findViewById(R.id.line2);
+					TextView line3 = (TextView) dialog.findViewById(R.id.line3);
+					TextView line4 = (TextView) dialog.findViewById(R.id.line4);
+					TextView line5 = (TextView) dialog.findViewById(R.id.line5);
+					TextView line6 = (TextView) dialog.findViewById(R.id.line6);
+					TextView line7 = (TextView) dialog.findViewById(R.id.line7);
+					TextView line8 = (TextView) dialog.findViewById(R.id.line8);
+
+					title.setText("Add Course");
+
+					line1.setText(arr[0]);
+					line2.setText(arr[1]);
+					line3.setText(arr[2]);
+					line4.setText(arr[3]);
+					line5.setText(arr[4]);
+					line6.setText(arr[5]);
+					line7.setText(arr[6]);
+					line8.setText(arr[7]);
+
+					Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+					// if button is clicked, close the custom dialog
+					dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							dialog.dismiss();
+						}
+					});
+
+					Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+					// if button is clicked, close the custom dialog
+					dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							boolean sel = markSelection(true);
+							//view.setBackgroundResource(R.color.transparent);
+							//view.setBackgroundResource(R.color.colorSelected);
+							dialog.dismiss();
+							populateCurrentSelection(0);
+						}
+					});
+
+					dialog.show();
+
+				}
+			});
+
+			lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+		} else if (type == 1) { //selected crns
+			selectedCRN = new ArrayList<>(selectedCoreCourses);
+			selectedCRN.removeAll(selectedSupplementCourses);
+			selectedCRN.addAll(selectedSupplementCourses);
+
+			//set arraylist to adapter
+			lv.setAdapter(new ArrayAdapter<CRN_Data>(
+					this, R.layout.item_crn_selection_basic, selectedCRN){
+				@Override
+				public View getView (int position, View view, ViewGroup parent){
+					if (view == null) {
+						view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection_basic, parent,
+								false);
+					}
+
+					CRN_Data crn_data = getItem(position);
+					String []  arr = crn_data.getToStringArray(0);
+
+					TextView line1 = (TextView) view.findViewById(R.id.line1);
+					TextView line2 = (TextView) view.findViewById(R.id.line2);
+					TextView line3 = (TextView) view.findViewById(R.id.line3);
+					TextView line4 = (TextView) view.findViewById(R.id.line4);
+
+					line1.setText(arr[0]);
+					line2.setText(arr[1]);
+					line3.setText(arr[2]);
+					line4.setText(arr[3]);
+
+					return view;
+				}
+			});
+
+			// set On Item Click Listener for the listview
+			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					//go to selection
+					CRN_Data crn_data = (CRN_Data) parent.getItemAtPosition(position);
+					navigateToSelection(crn_data);
+				}
+			});
+			lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+		}
+
+
 	}
 
 	public void populateTerm() {
@@ -276,7 +456,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 		filterTerm = null;
 		filterSubject = null;
 		filterCourse = null;
-		final FirebaseListAdapter<Term> firebaseAdapter;
+		filterCourseType = null;
+		filterCRN = null;
+
+		FirebaseListAdapter<Term> firebaseAdapter;
 		Database db = new Database("TERM");
 		lv = findViewById(R.id.listView);
 		firebaseAdapter = new FirebaseListAdapter<Term>(this, Term.class,
@@ -287,13 +470,24 @@ public class CourseFilterActivity extends AppCompatActivity {
 				termRow.setText(model.toString());
 				boolean cc = false;
 
-				for (Course x : selectedCourses) {
-					if((x.getTerm_code().equals(model.getTerm_code()))){
+				for (CRN_Data x : selectedCoreCourses) {
+					if((x.getTerm_Code().equals(model.getTerm_code()))){
 						v.setBackgroundResource(R.color.colorSelected);
 						cc = true;
 						break;
 					}
 				}
+
+				if (!(cc)){
+					for (CRN_Data x : selectedSupplementCourses) {
+						if((x.getTerm_Code().equals(model.getTerm_code()))){
+							v.setBackgroundResource(R.color.colorSelected);
+							cc = true;
+							break;
+						}
+					}
+				}
+
 				if (!(cc)){
 					v.setBackgroundResource(R.color.transparent);
 				}
@@ -302,23 +496,24 @@ public class CourseFilterActivity extends AppCompatActivity {
 		};
 		lv.setAdapter(firebaseAdapter);
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Term term = (Term) firebaseAdapter.getItem(position);
+				Term term = (Term) parent.getItemAtPosition(position);
 				populateSubject(term);
 			}
 		});
 	}
 
-	public void populateSubject(Term term){// params: listview reference, selected object
+	public void populateSubject(Term term){
 		filterState = 1;
 		filterTerm = term;
 		filterSubject = null;
 		filterCourse = null;
-		final FirebaseListAdapter<Subject> firebaseAdapter;
+		filterCourseType = null;
+		filterCRN = null;
+
+		FirebaseListAdapter<Subject> firebaseAdapter;
 		Database db = new Database("SUBJECT/" + term.getTerm_code());
-//		Database db = new Database("SUBJECT");
 		lv = findViewById(R.id.listView);
 		firebaseAdapter = new FirebaseListAdapter<Subject>(this, Subject.class,
 				android.R.layout.simple_list_item_1, db.getDbRef()) {
@@ -328,15 +523,30 @@ public class CourseFilterActivity extends AppCompatActivity {
 				subjectRow.setText(model.toString());
 				boolean cc = false;
 
-				for (Course x : selectedCourses) {
-					if( (x.getSubject_code().equals(model.getSubject_code())) &&
-						(x.getTerm_code().equals(model.getTerm_code())) ){
-
+				for (CRN_Data x : selectedCoreCourses) {
+					if(
+							x.getTerm_Code().equals(model.getTerm_code())
+							&& x.getSubject_Code().equals(model.getSubject_code())
+					){
 						v.setBackgroundResource(R.color.colorSelected);
 						cc = true;
 						break;
 					}
 				}
+
+				if (!(cc)) {
+					for (CRN_Data x : selectedSupplementCourses) {
+						if(
+								x.getTerm_Code().equals(model.getTerm_code())
+								&& x.getSubject_Code().equals(model.getSubject_code())
+						){
+							v.setBackgroundResource(R.color.colorSelected);
+							cc = true;
+							break;
+						}
+					}
+				}
+
 				if (!(cc)){
 					v.setBackgroundResource(R.color.transparent);
 				}
@@ -348,7 +558,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Subject subject = (Subject) firebaseAdapter.getItem(position);
+				Subject subject = (Subject) parent.getItemAtPosition(position);
 				populateCourse(subject);
 			}
 		});
@@ -359,8 +569,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 		//filterTerm = null;
 		filterSubject = subject;
 		filterCourse = null;
+		filterCourseType = null;
+		filterCRN = null;
 
-		final FirebaseListAdapter<Course> firebaseAdapter;
+		FirebaseListAdapter<Course> firebaseAdapter;
 		Database db = new Database("COURSE/" +
 				subject.getTerm_code() +
 				"/" +  subject.getSubject_code());
@@ -385,15 +597,33 @@ public class CourseFilterActivity extends AppCompatActivity {
 				cterm.setText(String.format("Term Code:%s", course.getTerm_code()));
 				csupp.setText(String.format("Has Supplement:%s", course.getHas_supplement()));
 
+				for (CRN_Data x : selectedCoreCourses) {
+					if(
+							x.getTerm_Code().equals(model.getTerm_code())
+							&& x.getSubject_Code().equals(model.getSubject_code())
+							&& x.getCourse_Code().equals(model.getCourse_code())
 
-				for (Course x : selectedCourses) {
-					if(x.equals(model)){
+					){
 						v.setBackgroundResource(R.color.colorSelected);
-						//v.setBackgroundColor(getResources().getColor(R.color.colorSelected));
 						cc = true;
 						break;
 					}
 				}
+
+				if (!(cc)) {
+					for (CRN_Data x : selectedSupplementCourses) {
+						if(
+								x.getTerm_Code().equals(model.getTerm_code())
+								&& x.getSubject_Code().equals(model.getSubject_code())
+								&& x.getCourse_Code().equals(model.getCourse_code())
+						){
+							v.setBackgroundResource(R.color.colorSelected);
+							cc = true;
+							break;
+						}
+					}
+				}
+
 				if (!(cc)){
 					v.setBackgroundResource(R.color.transparent);
 				}
@@ -402,38 +632,269 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 		lv.setAdapter(firebaseAdapter);
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			//--------------------------------------------------------------------------------
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Course course = (Course) firebaseAdapter.getItem(position);
-		boolean sel = false;
-		ArrayList<Course> newSelectedCourses = new ArrayList<>();
-
-		for (Course x : selectedCourses) {
-			if(!(x.equals(course))){
-				newSelectedCourses.add(x);
-			} else {
-				sel = true;
-			}
-		}
-		selectedCourses = newSelectedCourses;
-
-		if (sel){
-			view.setBackgroundResource(R.color.transparent);
-		} else {
-			view.setBackgroundResource(R.color.colorSelected);
-			selectedCourses.add(course);
-		}
-
+				Course course = (Course) parent.getItemAtPosition(position);
+				populateCourseType(course);
 			}
 		});
-		lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+	}
+
+	public void populateCourseType(Course course) {// params: listview reference,
+		filterState = 3;
+		//filterTerm = null;
+		//filterSubject = null;
+		filterCourse = course;
+		filterCourseType = null;
+		filterCRN = null;
+
+		ArrayList<CourseType> al = new ArrayList<>();
+
+		al.add(new CourseType(
+				course.getTerm_code(), course.getSubject_code(), course.getCourse_code(), true,
+				course.getCore()
+		));
+
+		al.add(new CourseType(
+				course.getTerm_code(), course.getSubject_code(), course.getCourse_code(), false,
+				course.getSupplement()
+		));
+
+		lv = findViewById(R.id.listView);
+		lv.setAdapter(new ArrayAdapter<CourseType>(
+				this, android.R.layout.simple_list_item_1 , al){
+			//R.layout.**** IS THE DESIGN FOR THE ROW
+			@Override
+			public View getView (int position, View view, ViewGroup parent){
+				if (view == null) {
+					view = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent,
+							false);
+				}
+				CourseType coursetype = getItem(position);
+				TextView row = (TextView)view.findViewById(android.R.id.text1);
+				row.setText(coursetype.toString());
+
+				Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
+				boolean cc = false;
+
+				for (CRN_Data x : selectedCoreCourses) {
+					Log.d("debug.print", String.format("%s %s", x.isCore(), x.toString()));
+					Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
+
+					if(
+							x.getTerm_Code().equals(coursetype.getTerm_code())
+							&& x.getSubject_Code().equals(coursetype.getSubject_code())
+							&& x.getCourse_Code().equals(coursetype.getCourse_code())
+							&& x.isCore() == coursetype.getCore()
+					){
+						view.setBackgroundResource(R.color.colorSelected);
+						cc = true;
+						break;
+					}
+				}
+
+				if (!(cc)) {
+					for (CRN_Data x : selectedSupplementCourses) {
+						if(
+								x.getTerm_Code().equals(coursetype.getTerm_code())
+								&& x.getSubject_Code().equals(coursetype.getSubject_code())
+								&& x.getCourse_Code().equals(coursetype.getCourse_code())
+								&& x.isCore() == coursetype.getCore()
+						){
+							view.setBackgroundResource(R.color.colorSelected);
+							cc = true;
+							break;
+						}
+					}
+				}
+
+				if (!(cc)){
+					view.setBackgroundResource(R.color.transparent);
+				}
+
+				return view;
+			}
+		});
+		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			// onItemClick method is called everytime a user clicks an item on the list
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				CourseType coursetype = (CourseType) parent.getItemAtPosition(position);
+				populateCRN(coursetype);
+			}
+		});
 
 	}
 
 
+	public void populateCRN(CourseType coursetype){// params: listview reference,
 
+		filterState = 4;
+		//filterTerm = null;
+		//filterSubject = null;
+		//filterCourse = course;
+		filterCourseType = coursetype;
+		filterCRN = null;
 
+		boolean core = coursetype.getCore();
 
+		viewCoreCourses = new ArrayList<>();
+		viewSupplementCourses = new ArrayList<>();
+
+		Log.d("debug.print", String.format("%s\n%s\n%s\n%s\n%s\n%s\n",
+				coursetype.getCore(),
+				coursetype.getDescrip(),
+				coursetype.getTerm_code(),
+				coursetype.getSubject_code(),
+				coursetype.getCourse_code(),
+				coursetype.getKeys()
+		));
+
+		for (String k : coursetype.getKeys()){
+			Database dbCRN = new Database("CRN_DATA/" + k);
+			dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
+				@Override
+				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+					CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
+					Log.d("debug.print", crn_data.toString());
+					Log.d("debug.print", "days: " + crn_data.getDays().toString());
+
+					if (filterCourseType.getCore()){
+						viewCoreCourses.add(crn_data);
+
+					} else {
+						viewSupplementCourses.add(crn_data);
+					}
+					populateCurrentSelection(0);
+				}
+
+				@Override
+				public void onCancelled(@NonNull DatabaseError databaseError) {
+					Log.d("debug.print", "The read failed: " + databaseError.getCode());
+				}
+			});
+		}
+
+	}
+
+	public boolean markSelection(boolean add){
+		CRN_Data crn = filterCRN;
+		boolean core = filterCourseType.getCore();
+
+		ArrayList<CRN_Data> newSelectedCourses = new ArrayList<>();
+		ArrayList<CRN_Data> selectedCourses = core ? selectedCoreCourses :
+				selectedSupplementCourses;
+
+		if (!(crn == null)){
+			for (CRN_Data x : selectedCourses) {
+				if(!(x.equals(crn))){
+					newSelectedCourses.add(x);
+				}
+			}
+
+			if (core){
+				selectedCoreCourses = newSelectedCourses;
+				if (add){
+					selectedCoreCourses.add(crn);
+				}
+			} else {
+				selectedSupplementCourses = newSelectedCourses;
+				if (add){
+					selectedSupplementCourses.add(crn);
+				}
+			}
+		}
+
+		return add;
+	}
+
+	public void navigateToSelection(CRN_Data crn_data){
+		filterTerm = null;
+		filterSubject = null;
+		filterCourse = null;
+		filterCourseType = null;
+		filterCRN = crn_data;
+		Database db = new Database(
+				"TERM/" +
+				filterCRN.getTerm_Code()
+		);
+		//set filterTerm
+		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(DataSnapshot dataSnapshot) {
+				filterTerm = dataSnapshot.getValue(Term.class);
+				if (filterTerm != null){
+					Database db = new Database(
+							"SUBJECT/"  +
+									filterCRN.getTerm_Code() + "/" +
+									filterCRN.getSubject_Code()
+					);
+					//set filterSubject
+					db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(DataSnapshot dataSnapshot) {
+							filterSubject = dataSnapshot.getValue(Subject.class);
+							if (filterSubject != null){
+								Database db = new Database(
+										"COURSE/"  +
+												filterCRN.getTerm_Code() + "/" +
+												filterCRN.getSubject_Code() + "/" +
+												filterCRN.getCourse_Code()
+								);
+								//set filterCourse
+								db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+									@Override
+									public void onDataChange(DataSnapshot dataSnapshot) {
+										filterCourse = dataSnapshot.getValue(Course.class);
+										if (filterCourse != null){
+											boolean is_core = filterCRN.isCore();
+											//set filterCourseType
+											filterCourseType = new CourseType(
+													filterCourse.getTerm_code(), filterCourse.getSubject_code(), filterCourse.getCourse_code(), is_core,
+													is_core ?
+															filterCourse.getCore() :
+															filterCourse.getSupplement()
+											);
+											populateCRN(filterCourseType);
+										} else {
+											text = "Error loading course. Restarting Course Filter";
+											Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+											toast.show();
+											populateTerm();
+										}
+									}
+									@Override
+									public void onCancelled(DatabaseError databaseError) {
+										Log.d("debug.print", "The read failed: " + databaseError.getCode());
+									}
+								});
+							} else {
+								text = "Error loading subject. Restarting Course Filter";
+								Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+								toast.show();
+								populateTerm();
+							}
+						}
+						@Override
+						public void onCancelled(DatabaseError databaseError) {
+							Log.d("debug.print", "The read failed: " + databaseError.getCode());
+						}
+					});
+				} else {
+					text = "Error loading term. Restarting Course Filter";
+					Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+					toast.show();
+					populateTerm();
+				}
+			}
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+				Log.d("debug.print", "The read failed: " + databaseError.getCode());
+			}
+		});
+	}
 
 }

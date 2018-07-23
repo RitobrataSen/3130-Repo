@@ -29,6 +29,7 @@ public class User implements Serializable {
 
     //constructors
     public User() {
+        this.registration = new HashMap<String, Boolean>();
     }
 
     public User(String email, String username,
@@ -78,6 +79,9 @@ public class User implements Serializable {
 
     public String toString(){
         return String.format("%s %s %s", this.email, this.username, this.password);
+    }
+    public String getPath(){
+        return String.format(String.format("STUDENT/%s", this.username));
     }
 
     @Exclude

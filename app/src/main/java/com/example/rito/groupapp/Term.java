@@ -21,7 +21,7 @@ public class Term implements Serializable {
 	public Term(){
 	}
 
-	public Term(String term_code, String term_description, String uid){
+	public Term(String term_code, String term_description){
 		this.term_code = term_code;
 		this.term_description = term_description;
 		//this.uid = uid;
@@ -46,6 +46,18 @@ public class Term implements Serializable {
 
 	public String generatePath(){
 		return String.format("TERMS/%s", this.term_code);
+	}
+
+
+	public boolean equals(Term t){
+		if (t == null){
+			return false;
+		} else if (
+				this.term_code.equals(t.getTerm_code())
+				){
+			return true;
+		}
+		return false;
 	}
 
 	@Override
