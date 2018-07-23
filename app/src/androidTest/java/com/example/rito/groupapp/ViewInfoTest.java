@@ -24,7 +24,14 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
+/**
+ * ViewInfoTest is the espresso test for the View_UserInformation
+ *
+ * @Author: Ritobrata Sen, Qu Yuze
+ * @DateStarted: 18th July
+ * @DateEnded:
+ *
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ViewInfoTest {

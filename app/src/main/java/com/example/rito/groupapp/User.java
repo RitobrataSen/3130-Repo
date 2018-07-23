@@ -2,6 +2,8 @@ package com.example.rito.groupapp;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -27,6 +29,7 @@ public class User implements Serializable {
 
     //constructors
     public User() {
+        this.registration = new HashMap<String, Boolean>();
     }
 
     public User(String email, String username,
@@ -70,14 +73,15 @@ public class User implements Serializable {
         this.registration.putAll(registration);
     }
 
-
-
-    public String getPath(){
-        return String.format("STUDENT/%s", this.username);
+    public void updateCurrentUser(User u){
+        MainActivity.currentUser = u;
     }
 
     public String toString(){
         return String.format("%s %s %s", this.email, this.username, this.password);
+    }
+    public String getPath(){
+        return String.format(String.format("STUDENT/%s", this.username));
     }
 
     @Exclude

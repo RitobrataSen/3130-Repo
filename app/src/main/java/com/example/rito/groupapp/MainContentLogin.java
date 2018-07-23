@@ -77,7 +77,7 @@ public class MainContentLogin extends AppCompatActivity {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
                                 //System.out.println("for loop");
                                 //System.out.println(student.toString());
-                                User currentUser = (User) student.getValue(User.class);
+                                final User currentUser = (User) student.getValue(User.class);
                                 //System.out.println("User: " + currentUser);
 
                                 if (!currentUser.getEmail().equals(email)) {
@@ -87,6 +87,26 @@ public class MainContentLogin extends AppCompatActivity {
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
+
+                                    //set event listener to update current user whenever it is
+                                    //changed
+                                    /*
+                                    Database db = new Database("STUDENT/" + currentUser.getUsername());
+                                    db.getDbRef().addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            User user = (User) dataSnapshot.getValue(User.class);
+                                            Log.d("debug.print", "currentUser data changed. " +
+                                                    "Updating variable stored at MainActivity" +
+                                                    ".currentUser: " + user.toString());
+                                            MainActivity.currentUser = user;
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Log.d("debug.print", "The read failed: " + databaseError.getCode());
+                                        }
+                                    });
+                                    */
 
 									MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
