@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 /**
@@ -84,6 +85,12 @@ public class View_UserInformation extends AppCompatActivity {
                         User user1 = new User(et1.getText().toString(),et2.getText().toString(),et5.getText().toString(),MainActivity.currentUser.getRegistration());
                         db.updateUser(MainActivity.currentUser,user1);
 
+                    }
+                    if(MainActivity.currentUser.getUsername().toString().equals(et2.getText().toString())&&MainActivity.currentUser.getEmail().toString().equals(et1.getText().toString())
+                            &&MainActivity.currentUser.getPassword().toString()!=et4.getText().toString()&& et1.getText().length()>0
+                            && et2.getText().length()>0 && et3.getText().length()>0 && et4.getText().length()>0 && et5.getText().length()>0){
+
+                        Toast.makeText(getBaseContext(), "Update Successful", Toast.LENGTH_LONG).show();
                     }
 
                 }
