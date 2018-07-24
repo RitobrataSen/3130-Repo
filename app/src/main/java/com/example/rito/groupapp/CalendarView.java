@@ -77,7 +77,7 @@ public class CalendarView extends AppCompatActivity {
                 return true;
 
             case R.id.go_to_view_remove_registered:
-                startActivity(new Intent(CalendarView.this, ViewRemoveCourseRegistrationActivity.class));
+                startActivity(new Intent(CalendarView.this, MyCoursesActivity.class));
                 return true;
 
             case R.id.log_out:
@@ -142,23 +142,23 @@ public class CalendarView extends AppCompatActivity {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
-                    Spinner codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
-                    ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
-            codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            codeSpinner.setAdapter(codeAdapter);
+                });
+                Spinner codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
+                ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
+                codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                codeSpinner.setAdapter(codeAdapter);
 
-                    selectedCourse = codeSpinner.getSelectedItem().toString();
-                    int index = codeList.indexOf(selectedCourse) - 1;
-            if (index >= 0) {
-                        selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
+                selectedCourse = codeSpinner.getSelectedItem().toString();
+                int index = codeList.indexOf(selectedCourse) - 1;
+                if (index >= 0) {
+                    selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
+                }
+                detail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("debug.print", "main_activity: Submit clicked");
+                        startActivity(new Intent(CalendarView.this, Detail_Page.class));
                     }
-            detail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Log.d("debug.print", "main_activity: Submit clicked");
-                            startActivity(new Intent(CalendarView.this, Detail_Page.class));
-                        }
-                    });
                 });
             }
         }
