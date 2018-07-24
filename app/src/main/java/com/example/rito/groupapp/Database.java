@@ -26,7 +26,10 @@ import com.google.firebase.database.ValueEventListener;
  of courses.
  *
  * @author   Gobii, Rito, Yuhao
- * @since    2018-07-08
+ * @Completed   2018-07-08
+ *
+ * @Since 2018-07-17
+ * Added a method that allowed the database to update any user information
  */
 
 public class Database extends Application {

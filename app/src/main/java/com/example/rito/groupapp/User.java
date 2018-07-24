@@ -13,8 +13,11 @@ import java.io.Serializable;
  * In MainActivity, currentUser is of type User, and is used to populate
  * the application views.
  *
- * @author  Rito, Qu, Gobii
- * @since   07-09-18
+ * @author  Ritobrata, Qu, Gobii
+ * @completed   07-09-18
+ *
+ * @since
+ * added a method which returns a string for the path to which the object is situated.
  */
 
 @IgnoreExtraProperties

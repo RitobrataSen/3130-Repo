@@ -1,11 +1,3 @@
-/**
- * Test class for View_UserInformation activity
- *
- * @Author: Ritobrata Sen, Qu Yuze
- * @DateStarted: 18th July
- * @DateEnded:
- *
- */
 package com.example.rito.groupapp;
 
 import android.support.test.filters.LargeTest;
@@ -32,8 +24,8 @@ import static org.hamcrest.Matchers.not;
  * ViewInfoTest is the espresso test for the View_UserInformation
  *
  * @Author: Ritobrata Sen, Qu Yuze
- * @DateStarted: 16th July
- * @DateEnded:
+ * @DateStarted: 16th July 2018
+ * @DateEnded: 24th July 2018
  *
  */
 @LargeTest
@@ -61,11 +53,6 @@ public class ViewInfoTest {
 
         onView(withId(R.id.textView6)).check(matches(withText(String.valueOf("Confirm Password"))));
 
-        onView(withText(String.valueOf("Update Successful")))
-
-                .inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView())))
-
-                .check(matches(isDisplayed()));
 
     }
 }

@@ -17,10 +17,11 @@ import java.util.ArrayList;
  * View_UserInformation displays all the current information of the user that is currently logged into the app
  * It also allows the user to update their information
  * It updates the database dynamically as it does so
+ * It gives the user a toast message upon successfully updating their information (if there is any information to be updated)
  *
  * @Author: Ritobrata Sen, Qu Yuze
- * @DateStarted: 18th July
- * @DateEnded:
+ * @DateStarted: 18th July 2018
+ * @DateEnded: 24th July 2018
  *
  */
 
