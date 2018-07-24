@@ -1,12 +1,5 @@
 package com.example.rito.groupapp;
 
-import android.app.Activity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -28,7 +21,7 @@ public class Subject implements Serializable {
 	public Subject(){
 	}
 
-	public Subject(String subject_code, String subject_description, String term_code){
+	public Subject(String term_code, String subject_code, String subject_description){
 		this.subject_code = subject_code;
 		this.subject_description = subject_description;
 		this.term_code = term_code;
@@ -56,6 +49,18 @@ public class Subject implements Serializable {
 
 	public String generatePath(){
 		return String.format("SUBJECTS/%s/%s", this.term_code, this.subject_code);
+	}
+
+	public boolean equals(Subject s){
+		if (s == null){
+			return false;
+		} else if (
+				this.term_code.equals(s.getTerm_code())
+				&& this.subject_code.equals(s.getSubject_code())
+		){
+			return true;
+		}
+		return false;
 	}
 
 	@Override

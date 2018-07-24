@@ -1,5 +1,5 @@
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.*;
+import com.example.rito.groupapp.old.CRN;
 
 
 import org.junit.After;

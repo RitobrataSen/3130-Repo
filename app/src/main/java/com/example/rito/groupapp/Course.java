@@ -29,10 +29,37 @@ public class Course implements Serializable {
 
 	//constructors
 	public Course() {
+		this.core = new HashMap<String, Boolean>();
+		this.supplement = new HashMap<String, Boolean>();
 	}
-	//removed second constructor
 
-	//methods
+	public Course(String term_code, String subject_code, String course_code,
+				  String course_name,
+				  boolean has_supplement,
+				  HashMap<String, Boolean> core,
+				  HashMap<String, Boolean> supplement) {
+
+		this.course_code = course_code;
+		this.course_name = course_name;
+		this.subject_code = subject_code;
+		this.term_code = term_code;
+		this.has_supplement = has_supplement;
+		this.core = core;
+		this.supplement = supplement;
+
+	}
+
+	public Course(String term_code, String subject_code, String course_code) {
+
+		this.course_code = course_code;
+		this.course_name = "";
+		this.subject_code = subject_code;
+		this.term_code = term_code;
+		this.has_supplement = false;
+		this.core = new HashMap<>();
+		this.supplement = new HashMap<>();
+	}
+		//methods
 
 	//getter/ setter methods
 	public String getCourse_code(){
@@ -91,26 +118,15 @@ public class Course implements Serializable {
 	}
 
 	public boolean equals(Course c){
-		//if (!(c == null)){
-			if (c == null){
-				return false;
-			} else if(
-					((this.course_code == c.getCourse_code()) || this.course_code.equals(c.getCourse_code())) &&
-					((this.course_name == c.getCourse_code()) || this.course_name.equals(c.getCourse_name())) &&
-					((this.subject_code == c.getSubject_code()) || this.subject_code.equals(c.getSubject_code())) &&
-					((this.term_code == c.getTerm_code()) || this.term_code.equals(c.getTerm_code())) &&
-					((this.has_supplement == c.getHas_supplement())) &&
-					((this.course_code == c.getCourse_code()) || this.course_code.equals(c.getCourse_code())) &&
-					((this.core == c.getCore()) || this.core.equals(c.getCore()))
-					){
-				return true;
-			} else if(this.toString().equals(c.toString())){
-				return true;
-			}
-
-
-		//}
-
+		if (c == null){
+			return false;
+		} else if (
+				this.term_code.equals(c.getTerm_code())
+				&& this.subject_code.equals(c.getSubject_code())
+				&& this.course_code.equals(c.getCourse_code())
+		){
+			return true;
+		}
 		return false;
 	}
 

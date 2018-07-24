@@ -1,8 +1,9 @@
 package com.example.rito.groupapp;
 
+import android.text.TextUtils;
+import android.widget.Switch;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -27,22 +28,17 @@ public class CRN_Data implements Serializable {
 	private String end_date;
 	private String start_time;
 	private String end_time;
-	private String mon;
-	private String tue;
-	private String wed;
-	private String thu;
-	private String fri;
+	private HashMap<String, Boolean> days;
 	private String location;
 	private String course_name;
 	private String max;
 	private HashMap<String, Boolean> enrollment;
 	private String subject_code;
-	private boolean has_supplement;
 
-
-	public CRN_Data(){
+	public CRN_Data() {
+		this.days = new HashMap<String, Boolean>();
+		this.enrollment = new HashMap<String, Boolean>();
 	}
-	//removed 2nd constructor
 
 	public String getCrn() {
 		return this.crn;
@@ -74,20 +70,8 @@ public class CRN_Data implements Serializable {
 	public String getEnd_Time() {
 		return this.end_time;
 	}
-	public String getMon() {
-		return this.mon;
-	}
-	public String getTue() {
-		return this.tue;
-	}
-	public String getWed() {
-		return this.wed;
-	}
-	public String getThu() {
-		return this.thu;
-	}
-	public String getFri() {
-		return this.fri;
+	public HashMap<String, Boolean> getDays() {
+		return this.days;
 	}
 	public String getLocation() {
 		return this.location;
@@ -103,9 +87,6 @@ public class CRN_Data implements Serializable {
 	}
 	public String getSubject_Code() {
 		return this.subject_code;
-	}
-	public boolean getHas_Supplement() {
-		return this.has_supplement;
 	}
 
 	public void setCrn(String crn) {
@@ -138,20 +119,9 @@ public class CRN_Data implements Serializable {
 	public void setEnd_Time(String end_time) {
 		this.end_time = end_time;
 	}
-	public void setMon(String mon) {
-		this.mon = mon;
-	}
-	public void setTue(String tue) {
-		this.tue = tue;
-	}
-	public void setWed(String wed) {
-		this.wed = wed;
-	}
-	public void setThu(String thu) {
-		this.thu = thu;
-	}
-	public void setFri(String fri) {
-		this.fri = fri;
+	public void setDays(HashMap<String, Boolean> days) {
+		this.days = new HashMap<>();
+		this.days.putAll(days);
 	}
 	public void setLocation(String location) {
 		this.location = location;
@@ -162,65 +132,14 @@ public class CRN_Data implements Serializable {
 	public void setMax(String max) {
 		this.max = max;
 	}
-	public void setEnrollment(HashMap<String, Boolean> enrollment){
-		//to add/ remove individual pairs get entire hash map first then call
-		//hash map functions: hashMap.put(k, v) or hashMap.remove(k)
+	public void setEnrollment(HashMap<String, Boolean> enrollment) {
 		this.enrollment = new HashMap<>();
 		this.enrollment.putAll(enrollment);
 	}
 	public void setSubject_Code(String subject_code) {
 		this.subject_code = subject_code;
 	}
-	public void setHas_Supplement(boolean has_supplement) {
-		this.has_supplement = has_supplement;
-	}
 
-	public boolean equals(CRN_Data c) {
-
-		//if (!(c == null)){
-		if (c == null) {
-			return false;
-		} else if (
-				((this.crn == c.getCrn()) || (this.crn.equals(c.getCrn()))) &&
-						((this.term_code == c.getTerm_Code()) || (this.term_code.equals(c.getTerm_Code()))) &&
-						((this.course_code == c.getCourse_Code()) || (this.course_code.equals(c.getCourse_Code()))) &&
-						((this.section_number == c.getSection_Number()) || (this.section_number.equals(c.getSection_Number()))) &&
-						((this.section_type == c.getSection_Type()) || (this.section_type.equals(c.getSection_Type()))) &&
-						((this.instructor == c.getInstructor()) || (this.instructor.equals(c.getInstructor()))) &&
-						((this.start_date == c.getStart_Date()) || (this.start_date.equals(c.getStart_Date()))) &&
-						((this.end_date == c.getEnd_Date()) || (this.end_date.equals(c.getEnd_Date()))) &&
-						((this.start_time == c.getStart_Time()) || (this.start_time.equals(c.getStart_Time()))) &&
-						((this.end_time == c.getEnd_Time()) || (this.end_time.equals(c.getEnd_Time()))) &&
-						((this.mon == c.getMon()) || (this.mon.equals(c.getMon()))) &&
-						((this.tue == c.getTue()) || (this.tue.equals(c.getTue()))) &&
-						((this.wed == c.getWed()) || (this.wed.equals(c.getWed()))) &&
-						((this.thu == c.getThu()) || (this.thu.equals(c.getThu()))) &&
-						((this.fri == c.getFri()) || (this.fri.equals(c.getFri()))) &&
-						((this.location == c.getLocation()) || (this.location.equals(c.getLocation()))) &&
-						((this.course_name == c.getCourse_Name()) || (this.course_name.equals(c.getCourse_Name()))) &&
-						((this.max == c.getMax()) || (this.max.equals(c.getMax()))) &&
-						((this.enrollment == c.getEnrollment()) || (this.enrollment.equals(c.getEnrollment()))) &&
-						((this.subject_code == c.getSubject_Code()) || (this.subject_code.equals(c.getSubject_Code()))) &&
-						((this.has_supplement == c.getHas_Supplement()))
-				) {
-			return true;
-		} else if (this.toString().equals(c.toString())) {
-			return true;
-		}
-
-		return false;
-
-	}
-
-	@Override
-	public String toString(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
-		return String.format("%s\n%s\n%s, %s %s\n%s", crn, term_code, course_code,
-				section_number, section_type);
-		//return this.crn;
-	}
-
-	@Exclude //ignores method from javadocs
 	public HashMap<String, Object> toMap() {
 		HashMap<String, Object> result = new HashMap<>();
 		result.put("crn", this.crn);
@@ -233,18 +152,124 @@ public class CRN_Data implements Serializable {
 		result.put("end_date", this.end_date);
 		result.put("start_time", this.start_time);
 		result.put("end_time", this.end_time);
-		result.put("mon", this.mon);
-		result.put("tue", this.tue);
-		result.put("wed", this.wed);
-		result.put("thu", this.thu);
-		result.put("fri", this.fri);
+		result.put("days", this.days);
 		result.put("location", this.location);
 		result.put("course_name", this.course_name);
 		result.put("max", this.max);
 		result.put("enrollment", this.enrollment);
 		result.put("subject_code", this.subject_code);
-		result.put("has_supplement", this.has_supplement);
 		return result;
+	}
+
+	public boolean equals(CRN_Data cd){
+		if (cd == null){
+			return false;
+		} else if (
+				this.term_code.equals(cd.getTerm_Code())
+				&& this.subject_code.equals(cd.getSubject_Code())
+				&& this.course_code.equals(cd.getCourse_Code())
+				&& this.crn.equals(cd.getCrn())
+		){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isCore(){
+		return (!(
+				this.section_type.equalsIgnoreCase("lab") ||
+						this.section_type.equalsIgnoreCase("tut")
+		));
+	}
+
+	@Override
+	public String toString(){
+		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+		return String.format("<%s-%s-%s-%s>", this.crn, this.term_code, this.course_code, this.section_type);
+		//return this.crn;
+	}
+
+	public String toString_CFA_Basic(){
+		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+		String str;
+
+		String [] arr = {
+				this.days.get("mon") ? "M" : "",
+				this.days.get("tue") ? "T" : "",
+				this.days.get("wed") ? "W" : "",
+				this.days.get("thu") ? "R" : "",
+				this.days.get("fri") ? "F" : ""
+		};
+
+		String days = TextUtils.join(" ", arr);
+		int curr = this.enrollment.size();
+
+		str = String.format(
+				"CRN: %s" +
+				"\tCourse: %s (%s)" +
+				"\tStart/ End Times: %s to %s" +
+				"\tDays: %s",
+				this.crn,
+				this.course_name, this.course_code,
+				this.start_time, this.end_time,
+				days)
+
+		;
+		return str;
+	}
+
+	public String toString_CFA_Full(){
+		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+		String str;
+
+		String [] arr = {
+			this.days.get("mon") ? "M" : "",
+			this.days.get("tue") ? "T" : "",
+			this.days.get("wed") ? "W" : "",
+			this.days.get("thu") ? "R" : "",
+			this.days.get("fri") ? "F" : ""
+		};
+
+		String days = TextUtils.join(" ", arr);
+		int curr = this.enrollment.size();
+
+		str = String.format(
+				"CRN: %s" +
+				"\tCourse: %s (%s)" +
+				"\tSection: %s - %s" +
+				"\tStart/ End Times: %s to %s" +
+				"\tDays: %s" +
+				"\tEnrollment (Current / Max): %s / %s" +
+				"\tLocation:\n%s" +
+				"\tInstructor: \n%s",
+
+				this.crn,
+				this.course_name, this.course_code,
+				this.section_number, this.section_type,
+				this.start_time, this.end_time,
+				days,
+				curr, this.max,
+				this.location,
+				this.instructor)
+
+				;
+		return str;
+	}
+
+	public String[] getToStringArray(int i){
+		/*
+		0 = basic
+		1 = full
+		 */
+		switch (i){
+			case 0:
+				return this.toString_CFA_Basic().split("\t");
+			case 1:
+				return this.toString_CFA_Full().split("\t");
+			default:
+				return this.toString_CFA_Basic().split("\t");
+		}
+
 	}
 
 }

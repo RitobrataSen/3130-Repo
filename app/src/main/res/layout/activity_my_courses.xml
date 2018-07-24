@@ -7,7 +7,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewRemoveCourseRegistrationActivity">
+    tools:context=".MyCoursesActivity">
 
     <!--android:listSelector="@color/colorSelected"-->
     <android.support.v7.widget.Toolbar

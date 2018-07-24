@@ -2,7 +2,6 @@ package com.example.rito.groupapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -18,15 +17,14 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rito.groupapp.old.CRN;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -38,7 +36,8 @@ import java.util.ArrayList;
  * @author   Gobii, Rito, Yuhao
  * @since    2018-07-08
  */
-public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
+public class MyCoursesActivity extends AppCompatActivity {
+	//MyCoursesActivity
 	private ListView lv;
 	private ArrayList<CRN> registeredCourses = new ArrayList<>();
 	private ArrayList<CRN> deletedCourses = new ArrayList<>();
@@ -59,23 +58,23 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CourseFilterActivity.class));
+				startActivity(new Intent(MyCoursesActivity.this, CourseFilterActivity.class));
 				return true;
 
 			case R.id.go_to_calender:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CalendarView.class));
+				startActivity(new Intent(MyCoursesActivity.this, CalendarView.class));
 				return true;
 
 			case R.id.go_to_add_crn:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, CourseRegistration.class));
+				startActivity(new Intent(MyCoursesActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, ViewRemoveCourseRegistrationActivity.class));
+				startActivity(new Intent(MyCoursesActivity.this, MyCoursesActivity.class));
 				return true;
 
 			case R.id.log_out:
-				startActivity(new Intent(ViewRemoveCourseRegistrationActivity.this, Logout_Activity.class));
+				startActivity(new Intent(MyCoursesActivity.this, Logout_Activity.class));
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -118,7 +117,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 		Log.d("debug.print", "VRCR, onCreate:");
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view_remove_course_registration);
+		setContentView(R.layout.activity_my_courses);
 
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation2);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -164,7 +163,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 		Log.d("debug.print", "VRCR, populateRegisteredCourses START:");
 
 		Database db = new Database("STUDENT/" + username);
-		db.getDbRef().addValueEventListener(new ValueEventListener() {
+		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Log.d("debug.print", "VRCR, onDataChange START:");
@@ -180,7 +179,7 @@ public class ViewRemoveCourseRegistrationActivity extends AppCompatActivity {
 							Database dbCRN = new Database("CRN/" + k);
 							Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
 
-							dbCRN.getDbRef().addValueEventListener(new ValueEventListener() {
+							dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 								@Override
 								public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 									CRN crn = dataSnapshot.getValue(CRN.class);

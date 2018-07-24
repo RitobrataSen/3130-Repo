@@ -6,7 +6,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 /**
  * Student class is used to unload firebase data using firebase ui adapter
@@ -29,6 +28,7 @@ public class Student implements Serializable {
 
 	//constructors
 	public Student() {
+		this.registration = new HashMap<String, Boolean>();
 	}
 
 	public Student(/*String uid,*/ String email, String username,
