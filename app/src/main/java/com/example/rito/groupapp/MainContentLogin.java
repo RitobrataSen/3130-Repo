@@ -14,6 +14,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * MainContentLogIn is the class that enables a user to log into the application
+ *
+ * @author Divanno,Shane
+ * @dateStarted: June 11th 2018
+ * @dateEnded: June 17th 2018
+ *
+ * @since: 24th July 2018
+ * Added a functionality that the email and password fields will be set to clear upon a successful log in.
+ * @author: Ritobrata Sen, Qu Yuze
+ *
+ */
 public class MainContentLogin extends AppCompatActivity {
 
     Button loginButton;
@@ -66,9 +78,12 @@ public class MainContentLogin extends AppCompatActivity {
                                     continue;
                                 }
                                 emailExists = true;
-                                if (currentUser.getPassword().equals(pw))
+                                if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
+                                    userEmail.setText(" ");
+                                    userPassword.setText(" ");
+                                }
                                 else {
                                     Toast.makeText(getApplicationContext(), "Incorrect password, please try again!", Toast.LENGTH_LONG).show();
                                 }
