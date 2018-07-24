@@ -11,7 +11,6 @@ package com.example.rito.groupapp;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-//import android.test.suitebuilder.annotation.LargeTest;
 
 import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 
@@ -21,14 +20,19 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
+import static org.hamcrest.Matchers.not;
+
 /**
  * ViewInfoTest is the espresso test for the View_UserInformation
  *
  * @Author: Ritobrata Sen, Qu Yuze
- * @DateStarted: 18th July
+ * @DateStarted: 16th July
  * @DateEnded:
  *
  */
@@ -56,6 +60,12 @@ public class ViewInfoTest {
         onView(withId(R.id.textView5)).check(matches(withText(String.valueOf("New Password"))));
 
         onView(withId(R.id.textView6)).check(matches(withText(String.valueOf("Confirm Password"))));
+
+        onView(withText(String.valueOf("Update Successful")))
+
+                .inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView())))
+
+                .check(matches(isDisplayed()));
 
     }
 }
