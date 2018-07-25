@@ -1,6 +1,8 @@
 package com.example.rito.groupapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,27 +24,23 @@ import com.google.firebase.database.ValueEventListener;
  * found true, the currentUser in MainActivity is updated, and the logged-in
  * intent is initialized.
  *
+ * Updated on July 24 to have the skeleton of a start new activity button for
+ * password recovery
+ *
  * @author  Shane, Divanno, Dryden
  * @since   07-06-18
  */
+
 public class MainContentLogin extends AppCompatActivity {
 
     Button loginButton;
+    Button forgotPasswordButton; //sends email
+
     EditText userEmail;
     EditText userPassword;
-    Button Submit;
     User currentUser;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
-    /*
-        @Override
-        public void onStart() {
-            super.onStart();
-            // Check if user is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            updateUI(currentUser);
-        }
-    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("debug.print", "mainContentLogin: onCreate");
@@ -51,14 +49,9 @@ public class MainContentLogin extends AppCompatActivity {
         setContentView(R.layout.content_main);
 
         loginButton = findViewById(R.id.login_submit_button);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
-
-
             public void onClick(View view) {
-
-
-                userEmail = findViewById(R.id.user_number);
+                userEmail = findViewById(R.id.user_email);
                 userPassword = findViewById(R.id.user_pw);
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
@@ -70,16 +63,9 @@ public class MainContentLogin extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean emailExists = false;
-
-                        //System.out.println(dataSnapshot.getChildrenCount());
-                        //System.out.println(dataSnapshot.toString());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
-                                //System.out.println("for loop");
-                                //System.out.println(student.toString());
                                 User currentUser = (User) student.getValue(User.class);
-                                //System.out.println("User: " + currentUser);
-
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
@@ -87,12 +73,9 @@ public class MainContentLogin extends AppCompatActivity {
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-
 									MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
-
                                 }
-
                                 else {
                                     Toast.makeText(getApplicationContext(), "Incorrect password, please try again!", Toast.LENGTH_LONG).show();
                                 }
@@ -107,6 +90,14 @@ public class MainContentLogin extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+            }
+        });
+
+        //Branch: Account_Recovery
+        forgotPasswordButton = findViewById(R.id.forgot_password);
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                //will start a new activity for user to enter email, and start pw recovery
             }
         });
     }

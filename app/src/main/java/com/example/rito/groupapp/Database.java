@@ -33,7 +33,7 @@ public class Database extends Application {
 	public DatabaseReference dbRef;
 
 	//constructors
-	public Database (){
+	public Database(){
 
 		FirebaseDatabase fb;
 		fb = FirebaseDatabase.getInstance();
@@ -98,9 +98,6 @@ public class Database extends Application {
 
 
 	public void readData(){
-
-		//this.db.setValue("Hello, World!");
-
 		System.out.println("READDATA METHOD");
 		System.out.println(this.dbRef.toString());//.child("TERMS").toString());
 		System.out.println("READDATA SUCCESS");
