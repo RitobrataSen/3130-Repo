@@ -22,6 +22,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.util.Arrays.sort;
 
@@ -48,6 +49,7 @@ public class CalendarView extends AppCompatActivity {
     public Button course_button;
     public Button detail;
     public static String selectedCRN;
+    Spinner codeSpinner;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
 
@@ -115,27 +117,10 @@ public class CalendarView extends AppCompatActivity {
                 courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        //  Log.d("Dryden", "checking to see if exists");
                         if (dataSnapshot.exists()) {
 
                             CRN_Data toAdd = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
                             calendarCourses[counter] = toAdd;
-
-                            if (toAdd.getDays().get("mon")) {
-                                displayCourse(monday, toAdd);
-                            }
-                            if (toAdd.getDays().get("tue")) {
-                                displayCourse(tuesday, toAdd);
-                            }
-                            if (toAdd.getDays().get("wed")) {
-                                displayCourse(wednesday, toAdd);
-                            }
-                            if (toAdd.getDays().get("thu")) {
-                                displayCourse(thursday, toAdd);
-                            }
-                            if (toAdd.getDays().get("fri")) {
-                                displayCourse(friday, toAdd);
-                            }
                         }
                     }
 
@@ -143,20 +128,42 @@ public class CalendarView extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-                Spinner codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
+                Log.d("Dryden", calendarCourses.toString());
+                Arrays.sort(calendarCourses);
+                for(i = 0; i < calendarCourses.length; i++) {
+                    if (calendarCourses[i].getDays().get("mon")) {
+                        displayCourse(monday, calendarCourses[i]);
+                    }
+                    if (calendarCourses[i].getDays().get("tue")) {
+                        displayCourse(tuesday, calendarCourses[i]);
+                    }
+                    if (calendarCourses[i].getDays().get("wed")) {
+                        displayCourse(wednesday, calendarCourses[i]);
+                    }
+                    if (calendarCourses[i].getDays().get("thu")) {
+                        displayCourse(thursday, calendarCourses[i]);
+                    }
+                    if (calendarCourses[i].getDays().get("fri")) {
+                        displayCourse(friday, calendarCourses[i]);
+                    }
+                }
+
+                codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
                 ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
                 codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 codeSpinner.setAdapter(codeAdapter);
-
-                selectedCourse = codeSpinner.getSelectedItem().toString();
                 int index = codeList.indexOf(selectedCourse) - 1;
                 if (index >= 0) {
                     selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
                 }
+
+                detail = findViewById(R.id.Detail);
                 detail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Log.d("debug.print", "main_activity: Submit clicked");
+
+                        selectedCourse = codeSpinner.getSelectedItem().toString();
                         startActivity(new Intent(CalendarView.this, Detail_Page.class));
                     }
                 });

@@ -29,7 +29,7 @@ public class Detail_Page extends AppCompatActivity {
 
         courseInfo = (ListView)findViewById(R.id.listView);
 
-        final Query courseQ = databaseReference.child("COURSE_SCHEDULE").child(selectedCRN);
+        final Query courseQ = databaseReference.child("CRN_Data").child(selectedCRN);
         courseQ.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -16,7 +16,7 @@ import java.util.HashMap;
  */
 
 @IgnoreExtraProperties //only maps fields during serialization
-public class CRN_Data implements Serializable {
+public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 
 	private String crn;
 	private String term_code;
@@ -270,6 +270,19 @@ public class CRN_Data implements Serializable {
 				return this.toString_CFA_Basic().split("\t");
 		}
 
+	}
+
+	// CompareTo Method created to improve sorting in calendar.
+	// @since 7/25/2018
+	// @author Dryden Pick and Yuhao Hu.
+	public int compareTo(CRN_Data other){
+		if(this.getStart_Time() == null){
+			return -1;
+		}
+		if(other.getStart_Time() == null){
+			return 1;
+		}
+		return this.getStart_Time().compareTo(other.getStart_Time());
 	}
 
 }
