@@ -3,8 +3,13 @@ import com.example.rito.groupapp.*;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,12 +35,55 @@ public class View_UserInformation extends AppCompatActivity {
     private TextView tv1, tv2, tv3,tv4,tv5;
     private EditText et1, et2, et3,et4,et5;
     private Button bt1;
+    private Toolbar hdrToolBar;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.go_to_course:
+                startActivity(new Intent(View_UserInformation.this, CourseFilterActivity.class));
+                return true;
+
+            case R.id.go_to_calender:
+                startActivity(new Intent(View_UserInformation.this, CalendarView.class));
+                return true;
+
+            case R.id.go_to_add_crn:
+                startActivity(new Intent(View_UserInformation.this, CourseRegistration.class));
+                return true;
+
+            case R.id.go_to_view_remove_registered:
+                startActivity(new Intent(View_UserInformation.this, MyCoursesActivity.class));
+                return true;
+            case R.id.view_user_information:
+                startActivity(new Intent(View_UserInformation.this, View_UserInformation.class));
+
+            case R.id.log_out:
+                startActivity(new Intent(View_UserInformation.this, Logout_Activity.class));
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
     private DatabaseReference databaseRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__user_information);
+
+        hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(hdrToolBar);
+
+
        final Database db = new Database();
         databaseRef = db.getDb().getReference("STUDENT");
 
