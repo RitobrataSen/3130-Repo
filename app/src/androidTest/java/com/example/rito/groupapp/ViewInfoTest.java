@@ -45,14 +45,23 @@ public class ViewInfoTest {
 
         onView(withId(R.id.textView2)).check(matches(withText(String.valueOf("Email"))));
 
+        onView(withId(R.id.textView2)).check(matches(isDisplayed()));
+
         onView(withId(R.id.textView3)).check(matches(withText(String.valueOf("Username"))));
+
+        onView(withId(R.id.textView3)).check(matches(isDisplayed()));
 
         onView(withId(R.id.textView4)).check(matches(withText(String.valueOf("Password"))));
 
+        onView(withId(R.id.textView4)).check(matches(isDisplayed()));
+
         onView(withId(R.id.textView5)).check(matches(withText(String.valueOf("New Password"))));
+
+        onView(withId(R.id.textView5)).check(matches(isDisplayed()));
 
         onView(withId(R.id.textView6)).check(matches(withText(String.valueOf("Confirm Password"))));
 
+        onView(withId(R.id.textView6)).check(matches(isDisplayed()));
 
     }
 }
