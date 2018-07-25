@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +32,13 @@ import static java.util.Arrays.sort;
  * day. Plans exist for expanding this to short all activities based on start time.
  *
  * @author   Dryden and Shane
- * @since    2018-07-08
+ * @completed   2018-07-08
+ *
+ * @since 2018-07-19
+ *
+ * @author Ritobrata Sen, Qu Yuze
+ * @updated: The an added functionality to the menu was added so that the user can now
+ * navigate and view their information.
  */
 public class CalendarView extends AppCompatActivity {
 
@@ -81,6 +88,8 @@ public class CalendarView extends AppCompatActivity {
             case R.id.go_to_view_remove_registered:
                 startActivity(new Intent(CalendarView.this, MyCoursesActivity.class));
                 return true;
+            case R.id.view_user_information:
+                startActivity(new Intent(CalendarView.this, View_UserInformation.class));
 
             case R.id.log_out:
                 startActivity(new Intent(CalendarView.this, Logout_Activity.class));

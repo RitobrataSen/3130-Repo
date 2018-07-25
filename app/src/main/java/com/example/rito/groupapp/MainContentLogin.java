@@ -92,6 +92,7 @@ public class MainContentLogin extends AppCompatActivity {
 
                                     //set event listener to update current user whenever it is
                                     //changed
+                                    /*
                                     Database db = new Database("STUDENT/" + currentUser.getUsername());
                                     db.getDbRef().addValueEventListener(new ValueEventListener() {
                                         @Override
@@ -107,8 +108,9 @@ public class MainContentLogin extends AppCompatActivity {
                                             Log.d("debug.print", "The read failed: " + databaseError.getCode());
                                         }
                                     });
+                                    */
 
-									//MainActivity.currentUser = currentUser;
+									MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
 
                                 }

@@ -23,6 +23,16 @@
             android:name=".MainContentLogin"
             android:label="Login"></activity>
         <activity
+            android:name=".ReadCourses"
+            android:parentActivityName=".MainContentLogin">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainContentLogin" />
+        </activity>
+
+        <activity
             android:name=".CourseRegistration"
             android:label="@string/to_add_crn"></activity>
         <activity
@@ -40,8 +50,12 @@
             android:label="@string/to_course_view"></activity>
 
         <activity
-            android:name=".Detail_Page"
-            android:label="Detail Page"></activity>
+            android:name=".MyCoursesActivity"
+            android:label="@string/to_view_remove_registration"></activity>
+        <activity android:name=".ViewUser_Information.View_UserInformation"
+            android:label="View Information">
+
+        </activity>
     </application>
 
 </manifest>

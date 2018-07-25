@@ -15,6 +15,7 @@
     <string name="to_Calender_view">My Calender</string>
     <string name="to_course_view">View Courses</string>
     <string name="to_add_crn">Add CRN</string>
+    <string name="to_view_info">View Information</string>
     <string name="to_view_remove_registration">My Courses</string>
 
     <string name="title_activity_course_filter">CourseFilterActivity</string>
