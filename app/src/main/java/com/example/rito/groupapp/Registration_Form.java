@@ -72,7 +72,7 @@ public class Registration_Form extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
               
-                if (password == password2) {
+                if (password.getText().toString().equals( password2.getText().toString())) {
 
 
                     final Context context = getApplicationContext();
@@ -128,7 +128,7 @@ public class Registration_Form extends AppCompatActivity {
                     });
 
                 }
-                if(password != password2){
+                if(password.getText().toString().equals( password2.getText().toString())==false){
                     Toast.makeText(getBaseContext(), "passwords not the same", Toast.LENGTH_LONG).show();
                 }
             }
