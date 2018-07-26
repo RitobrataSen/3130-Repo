@@ -93,11 +93,18 @@ public class Registration_Form extends AppCompatActivity {
                             boolean exists = false;
 
                             if (dataSnapshot.child(un).exists()) {
-                                text = "Sorry, username already exists.";
-                                Toast toast = Toast.makeText(context, text, duration);
-                                toast.show();
+                                if(un.length() != 0){
+                                    text = "Sorry, username already exists.";
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
                                 exists = true;
-                            } else {
+                            }else if(password.getText().toString().equals( password2.getText().toString())==false){
+                                exists = true;
+                            } else if(un.length() == 0 || pw.length() == 0 || em.length() == 0){
+                                exists = true;
+                            }
+                            else {
                                 //verify if email exists
                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                                     User u = data.getValue(User.class);
@@ -128,9 +135,18 @@ public class Registration_Form extends AppCompatActivity {
                     });
 
                 }
+
                 if(password.getText().toString().equals( password2.getText().toString())==false){
                     Toast.makeText(getBaseContext(), "passwords not the same", Toast.LENGTH_LONG).show();
                 }
+                if( un.length() == 0 ){
+                    Toast.makeText(getBaseContext(), "No username entered", Toast.LENGTH_LONG).show();
+                }else if(pw.length() == 0 ){
+                    Toast.makeText(getBaseContext(), "No password entered", Toast.LENGTH_LONG).show();
+                }else if ( em.length() == 0){
+                    Toast.makeText(getBaseContext(), "No email entered", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 

@@ -107,7 +107,8 @@ public class MainContentLogin extends AppCompatActivity {
                                         }
                                     });
                                     */
-
+                                    userEmail.setText(null);
+                                    userPassword.setText(null);
 									MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
 
