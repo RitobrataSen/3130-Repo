@@ -2,6 +2,7 @@ package com.example.rito.groupapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -109,37 +110,43 @@ public class CalendarView extends AppCompatActivity {
 
         populateTextViewLists();
 
+        //Recall, this wont work unless a user is signed in.
         if(MainActivity.currentUser != null) {
             courseList = new Course[MainActivity.currentUser.getRegistration().keySet().toArray().length];
+            Log.d("Dryden", "courseListLength "+courseList.length);
             calendarCourses = new CRN_Data[courseList.length];
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
-                //Recall, this wont work unless a user is signed in.
+
                 String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
 
-                //Query courseSchedule = databaseRef.child("CRN_DATA").child(crn);
+                Log.d("Dryden", "CRN " + crn);
+
                 Database db = new Database("CRN_DATA/" + crn);
-                DatabaseReference courseSchedule = db.getDbRef();
-                Log.d("debug.print", courseSchedule.toString());
-
-                counter = i;
-                //Log.d("Dryden", courseSchedule.toString());
-                courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
+                db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d("Dryden", "before!?");
                         if (dataSnapshot.exists()) {
-
-                            CRN_Data toAdd = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
-                            calendarCourses[counter] = toAdd;
+                            Log.d("Dryden", "exists!?");
+                            calendarCourses[counter] = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        Log.d("debug.print", "The read failed: " + databaseError.getCode());
                     }
                 });
-                Log.d("Dryden", calendarCourses.toString());
+            }
+                for(int i = 0; i < calendarCourses.length; i++) {
+
+                    Log.d("Dryden", "length:"+calendarCourses.length+"     i : "+ i );
+                    if(calendarCourses[i] != null) {
+                        Log.d("Dryden", calendarCourses[i].toString());
+                    }
+                }
                 Arrays.sort(calendarCourses);
-                for(i = 0; i < calendarCourses.length; i++) {
+                for(int i = 0; i < calendarCourses.length; i++) {
                     if (calendarCourses[i].getDays().get("mon")) {
                         displayCourse(monday, calendarCourses[i]);
                     }
@@ -176,7 +183,6 @@ public class CalendarView extends AppCompatActivity {
                         startActivity(new Intent(CalendarView.this, Detail_Page.class));
                     }
                 });
-            }
         }
         else{
             CRN_Data c = new CRN_Data();
