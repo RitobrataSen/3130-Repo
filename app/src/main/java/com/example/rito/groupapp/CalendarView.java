@@ -25,6 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static java.util.Arrays.sort;
 
@@ -52,13 +54,12 @@ public class CalendarView extends AppCompatActivity {
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
     public Course courseList[];
-    public CRN_Data calendarCourses[];
+    public ArrayList<CRN_Data> calendarCourses;
     public int counter;
     public Button course_button;
     public Button detail;
     public static String selectedCRN;
     Spinner codeSpinner;
-    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
 
     private Toolbar hdrToolBar;
@@ -114,13 +115,13 @@ public class CalendarView extends AppCompatActivity {
         if(MainActivity.currentUser != null) {
             courseList = new Course[MainActivity.currentUser.getRegistration().keySet().toArray().length];
             Log.d("Dryden", "courseListLength "+courseList.length);
-            calendarCourses = new CRN_Data[courseList.length];
+            calendarCourses = new ArrayList<CRN_Data>();
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
 
                 String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
 
                 Log.d("Dryden", "CRN " + crn);
-
+                counter = i;
                 Database db = new Database("CRN_DATA/" + crn);
                 db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -128,7 +129,11 @@ public class CalendarView extends AppCompatActivity {
                         Log.d("Dryden", "before!?");
                         if (dataSnapshot.exists()) {
                             Log.d("Dryden", "exists!?");
-                            calendarCourses[counter] = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                            CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                            calendarCourses.add(curr);
+                        }
+                        if(calendarCourses.size() == courseList.length){
+                            populateCalendar();
                         }
                     }
 
@@ -138,51 +143,7 @@ public class CalendarView extends AppCompatActivity {
                     }
                 });
             }
-                for(int i = 0; i < calendarCourses.length; i++) {
-
-                    Log.d("Dryden", "length:"+calendarCourses.length+"     i : "+ i );
-                    if(calendarCourses[i] != null) {
-                        Log.d("Dryden", calendarCourses[i].toString());
-                    }
-                }
-                Arrays.sort(calendarCourses);
-                for(int i = 0; i < calendarCourses.length; i++) {
-                    if (calendarCourses[i].getDays().get("mon")) {
-                        displayCourse(monday, calendarCourses[i]);
-                    }
-                    if (calendarCourses[i].getDays().get("tue")) {
-                        displayCourse(tuesday, calendarCourses[i]);
-                    }
-                    if (calendarCourses[i].getDays().get("wed")) {
-                        displayCourse(wednesday, calendarCourses[i]);
-                    }
-                    if (calendarCourses[i].getDays().get("thu")) {
-                        displayCourse(thursday, calendarCourses[i]);
-                    }
-                    if (calendarCourses[i].getDays().get("fri")) {
-                        displayCourse(friday, calendarCourses[i]);
-                    }
-                }
-
-                codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
-                ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
-                codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                codeSpinner.setAdapter(codeAdapter);
-                int index = codeList.indexOf(selectedCourse) - 1;
-                if (index >= 0) {
-                    selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
-                }
-
-                detail = findViewById(R.id.Detail);
-                detail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.d("debug.print", "main_activity: Submit clicked");
-
-                        selectedCourse = codeSpinner.getSelectedItem().toString();
-                        startActivity(new Intent(CalendarView.this, Detail_Page.class));
-                    }
-                });
+            codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
         }
         else{
             CRN_Data c = new CRN_Data();
@@ -194,6 +155,44 @@ public class CalendarView extends AppCompatActivity {
         }
     }
 
+    public void populateCalendar(){
+        Collections.sort(calendarCourses);
+        for(int i = 0; i < calendarCourses.size(); i++) {
+            if (calendarCourses.get(i).getDays().get("mon")) {
+                displayCourse(monday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("tue")) {
+                displayCourse(tuesday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("wed")) {
+                displayCourse(wednesday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("thu")) {
+                displayCourse(thursday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("fri")) {
+                displayCourse(friday, calendarCourses.get(i));
+            }
+        }
+        ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
+        codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        codeSpinner.setAdapter(codeAdapter);
+        int index = codeList.indexOf(selectedCourse) - 1;
+        if (index >= 0) {
+            selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
+        }
+
+        detail = findViewById(R.id.Detail);
+        detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("debug.print", "main_activity: Submit clicked");
+
+                selectedCourse = codeSpinner.getSelectedItem().toString();
+                startActivity(new Intent(CalendarView.this, Detail_Page.class));
+            }
+        });
+    }
 
     public void displayCourse(TextView[] selected, CRN_Data course){
         for(int i = 0; i < courseListSize; i++) {
