@@ -12,12 +12,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
 
 import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,10 +44,13 @@ import static java.util.Arrays.sort;
  * @completed   2018-07-08
  *
  * @since 2018-07-19
- *
  * @author Ritobrata Sen, Qu Yuze
  * @updated: The an added functionality to the menu was added so that the user can now
  * navigate and view their information.
+ *
+ * @since 2018-07-28
+ * @author Dryden and Yuhao
+ * @updated: Created a popup displaying a course's specific information and created a filter to filter courses by term.
  */
 public class CalendarView extends AppCompatActivity {
 
@@ -228,7 +233,6 @@ public class CalendarView extends AppCompatActivity {
                                         line7.setText(arr[6]);
                                         line8.setText(arr[7]);
 
-
                                         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
                                         // if button is clicked, close the custom dialog
                                         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +242,8 @@ public class CalendarView extends AppCompatActivity {
                                             }
                                         });
 
+                                        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+                                        dialogButtonCancel.setVisibility(View.INVISIBLE);
                                         dialog.show();
 
                                     }
@@ -313,4 +319,5 @@ public class CalendarView extends AppCompatActivity {
     public int getCourseListSize(){
         return courseListSize;
     }
+
 }

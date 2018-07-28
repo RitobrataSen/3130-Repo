@@ -52,9 +52,6 @@
         <activity
             android:name=".MyCoursesActivity"
             android:label="@string/to_view_remove_registration"></activity>
-        <activity
-            android:name=".Detail_Page"
-            android:label="Course Detail"></activity>
     </application>
 
 </manifest>
