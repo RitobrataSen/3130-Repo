@@ -68,9 +68,9 @@ public class RecoveryEmailActivityTest {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot student : dataSnapshot.getChildren()) {
                         User currentUser = (User) student.getValue(User.class);
-                        if (currentUser.getEmail().equals("ea2")) {
+                        if (currentUser.getEmail().equals("Email_Address3")) {
                             User resetUser = currentUser;
-                            resetUser.setPassword("pw2");
+                            resetUser.setPassword("pw3");
                             dbRefStudent.updateUser(currentUser, resetUser);
                             break;
                         }
