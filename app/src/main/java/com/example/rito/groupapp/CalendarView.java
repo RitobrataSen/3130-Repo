@@ -122,21 +122,17 @@ public class CalendarView extends AppCompatActivity {
         //Recall, this wont work unless a user is signed in.
         if(MainActivity.currentUser != null) {
             courseList = new CRN_Data[MainActivity.currentUser.getRegistration().keySet().toArray().length];
-            Log.d("Dryden", "courseListLength "+courseList.length);
             calendarCourses = new ArrayList<CRN_Data>();
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
 
                 String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
 
-                Log.d("Dryden", "CRN " + crn);
                 counter = i;
                 Database db = new Database("CRN_DATA/" + crn);
                 db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d("Dryden", "before!?");
                         if (dataSnapshot.exists()) {
-                            Log.d("Dryden", "exists!?");
                             CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
                             calendarCourses.add(curr);
                         }
