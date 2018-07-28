@@ -77,7 +77,7 @@ public class Database extends Application {
 
 		//remove from: COURSE_ENROLLMENT/<crn>/ENROLLMENT/<username> = null
 		String pathEnrollment = String.format(
-				"COURSE_ENROLLMENT/%s/ENROLLMENT/%s", crn, username);
+				"COURSE_ENROLLEMENT/%s/ENROLLMENT/%s", crn, username);
 
 		ref = this.db.getReference(pathEnrollment);
 		ref.setValue(val ? val : null);
@@ -96,11 +96,33 @@ public class Database extends Application {
 
 	}
 
+	public void addUser(String email, String username, String password){
+		int result = -1;
+		/*
+		0 = success
+		1 = username exists
+		2 = email exists
+		 */
+		DatabaseReference ref;
 
-	public void readData(){
-		System.out.println("READDATA METHOD");
-		System.out.println(this.dbRef.toString());//.child("TERMS").toString());
-		System.out.println("READDATA SUCCESS");
+		//check if username exists
+		String pathUsername = String.format(
+				"STUDENT/%s", username);
+
+		Log.d("debug.print", "UPE: " +
+				username + "," + password + "," + email);
+
+		HashMap<String, Boolean> hm = new HashMap<>();
+		User user = new User(email, username, password, hm);
+		ref = this.db.getReference(pathUsername);
+		ref.setValue(user);
+	}
+	public void updateUser(User oldusr, User newusr){
+		DatabaseReference refOld = this.db.getReference(oldusr.getPath());
+		refOld.setValue(null);
+		DatabaseReference refNew = this.db.getReference(newusr.getPath());
+		refNew.setValue(newusr);
+		MainActivity.currentUser = newusr;
 	}
 
 }

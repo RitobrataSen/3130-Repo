@@ -24,8 +24,7 @@ import com.google.firebase.database.ValueEventListener;
  * found true, the currentUser in MainActivity is updated, and the logged-in
  * intent is initialized.
  *
- * Updated on July 24 to have the skeleton of a start new activity button for
- * password recovery
+ * Forgot password button redirects to new activity. All entry forms now error checked.
  *
  * @author  Shane, Divanno, Dryden
  * @since   07-06-18
@@ -53,6 +52,14 @@ public class MainContentLogin extends AppCompatActivity {
             public void onClick(View view) {
                 userEmail = findViewById(R.id.user_email);
                 userPassword = findViewById(R.id.user_pw);
+                if(userEmail.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Enter an email first!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(userPassword.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Enter your password!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
 
@@ -97,7 +104,7 @@ public class MainContentLogin extends AppCompatActivity {
         forgotPasswordButton = findViewById(R.id.forgot_password);
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                //will start a new activity for user to enter email, and start pw recovery
+                startActivity(new Intent(MainContentLogin.this,RecoveryEmailActivity.class));
             }
         });
     }
