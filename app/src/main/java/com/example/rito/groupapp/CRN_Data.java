@@ -182,6 +182,11 @@ public class CRN_Data implements Serializable {
 		));
 	}
 
+	public long getCur(){
+		long cur = this.enrollment != null ? this.enrollment.size() : 0;
+		return cur;
+	}
+
 	@Override
 	public String toString(){
 		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
@@ -201,8 +206,9 @@ public class CRN_Data implements Serializable {
 				this.days.get("fri") ? "F" : ""
 		};
 
-		String days = TextUtils.join(" ", arr);
-		int curr = this.enrollment.size();
+		String days = join(arr);
+		System.out.println(days);
+		System.out.println(this.days);
 
 		str = String.format(
 				"CRN: %s" +
@@ -230,14 +236,14 @@ public class CRN_Data implements Serializable {
 			this.days.get("fri") ? "F" : ""
 		};
 
-		String days = TextUtils.join(" ", arr);
+		String days = join(arr);
 		int curr = this.enrollment.size();
 
 		str = String.format(
 				"CRN: %s" +
 				"\tCourse: %s (%s)" +
 				"\tSection: %s - %s" +
-				"\tStart/ End Times: %s to %s" +
+				"\tStart/ End Times: %s" +
 				"\tDays: %s" +
 				"\tEnrollment (Current / Max): %s / %s" +
 				"\tLocation:\n%s" +
@@ -246,8 +252,10 @@ public class CRN_Data implements Serializable {
 				this.crn,
 				this.course_name, this.course_code,
 				this.section_number, this.section_type,
-				this.start_time, this.end_time,
-				days,
+				this.start_time.equalsIgnoreCase("CD") ?
+						"Consult Department" : this.start_time + " to " + this.end_time,
+				days.equalsIgnoreCase("") ?
+						"Consult Department" : days,
 				curr, this.max,
 				this.location,
 				this.instructor)
@@ -271,5 +279,21 @@ public class CRN_Data implements Serializable {
 		}
 
 	}
+
+	public String join(String [] arr){
+		//String days = TextUtils.join(" ", arr);
+		String days = "";
+		for (String x : arr){
+			if (!(x.equalsIgnoreCase(""))){
+				if (days.equalsIgnoreCase("")){
+					days = x;
+				} else {
+					days = days + " " + x;
+				}
+			}
+		}
+		return days;
+	}
+
 
 }

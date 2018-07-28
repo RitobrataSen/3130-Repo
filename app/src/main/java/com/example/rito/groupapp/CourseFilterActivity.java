@@ -3,10 +3,13 @@ package com.example.rito.groupapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +21,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -26,9 +31,11 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * CourseFilterActivity allows users to drill down courses. plans exists to
@@ -48,6 +55,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	private ArrayList<CRN_Data> viewCoreCourses = new ArrayList<>();
 	private ArrayList<CRN_Data> viewSupplementCourses = new ArrayList<>();
+
+	private ArrayList<ProcessedCRN> processedCRN = new ArrayList<>();
 
 	private TextView mTextMessage;
 
@@ -71,30 +80,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	private boolean displaySelection = false;
 	// flag to determine the current view type,
-	// true = course selection display,
-	// false = selected courses display;
+	// true = selected courses display;
+	// false = course selection display,
 
-	/*
-	NOTE: we will need to pass in the user data or access
-	it through a public variable. for development purposes
-	we will set it as a static variable here.
-	*/
-
-	/*
-	for iteration 3 we will need to do the following:
-	1) go deeper into the course filter where clicking
-	a course lists all crn and they schedules
-
-	2) auto schedule generation that recursively builds
-	non overlapping schedules (ie overlap between courses
-	such that no two courses can occur during the same time
-	for a single user)
-
-	3) allow easy conversion to adding courses by crn. for example
-	add a crn to a pool that is used by the schedule generator.
-	 */
 	private String student = "Student2";
-	private Toolbar hdrToolBar;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,6 +121,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
 				return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -143,7 +133,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 		@Override
 		public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+			int o = 0;
+			String t, m;
 			switch (item.getItemId()) {
 				case R.id.navigation_back:
 					if (displaySelection){
@@ -160,28 +151,32 @@ public class CourseFilterActivity extends AppCompatActivity {
 					displaySelection = true;
 					return true;
 
-				/*
-				case R.id.navigation_add:
-
-					//mTextMessage.setText(R.string.title_dashboard);//title_my_courses
-					Log.d("debug.print", "NAVI, ADD BY CRN:" + selectedCourses);
-					return true;
-				*/
-
 				case R.id.navigation_reset:
-					selectedCoreCourses.clear();
-					selectedSupplementCourses.clear();
-					viewCoreCourses.clear();
-					viewSupplementCourses.clear();
-					populateTerm();
+
+					t = "Reset Filter";
+					m = "Are you sure you want to reset your selection?";
+					o = 1;
+					popupMsg(t, m, o);
 					return true;
 
-				/*
 				case R.id.navigation_done:
 					//getPreviousState();
-					Log.d("debug.print", "NAVI, DONE:" + selectedCourses);
-					return true;
-				*/
+					if (selectedCoreCourses.size() == 0 && selectedSupplementCourses.size() == 0){
+						text = "You have not selected any courses. Please select at least 1 " +
+								"course to register, and try again.";
+						Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+						toast.show();
+
+					} else {
+						Log.d("debug.print", "DONE");
+						t = "Register Classes";
+						m = "Do you want register for all selected classes identified by " +
+								"their CRNs?";
+						o = 0;
+						popupMsg(t, m, o);
+						return true;
+					}
+
 			}
 
 			return false;
@@ -197,8 +192,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_course_filter);
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(hdrToolBar);
 
 		Intent intent = getIntent();
@@ -247,10 +241,22 @@ public class CourseFilterActivity extends AppCompatActivity {
 			case 4:
 				populateCourseType(filterCourse);
 				break;
+			case 5:
+				selectedCoreCourses.clear();
+				selectedSupplementCourses.clear();
+				viewCoreCourses.clear();
+				viewSupplementCourses.clear();
+				processedCRN.clear();
+				populateTerm();
+				break;
 			default:
 				populateTerm();
 				break;
 		}
+	}
+
+	public void addCRNs(){
+
 	}
 
 	public void populateCurrentSelection(int type){
@@ -328,17 +334,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					CRN_Data crn_data = (CRN_Data) parent.getItemAtPosition(position);
 					filterCRN = crn_data;
-					/*
-					boolean core = filterCourseType.getCore();
-					boolean sel = markSelection(crn_data, core);
-
-					if (sel){
-						view.setBackgroundResource(R.color.transparent);
-					} else {
-						view.setBackgroundResource(R.color.colorSelected);
-					}
-					*/
-
 
 					// custom dialog
 					final Dialog dialog = new Dialog(context);
@@ -349,7 +344,36 @@ public class CourseFilterActivity extends AppCompatActivity {
 					String []  arr = crn_data.getToStringArray(1);
 
 					TextView title = (TextView) dialog.findViewById(R.id.title);
+					title.setText("Add/Remove Course");
 
+					//bold titles
+					SpannableString ss;
+					String t, v;
+					HashMap<String, TextView> hmap = new HashMap<>();
+					hmap.put("line1", (TextView) dialog.findViewById(R.id.line1));
+					hmap.put("line2", (TextView) dialog.findViewById(R.id.line2));
+					hmap.put("line3", (TextView) dialog.findViewById(R.id.line3));
+					hmap.put("line4", (TextView) dialog.findViewById(R.id.line4));
+					hmap.put("line5", (TextView) dialog.findViewById(R.id.line5));
+					hmap.put("line6", (TextView) dialog.findViewById(R.id.line6));
+					hmap.put("line7", (TextView) dialog.findViewById(R.id.line7));
+					hmap.put("line8", (TextView) dialog.findViewById(R.id.line8));
+					String [] s;
+					TextView tv;
+					for (int i = 0; i < arr.length; i++){
+						s = arr[i].split(":");
+						t = s[0] + ":";
+						v = s[1];
+						ss =  new SpannableString(t);
+						ss.setSpan(new StyleSpan(Typeface.BOLD), 0, ss.length(), 0);
+						tv = hmap.get("line" + (i + 1));
+						tv.append(ss);
+						tv.append(v);
+						Log.d("debug.print", t + " " + v + " " + "line" + i);
+					}
+
+
+					/*
 					TextView line1 = (TextView) dialog.findViewById(R.id.line1);
 					TextView line2 = (TextView) dialog.findViewById(R.id.line2);
 					TextView line3 = (TextView) dialog.findViewById(R.id.line3);
@@ -359,8 +383,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 					TextView line7 = (TextView) dialog.findViewById(R.id.line7);
 					TextView line8 = (TextView) dialog.findViewById(R.id.line8);
 
-					title.setText("Add Course");
-
 					line1.setText(arr[0]);
 					line2.setText(arr[1]);
 					line3.setText(arr[2]);
@@ -369,6 +391,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 					line6.setText(arr[5]);
 					line7.setText(arr[6]);
 					line8.setText(arr[7]);
+					*/
+
 
 					Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 					// if button is clicked, close the custom dialog
@@ -384,7 +408,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 					dialogButtonOK.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							boolean sel = markSelection(true);
+							boolean sel = markSelection();
 							//view.setBackgroundResource(R.color.transparent);
 							//view.setBackgroundResource(R.color.colorSelected);
 							dialog.dismiss();
@@ -681,9 +705,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 					Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
 
 					if(
-							x.getTerm_Code().equals(coursetype.getTerm_code())
-							&& x.getSubject_Code().equals(coursetype.getSubject_code())
-							&& x.getCourse_Code().equals(coursetype.getCourse_code())
+							x.getTerm_Code().equals(coursetype.getTerm_Code())
+							&& x.getSubject_Code().equals(coursetype.getSubject_Code())
+							&& x.getCourse_Code().equals(coursetype.getCourse_Code())
 							&& x.isCore() == coursetype.getCore()
 					){
 						view.setBackgroundResource(R.color.colorSelected);
@@ -695,9 +719,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 				if (!(cc)) {
 					for (CRN_Data x : selectedSupplementCourses) {
 						if(
-								x.getTerm_Code().equals(coursetype.getTerm_code())
-								&& x.getSubject_Code().equals(coursetype.getSubject_code())
-								&& x.getCourse_Code().equals(coursetype.getCourse_code())
+								x.getTerm_Code().equals(coursetype.getTerm_Code())
+								&& x.getSubject_Code().equals(coursetype.getSubject_Code())
+								&& x.getCourse_Code().equals(coursetype.getCourse_Code())
 								&& x.isCore() == coursetype.getCore()
 						){
 							view.setBackgroundResource(R.color.colorSelected);
@@ -725,6 +749,226 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
+	public void displayProcessedCRN(){
+		lv = findViewById(R.id.listView);
+		lv.setAdapter(new ArrayAdapter<ProcessedCRN>(
+				this, R.layout.item_processed_crn , processedCRN){
+			//R.layout.**** IS THE DESIGN FOR THE ROW
+			@Override
+			public View getView (int position, View view, ViewGroup parent){
+				if (view == null) {
+					view = LayoutInflater.from(getContext()).inflate(R.layout.item_processed_crn, parent,
+							false);
+				}
+				ProcessedCRN p = getItem(position);
+				TextView row1 = (TextView) view.findViewById(R.id.crn_pc);
+				TextView row2 = (TextView) view.findViewById(R.id.msg_pc);
+				ImageView row3 = (ImageView) view.findViewById(R.id.status_pc);
+
+				row1.setText(p.getCrn());
+				row2.setText(p.getMsg());
+
+				if (p.getStatus()){
+					row3.setImageDrawable(getResources().getDrawable(R.drawable.ic_pass_green_24dp,
+							getApplicationContext().getTheme()));
+				} else {
+					row3.setImageDrawable(getResources().getDrawable(R.drawable.ic_fail_red_24dp,
+							getApplicationContext().getTheme()));
+				}
+
+
+				return view;
+			}
+		});
+
+		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			// onItemClick method is called everytime a user clicks an item on the list
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ProcessedCRN p = (ProcessedCRN) parent.getItemAtPosition(position);
+				ArrayList<ProcessedCRN> newProcessedCRN = new ArrayList<>();
+
+				for (ProcessedCRN x : processedCRN){
+					if (!(x.equals(p))){
+						newProcessedCRN.add(x);
+					}
+				}
+				processedCRN = newProcessedCRN;
+				displayProcessedCRN();
+			}
+		});
+
+	}
+
+
+	public void addSelection(){
+		filterState = 5;
+
+		ArrayList<CRN_Data> selectedCRN;
+		selectedCRN = new ArrayList<>(selectedCoreCourses);
+		selectedCRN.removeAll(selectedSupplementCourses);
+		selectedCRN.addAll(selectedSupplementCourses);
+		final Database db = new Database();
+		DatabaseReference ref;
+		final ProcessedCRN pcd = new ProcessedCRN();
+
+		for (CRN_Data c : selectedCRN){
+			pcd.setCrn(c.getCrn());
+			ref = db.getDb().getReference("CRN_DATA/" + c.getCrn());
+			ref.addListenerForSingleValueEvent(new ValueEventListener() {
+				@Override
+				public void onDataChange(DataSnapshot dataSnapshot) {
+					//Read the inputted string from users
+					//Checking if crn exists
+					if (dataSnapshot.exists()) {
+						final CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
+						long max = Integer.parseInt(crn_data.getMax());
+						long cur = crn_data.getCur();
+						//Checking the number of student that enrolled in this course is full or not
+						if (max > cur) {
+							DatabaseReference ref;
+							ref = db.getDb().getReference("STUDENT/" +
+									MainActivity.currentUser.getUsername());
+							ref.addListenerForSingleValueEvent(new ValueEventListener() {
+								@Override
+								public void onDataChange(DataSnapshot dataSnapshot) {
+									if (!(dataSnapshot.hasChild("registration")) ||
+											!(dataSnapshot.child("registration").hasChild(crn_data.getCrn()))) {
+										//save data
+										/*
+										db.addRemoveCourse(
+												crn_data.getCrn(),
+												MainActivity.currentUser.getUsername(),
+												true);
+										 */
+
+										//append Processed_CRN object
+										pcd.setCrn(crn_data.getCrn());
+										pcd.setMsg("Registration successful!");
+										pcd.setStatus(true);
+										//append Processed_CRN object
+										processedCRN.add(pcd.cloneData());
+										displayProcessedCRN();
+
+									} else {
+										//case for duplicate enrollment
+										pcd.setCrn(crn_data.getCrn());
+										pcd.setMsg("Registration failed: " +
+												"You are already enrolled " +
+												"for this CRN!");
+										pcd.setStatus(false);
+										//append Processed_CRN object
+										processedCRN.add(pcd.cloneData());
+										displayProcessedCRN();
+									}
+								}
+
+								@Override
+								public void onCancelled(DatabaseError databaseError) {
+								}
+							});
+						} else {
+							//case for course is full
+							pcd.setCrn(dataSnapshot.getKey());
+							pcd.setMsg("Registration failed: Course is full. " +
+									"Please contact the instructor.");
+							pcd.setStatus(false);
+							//append Processed_CRN object
+							processedCRN.add(pcd.cloneData());
+							displayProcessedCRN();
+						}
+					} else {
+						//case for the inputted CRN is not exists
+						pcd.setCrn(dataSnapshot.getKey());
+						pcd.setMsg("Registration failed: CRN does not exist.");
+						pcd.setStatus(false);
+						//append Processed_CRN object
+						processedCRN.add(pcd.cloneData());
+						displayProcessedCRN();
+					}
+				}
+
+				@Override
+				public void onCancelled(DatabaseError databaseError) {
+				}
+			});
+		}
+
+		filterTerm = null;
+		filterSubject = null;
+		filterCourse = null;
+		filterCourseType = null;
+		filterCRN = null;
+
+		selectedCoreCourses.clear();
+		selectedSupplementCourses.clear();
+		viewCoreCourses.clear();
+		viewSupplementCourses.clear();
+
+	}
+
+	public void popupMsg(String t, String m, int o){
+
+		// custom dialog
+		final Dialog dialog = new Dialog(context);
+		dialog.setContentView(R.layout.item_popup_msg);
+
+
+
+
+		TextView title = (TextView) dialog.findViewById(R.id.title);
+		TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+
+		title.setText(t);
+		line1.setText(m);
+
+		Button popUpMsgButtonCancel = (Button) dialog.findViewById(R.id.popUpMsgButtonCancel);
+		popUpMsgButtonCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		Button popUpMsgButtonOK = (Button) dialog.findViewById(R.id.popUpMsgButtonOK);
+
+
+		switch(o){
+			case 0:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+						addSelection();
+					}
+				});
+				break;
+			case 1:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+						selectedCoreCourses.clear();
+						selectedSupplementCourses.clear();
+						viewCoreCourses.clear();
+						viewSupplementCourses.clear();
+						processedCRN.clear();
+						populateTerm();
+					}
+				});
+				break;
+			default:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+
+		}
+
+		dialog.show();
+	}
 
 	public void populateCRN(CourseType coursetype){// params: listview reference,
 
@@ -743,9 +987,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 		Log.d("debug.print", String.format("%s\n%s\n%s\n%s\n%s\n%s\n",
 				coursetype.getCore(),
 				coursetype.getDescrip(),
-				coursetype.getTerm_code(),
-				coursetype.getSubject_code(),
-				coursetype.getCourse_code(),
+				coursetype.getTerm_Code(),
+				coursetype.getSubject_Code(),
+				coursetype.getCourse_Code(),
 				coursetype.getKeys()
 		));
 
@@ -776,9 +1020,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
-	public boolean markSelection(boolean add){
+	//public boolean markSelection(boolean add){
+	public boolean markSelection(){
 		CRN_Data crn = filterCRN;
 		boolean core = filterCourseType.getCore();
+		boolean sel = false;
 
 		ArrayList<CRN_Data> newSelectedCourses = new ArrayList<>();
 		ArrayList<CRN_Data> selectedCourses = core ? selectedCoreCourses :
@@ -788,23 +1034,25 @@ public class CourseFilterActivity extends AppCompatActivity {
 			for (CRN_Data x : selectedCourses) {
 				if(!(x.equals(crn))){
 					newSelectedCourses.add(x);
+				} else {
+					sel = true;
 				}
 			}
 
 			if (core){
 				selectedCoreCourses = newSelectedCourses;
-				if (add){
+				if (!(sel)){
 					selectedCoreCourses.add(crn);
 				}
 			} else {
 				selectedSupplementCourses = newSelectedCourses;
-				if (add){
+				if (!(sel)){
 					selectedSupplementCourses.add(crn);
 				}
 			}
 		}
 
-		return add;
+		return sel;
 	}
 
 	public void navigateToSelection(CRN_Data crn_data){

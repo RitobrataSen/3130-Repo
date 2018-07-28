@@ -20,18 +20,12 @@ this is for the course filter activity bottom navigation view
         android:checkable="false"
         android:title="@string/title_list" />
 
-    <!--
-    <item
-        android:id="@+id/navigation_add"
-        android:icon="@drawable/ic_add_black_24dp"
-        android:checkable="false"
-        android:title="@string/title_crn" />
+
     <item
         android:id="@+id/navigation_done"
         android:icon="@drawable/ic_done_black_24dp"
         android:checkable="false"
         android:title="@string/title_done" />
-    -->
 
 </menu>
 

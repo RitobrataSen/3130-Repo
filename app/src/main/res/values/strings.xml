@@ -14,7 +14,7 @@
     <string name="log_out_option">Log out</string>
     <string name="to_Calender_view">My Calender</string>
     <string name="to_course_view">View Courses</string>
-    <string name="to_add_crn">Add CRN</string>
+    <string name="to_add_crn">Add Courses</string>
     <string name="to_view_remove_registration">My Courses</string>
 
     <string name="title_activity_course_filter">CourseFilterActivity</string>
@@ -30,4 +30,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_deregister">Deregister</string>
+    <string name="register_classes">Register Classes</string>
+    <string name="register_crn_msg">Do you want register for all selected classes identified by their CRNs?</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+
 </resources>

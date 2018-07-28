@@ -1,5 +1,6 @@
 package com.example.rito.groupapp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -17,11 +18,11 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rito.groupapp.old.CRN;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,11 +40,12 @@ import java.util.ArrayList;
 public class MyCoursesActivity extends AppCompatActivity {
 	//MyCoursesActivity
 	private ListView lv;
-	private ArrayList<CRN> registeredCourses = new ArrayList<>();
-	private ArrayList<CRN> deletedCourses = new ArrayList<>();
+	private ArrayList<CRN_Data> registeredCourses = new ArrayList<>();
+	private ArrayList<CRN_Data> deletedCourses = new ArrayList<>();
 	private String username = MainActivity.currentUser.getUsername();
 	private Term currentTerm;
 	private Toolbar hdrToolBar;
+	private Context context = this;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,7 +90,8 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 				@Override
 				public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+					String title, msg;
+					int option;
 					switch (item.getItemId()) {
 						case R.id.navigation_back:
 							Log.d("debug.print", "VRCR, navigation_back:");
@@ -97,12 +100,11 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 						case R.id.navigation_deregister:
 							Log.d("debug.print", "VRCR, navigation_deregister:");
-
-							if (deletedCourses.size() > 0){
-								deregisterCourses();
-								populateTerm();
-								return true;
-							}
+							title = "Deregister Selected Courses";
+							msg = "You are about to deregister for all selected courses. Please " +
+									"confirm to continue.";
+							option = 0;
+							popupMsg(title, msg, option);
 							return true;
 
 					}
@@ -119,7 +121,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_courses);
 
-		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation2);
+		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
@@ -136,7 +138,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 		final FirebaseListAdapter<Term> firebaseAdapter;
 		Database db = new Database("TERM");
-		lv = findViewById(R.id.listView2);
+		lv = findViewById(R.id.listView);
 		firebaseAdapter = new FirebaseListAdapter<Term>(this, Term.class,
 				android.R.layout.simple_list_item_1, db.getDbRef()) {
 			@Override
@@ -158,6 +160,55 @@ public class MyCoursesActivity extends AppCompatActivity {
 		});
 	}
 
+	public void popupMsg(String t, String m, int o){
+
+		// custom dialog
+		final Dialog dialog = new Dialog(context);
+
+		dialog.setContentView(R.layout.item_popup_msg);
+
+		TextView title = (TextView) dialog.findViewById(R.id.title);
+		TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+
+		title.setText(t);
+		line1.setText(m);
+
+		Button popUpMsgButtonCancel = (Button) dialog.findViewById(R.id.popUpMsgButtonCancel);
+		popUpMsgButtonCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		Button popUpMsgButtonOK = (Button) dialog.findViewById(R.id.popUpMsgButtonOK);
+
+		switch(o){
+			case 0:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+						if (deletedCourses.size() > 0){
+							deregisterCourses();
+							populateTerm();
+						}
+					}
+				});
+				break;
+			default:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+
+		}
+
+		dialog.show();
+	}
+
 	public void populateRegisteredCourses(){
 
 		Log.d("debug.print", "VRCR, populateRegisteredCourses START:");
@@ -172,20 +223,20 @@ public class MyCoursesActivity extends AppCompatActivity {
 				int duration = Toast.LENGTH_LONG;
 
 				if (dataSnapshot.child("registration").exists()){
-					Student std = dataSnapshot.getValue(Student.class);
+					User std = dataSnapshot.getValue(User.class);
 					String crn;
 					for (String k : std.getRegistration().keySet()){
 						if (std.getRegistration().get(k)){
-							Database dbCRN = new Database("CRN/" + k);
+							Database dbCRN = new Database("CRN_DATA/" + k);
 							Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
 
 							dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 								@Override
 								public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-									CRN crn = dataSnapshot.getValue(CRN.class);
+									CRN_Data crn = dataSnapshot.getValue(CRN_Data.class);
 
 									boolean sel = false;
-									ArrayList<CRN> newRegisteredCourses = new ArrayList<>();
+									ArrayList<CRN_Data> newRegisteredCourses = new ArrayList<>();
 
 									Log.d("debug.print", "VRCR, populateCurrentSelection " +
 											"crn:" + crn);
@@ -193,7 +244,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 											"registeredCourses:" + registeredCourses);
 
 									if (!(crn == null)){
-										for (CRN x : registeredCourses) {
+										for (CRN_Data x : registeredCourses) {
 											if(!(x.equals(crn))){
 												newRegisteredCourses.add(x);
 											} else {
@@ -203,7 +254,8 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 										registeredCourses = newRegisteredCourses;
 
-										if (!(sel) && (crn.getTerm_code().equals(currentTerm.getTerm_code()))){
+										if (!(sel) && (crn.getTerm_Code().equals(currentTerm.getTerm_code()
+										))){
 											registeredCourses.add(crn);
 										}
 									}
@@ -238,16 +290,11 @@ public class MyCoursesActivity extends AppCompatActivity {
 		Context context = getApplicationContext();
 		int duration = Toast.LENGTH_LONG;
 
-		if (registeredCourses.size() == 0) {
-			text = "You are not registered for any courses during this term.";
-			Toast toast = Toast.makeText(context, text, duration);
-			toast.show();
-		}
 
-		lv = findViewById(R.id.listView2);
+		lv = findViewById(R.id.listView);
 		Log.d("debug.print", "VRCR, populateCurrentSelection 2:");
 
-		lv.setAdapter(new ArrayAdapter<CRN>(
+		lv.setAdapter(new ArrayAdapter<CRN_Data>(
 				this, R.layout.item_registration , registeredCourses){
 
 			@Override
@@ -260,7 +307,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 				}
 
 				Log.d("debug.print", "VRCR, populateCurrentSelection 4:");
-				CRN crnObj = getItem(position);
+				CRN_Data crnObj = getItem(position);
 				TextView ccode = (TextView) view.findViewById(R.id.course_code);
 				TextView snumber = (TextView) view.findViewById(R.id.section_number);
 				TextView stype = (TextView) view.findViewById(R.id.section_type);
@@ -268,10 +315,10 @@ public class MyCoursesActivity extends AppCompatActivity {
 				TextView crn = (TextView) view.findViewById(R.id.crn);
 
 				Log.d("debug.print", "VRCR, populateCurrentSelection 5:");
-				ccode.setText(String.format("Course Code:%s", crnObj.getCourse_code()));
-				snumber.setText(String.format("Section Number:%s", crnObj.getSection_number()));
-				stype.setText(String.format("Section Type:%s", crnObj.getSection_type()));
-				tcode.setText(String.format("Term Code:%s", crnObj.getTerm_code()));
+				ccode.setText(String.format("Course Code:%s", crnObj.getCourse_Code()));
+				snumber.setText(String.format("Section Number:%s", crnObj.getSection_Number()));
+				stype.setText(String.format("Section Type:%s", crnObj.getSection_Type()));
+				tcode.setText(String.format("Term Code:%s", crnObj.getTerm_Code()));
 				crn.setText(String.format("CRN:%s", crnObj.getCrn()));
 
 				return view;
@@ -283,11 +330,11 @@ public class MyCoursesActivity extends AppCompatActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.d("debug.print", "VRCR, populateCurrentSelection 6:");
-				CRN crnObj = (CRN) parent.getItemAtPosition(position);
+				CRN_Data crnObj = (CRN_Data) parent.getItemAtPosition(position);
 				boolean sel = false;
-				ArrayList<CRN> newDeletedCourses = new ArrayList<>();
+				ArrayList<CRN_Data> newDeletedCourses = new ArrayList<>();
 
-				for (CRN x : deletedCourses) {
+				for (CRN_Data x : deletedCourses) {
 					if(!(x.equals(crnObj))){
 						newDeletedCourses.add(x);
 					} else {
@@ -313,7 +360,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 		Log.d("debug.print", "VRCR, deregisterCourses START:");
 
 		if(deletedCourses.size() > 0){
-			for (CRN x : deletedCourses){
+			for (CRN_Data x : deletedCourses){
 				Database db = new Database();
 				db.addRemoveCourse(x.getCrn(), username, false);
 			}
