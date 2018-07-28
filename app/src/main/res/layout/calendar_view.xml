@@ -103,7 +103,7 @@
                 <TextView
                     android:id="@+id/m_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -113,7 +113,7 @@
                 <TextView
                     android:id="@+id/t_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -122,7 +122,7 @@
                 <TextView
                     android:id="@+id/w_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -131,7 +131,7 @@
                 <TextView
                     android:id="@+id/r_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -140,7 +140,7 @@
                 <TextView
                     android:id="@+id/f_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -156,7 +156,7 @@
                 <TextView
                     android:id="@+id/m1_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -166,7 +166,7 @@
                 <TextView
                     android:id="@+id/t1_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -175,7 +175,7 @@
                 <TextView
                     android:id="@+id/w1_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -184,7 +184,7 @@
                 <TextView
                     android:id="@+id/r1_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -193,7 +193,7 @@
                 <TextView
                     android:id="@+id/f1_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -209,7 +209,7 @@
                 <TextView
                     android:id="@+id/m2_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -219,7 +219,7 @@
                 <TextView
                     android:id="@+id/t2_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -228,7 +228,7 @@
                 <TextView
                     android:id="@+id/w2_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -237,7 +237,7 @@
                 <TextView
                     android:id="@+id/r2_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -246,7 +246,7 @@
                 <TextView
                     android:id="@+id/f2_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -261,7 +261,7 @@
                 <TextView
                     android:id="@+id/m3_body"
                     android:layout_width="100dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -271,7 +271,7 @@
                 <TextView
                     android:id="@+id/t3_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -280,7 +280,7 @@
                 <TextView
                     android:id="@+id/w3_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -289,7 +289,7 @@
                 <TextView
                     android:id="@+id/r3_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -298,7 +298,7 @@
                 <TextView
                     android:id="@+id/f3_body"
                     android:layout_width="110dp"
-                    android:layout_height="120dp"
+                    android:layout_height="115dp"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
                     android:text=""
@@ -306,41 +306,4 @@
             </TableRow>
         </TableLayout>
     </HorizontalScrollView>
-
-    <Spinner
-        android:id="@+id/codeSpinner"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="570dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/Detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!--
-    <Button
-        android:id="@+id/course_button"
-        android:layout_width="82dp"
-        android:layout_height="41dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/button_course"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-     -->
 </android.support.constraint.ConstraintLayout>

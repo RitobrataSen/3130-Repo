@@ -1,5 +1,7 @@
 package com.example.rito.groupapp;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,6 +49,8 @@ import static java.util.Arrays.sort;
  */
 public class CalendarView extends AppCompatActivity {
 
+
+    private Context context = this;
     private int courseListSize = 4;
     private final ArrayList<String> codeList = new ArrayList<>();
     private String selectedCourse;
@@ -53,13 +59,10 @@ public class CalendarView extends AppCompatActivity {
     public TextView wednesday[] = new TextView[courseListSize];
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
-    public Course courseList[];
+    public CRN_Data courseList[];
     public ArrayList<CRN_Data> calendarCourses;
     public int counter;
-    public Button course_button;
-    public Button detail;
     public static String selectedCRN;
-    Spinner codeSpinner;
 
 
     private Toolbar hdrToolBar;
@@ -113,7 +116,7 @@ public class CalendarView extends AppCompatActivity {
 
         //Recall, this wont work unless a user is signed in.
         if(MainActivity.currentUser != null) {
-            courseList = new Course[MainActivity.currentUser.getRegistration().keySet().toArray().length];
+            courseList = new CRN_Data[MainActivity.currentUser.getRegistration().keySet().toArray().length];
             Log.d("Dryden", "courseListLength "+courseList.length);
             calendarCourses = new ArrayList<CRN_Data>();
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
@@ -143,12 +146,11 @@ public class CalendarView extends AppCompatActivity {
                     }
                 });
             }
-            codeSpinner = (Spinner) findViewById(R.id.codeSpinner);
         }
         else{
             CRN_Data c = new CRN_Data();
-            c.setCourse_Code("Error");
-            c.setCourse_Name("User Failed to Login");
+            c.setCrn("Error");
+            c.setCourse_Code("User Failed to Login");
             c.setStart_Time("0:00");
             c.setEnd_Time("0:00");
             displayCourse(monday, c);
@@ -174,36 +176,86 @@ public class CalendarView extends AppCompatActivity {
                 displayCourse(friday, calendarCourses.get(i));
             }
         }
-        ArrayAdapter<String> codeAdapter = new ArrayAdapter<>(CalendarView.this, android.R.layout.simple_spinner_item, codeList);
-        codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        codeSpinner.setAdapter(codeAdapter);
-        int index = codeList.indexOf(selectedCourse) - 1;
-        if (index >= 0) {
-            selectedCRN = MainActivity.currentUser.getRegistration().keySet().toArray()[index].toString();
-        }
-
-        detail = findViewById(R.id.Detail);
-        detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("debug.print", "main_activity: Submit clicked");
-
-                selectedCourse = codeSpinner.getSelectedItem().toString();
-                startActivity(new Intent(CalendarView.this, Detail_Page.class));
-            }
-        });
     }
 
     public void displayCourse(TextView[] selected, CRN_Data course){
         for(int i = 0; i < courseListSize; i++) {
             if(selected[i].getText().length() == 0) {
-                selected[i].setText(course.getCourse_Name() + "\n" + course.getCourse_Code() + "\nTime:" + course
+                selected[i].setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
+                selected[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView t = (TextView) view;
+                        selectedCourse = "";
+                        for(int i=0; i<5; i++){
+                            selectedCourse += t.getText().charAt(i);
+                        }
+                        if(selectedCourse != "") {
+                            CRN_Data displayed = new CRN_Data();
+                            Database db = new Database("CRN_DATA/" + selectedCourse);
+                            db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                                        final Dialog dialog = new Dialog(context);
+                                        dialog.setContentView(R.layout.item_crn_selection_full);
+                                        //dialog.setTitle("Title...");
+
+                                        // set the custom dialog components - text, image and button
+                                        String []  arr = curr.getToStringArray(1);
+
+                                        TextView title = (TextView) dialog.findViewById(R.id.title);
+
+                                        TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+                                        TextView line2 = (TextView) dialog.findViewById(R.id.line2);
+                                        TextView line3 = (TextView) dialog.findViewById(R.id.line3);
+                                        TextView line4 = (TextView) dialog.findViewById(R.id.line4);
+                                        TextView line5 = (TextView) dialog.findViewById(R.id.line5);
+                                        TextView line6 = (TextView) dialog.findViewById(R.id.line6);
+                                        TextView line7 = (TextView) dialog.findViewById(R.id.line7);
+                                        TextView line8 = (TextView) dialog.findViewById(R.id.line8);
+
+                                        title.setText("Add Course");
+
+                                        line1.setText(arr[0]);
+                                        line2.setText(arr[1]);
+                                        line3.setText(arr[2]);
+                                        line4.setText(arr[3]);
+                                        line5.setText(arr[4]);
+                                        line6.setText(arr[5]);
+                                        line7.setText(arr[6]);
+                                        line8.setText(arr[7]);
+
+
+                                        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                        // if button is clicked, close the custom dialog
+                                        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+
+                                        dialog.show();
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.d("debug.print", "The read failed: " + databaseError.getCode());
+                                }
+                            });
+                        }
+                        }
+                });
                 break;
             }
         }
-
     }
+
 
     // Method fills list of TextViews and clears all old courses
     public void populateTextViewLists(){
