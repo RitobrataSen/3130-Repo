@@ -1,10 +1,12 @@
 package com.example.rito.groupapp;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +26,10 @@ import com.google.firebase.database.ValueEventListener;
  of courses.
  *
  * @author   Gobii, Rito, Yuhao
- * @since    2018-07-08
+ * @Completed   2018-07-08
+ *
+ * @Since 2018-07-17
+ * Added a method that allowed the database to update any user information
  */
 
 public class Database extends Application {

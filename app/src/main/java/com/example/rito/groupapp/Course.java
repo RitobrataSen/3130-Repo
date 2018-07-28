@@ -23,20 +23,43 @@ public class Course implements Serializable {
 	private String term_code;
 	private boolean has_supplement;
 
+	//new fields
+	private HashMap<String, Boolean> core;
+	private HashMap<String, Boolean> supplement;
+
 	//constructors
 	public Course() {
+		this.core = new HashMap<String, Boolean>();
+		this.supplement = new HashMap<String, Boolean>();
 	}
 
-	public Course(String course_code, String course_name, String subject_code,
-				  String term_code, boolean has_supplement){
-		this.course_code= course_code;
+	public Course(String term_code, String subject_code, String course_code,
+				  String course_name,
+				  boolean has_supplement,
+				  HashMap<String, Boolean> core,
+				  HashMap<String, Boolean> supplement) {
+
+		this.course_code = course_code;
 		this.course_name = course_name;
 		this.subject_code = subject_code;
 		this.term_code = term_code;
 		this.has_supplement = has_supplement;
+		this.core = core;
+		this.supplement = supplement;
+
 	}
 
-	//methods
+	public Course(String term_code, String subject_code, String course_code) {
+
+		this.course_code = course_code;
+		this.course_name = "";
+		this.subject_code = subject_code;
+		this.term_code = term_code;
+		this.has_supplement = false;
+		this.core = new HashMap<>();
+		this.supplement = new HashMap<>();
+	}
+		//methods
 
 	//getter/ setter methods
 	public String getCourse_code(){
@@ -54,6 +77,12 @@ public class Course implements Serializable {
 	public boolean getHas_supplement(){
 		return this.has_supplement;
 	}
+	public HashMap<String, Boolean> getCore() {
+		return this.core;
+	}
+	public HashMap<String, Boolean> getSupplement() {
+		return this.supplement;
+	}
 
 	public void setCourse_code(String course_code){
 		this.course_code = course_code;
@@ -70,31 +99,76 @@ public class Course implements Serializable {
 	public void setHas_supplement(boolean has_supplement){
 		this.has_supplement = has_supplement;
 	}
+	public void setCore(HashMap<String, Boolean> core){
+		//to add/ remove individual pairs get entire hash map first then call
+		//hash map functions: hashMap.put(k, v) or hashMap.remove(k)
+		this.core = new HashMap<>();
+		this.core.putAll(core);
+	}
+	public void setSupplement(HashMap<String, Boolean> supplement){
+		//to add/ remove individual pairs get entire hash map first then call
+		//hash map functions: hashMap.put(k, v) or hashMap.remove(k)
+		this.supplement = new HashMap<>();
+		this.supplement.putAll(supplement);
+	}
 
 	public String generatePath(){
 		return String.format("COURSE/%s/%s/%s",
 				this.term_code, this.subject_code, this.course_code);
 	}
+/*
+	public boolean equals(Course c){
+		if (c == null){
+			return false;
+		} else if (
+				this.term_code.equals(c.getTerm_code())
+				&& this.subject_code.equals(c.getSubject_code())
+				&& this.course_code.equals(c.getCourse_code())
+		){
+			return true;
+		}
+		return false;
+	}
+*/
 
 	public boolean equals(Course c){
+
 		//if (!(c == null)){
-			if (c == null){
-				return false;
-			} else if(
-					((this.course_code == c.getCourse_code()) || this.course_code.equals(c.getCourse_code())) &&
-					((this.course_name == c.getCourse_code()) || this.course_name.equals(c.getCourse_name())) &&
-					((this.subject_code == c.getSubject_code()) || this.subject_code.equals(c.getSubject_code())) &&
-					((this.term_code == c.getTerm_code()) || this.term_code.equals(c.getTerm_code())) &&
-					((this.has_supplement == c.getHas_supplement()) || this.has_supplement == c.getHas_supplement())){
-				return true;
-			} else if(this.toString().equals(c.toString())){
-				return true;
-			}
+
+		if (c == null){
+
+			return false;
+
+		} else if(
+
+				((this.course_code == c.getCourse_code()) || this.course_code.equals(c.getCourse_code())) &&
+
+						((this.course_name == c.getCourse_code()) || this.course_name.equals(c.getCourse_name())) &&
+
+						((this.subject_code == c.getSubject_code()) || this.subject_code.equals(c.getSubject_code())) &&
+
+						((this.term_code == c.getTerm_code()) || this.term_code.equals(c.getTerm_code())) &&
+
+						((this.has_supplement == c.getHas_supplement()) || this.has_supplement == c.getHas_supplement())){
+
+			return true;
+
+		} else if(this.toString().equals(c.toString())){
+
+			return true;
+
+		}
+
+
+
 
 
 		//}
 
+
+
 		return false;
+
 	}
 
 	@Override
@@ -121,7 +195,8 @@ public class Course implements Serializable {
 		result.put("course_name", this.course_name);
 		result.put("subject_code", this.subject_code);
 		result.put("term_code", this.term_code);
-		result.put("has_supplement", this.has_supplement);
+		result.put("core", this.core);
+		result.put("supplement", this.supplement);
 		return result;
 	}
 

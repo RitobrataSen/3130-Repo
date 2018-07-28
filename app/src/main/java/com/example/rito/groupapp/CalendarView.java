@@ -2,30 +2,37 @@ package com.example.rito.groupapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import static java.util.Arrays.sort;
+
 /**
  * CalendarView Activity displays all courses that a student is registered for sorted by
  * day. Plans exist for expanding this to short all activities based on start time.
  *
  * @author   Dryden and Shane
- * @since    2018-07-08
+ * @completed   2018-07-08
+ *
+ * @since 2018-07-19
+ *
+ * @author Ritobrata Sen, Qu Yuze
+ * @updated: The an added functionality to the menu was added so that the user can now
+ * navigate and view their information.
  */
 public class CalendarView extends AppCompatActivity {
 
@@ -36,6 +43,8 @@ public class CalendarView extends AppCompatActivity {
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
     public Course courseList[];
+    public CRN_Data calendarCourses[];
+    public int counter;
     public Button course_button;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
@@ -66,8 +75,10 @@ public class CalendarView extends AppCompatActivity {
                 return true;
 
             case R.id.go_to_view_remove_registered:
-                startActivity(new Intent(CalendarView.this, ViewRemoveCourseRegistrationActivity.class));
+                startActivity(new Intent(CalendarView.this, MyCoursesActivity.class));
                 return true;
+            case R.id.view_user_information:
+                startActivity(new Intent(CalendarView.this, View_UserInformation.class));
 
             case R.id.log_out:
                 startActivity(new Intent(CalendarView.this, Logout_Activity.class));
@@ -87,37 +98,43 @@ public class CalendarView extends AppCompatActivity {
 
         populateTextViewLists();
 
+
         if(MainActivity.currentUser != null) {
             courseList = new Course[MainActivity.currentUser.getRegistration().keySet().toArray().length];
+            calendarCourses = new CRN_Data[courseList.length];
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
-
-                //Recall, this wont work unless a user is signed in.
+                        //Recall, this wont work unless a user is signed in.
                 String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
-                Query courseSchedule = databaseRef.child("COURSE_SCHEDULE").child(crn);
+
+                //Query courseSchedule = databaseRef.child("CRN_DATA").child(crn);
+                Database db = new Database("CRN_DATA/" + crn);
+                DatabaseReference courseSchedule = db.getDbRef();
+                Log.d("debug.print", courseSchedule.toString());
+
+                counter = i;
+                //Log.d("Dryden", courseSchedule.toString());
                 courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                      //  Log.d("Dryden", "checking to see if exists");
                         if (dataSnapshot.exists()) {
-                            dataSnapshot.getChildren();
-                            Course_Schedule toAdd = new Course_Schedule();
-                            toAdd.setCourse_code(dataSnapshot.child("course_code").getValue().toString());
-                            toAdd.setCourse_name(dataSnapshot.child("course_name").getValue().toString());
-                            toAdd.setEndTime(dataSnapshot.child("end_time").getValue().toString());
-                            toAdd.setStartTime(dataSnapshot.child("start_time").getValue().toString());
 
-                            if (dataSnapshot.child("mon").getValue().toString().equals("1")) {
+                            CRN_Data toAdd = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                            calendarCourses[counter] = toAdd;
+
+                            if (toAdd.getDays().get("mon")) {
                                 displayCourse(monday, toAdd);
                             }
-                            if (dataSnapshot.child("tue").getValue().toString().equals("1")) {
+                            if (toAdd.getDays().get("tue")) {
                                 displayCourse(tuesday, toAdd);
                             }
-                            if (dataSnapshot.child("wed").getValue().toString().equals("1")) {
+                            if (toAdd.getDays().get("wed")) {
                                 displayCourse(wednesday, toAdd);
                             }
-                            if (dataSnapshot.child("thu").getValue().toString().equals("1")) {
+                            if (toAdd.getDays().get("thu")) {
                                 displayCourse(thursday, toAdd);
                             }
-                            if (dataSnapshot.child("fri").getValue().toString().equals("1")) {
+                            if (toAdd.getDays().get("fri")) {
                                 displayCourse(friday, toAdd);
                             }
                         }
@@ -130,21 +147,21 @@ public class CalendarView extends AppCompatActivity {
             }
         }
         else{
-            Course_Schedule c = new Course_Schedule("Error", "User Failed to Login",
-                    "", "", "", "", "",
-                    "", "", "", "", "", "");
-            c.setStartTime("0:00");
-            c.setEndTime("0:00");
+            CRN_Data c = new CRN_Data();
+            c.setCourse_Code("Error");
+            c.setCourse_Name("User Failed to Login");
+            c.setStart_Time("0:00");
+            c.setEnd_Time("0:00");
             displayCourse(monday, c);
         }
     }
 
 
-    public void displayCourse(TextView[] selected, Course_Schedule course){
+    public void displayCourse(TextView[] selected, CRN_Data course){
         for(int i = 0; i < courseListSize; i++) {
             if(selected[i].getText().length() == 0) {
-                selected[i].setText(course.getCourse_name() + "\n" + course.getCourse_code() + "\nTime:" + course
-                        .getStartTime() + "-" + course.getEndTime());
+                selected[i].setText(course.getCourse_Name() + "\n" + course.getCourse_Code() + "\nTime:" + course
+                        .getStart_Time() + "-" + course.getEnd_Time());
                 break;
             }
         }
@@ -203,8 +220,6 @@ public class CalendarView extends AppCompatActivity {
         friday[2].setText("");
         friday[3].setText("");
     }
-
-
 
     public int getCourseListSize(){
         return courseListSize;
