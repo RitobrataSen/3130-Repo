@@ -34,6 +34,6 @@
     <string name="register_classes">Register Classes</string>
     <string name="register_crn_msg">Do you want register for all selected classes identified by their CRNs?</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
 
 </resources>
