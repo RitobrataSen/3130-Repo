@@ -80,7 +80,7 @@ public class CourseRegistration extends AppCompatActivity{
                 return true;
             case R.id.view_user_information:
                 startActivity(new Intent(CourseRegistration.this, View_UserInformation.class));
-
+                return true;
             case R.id.log_out:
                 startActivity(new Intent(CourseRegistration.this, Logout_Activity.class));
                 return true;

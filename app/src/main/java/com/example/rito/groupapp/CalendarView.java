@@ -106,6 +106,7 @@ public class CalendarView extends AppCompatActivity {
                 return true;
             case R.id.view_user_information:
                 startActivity(new Intent(CalendarView.this, View_UserInformation.class));
+                return true;
 
             case R.id.log_out:
                 startActivity(new Intent(CalendarView.this, Logout_Activity.class));

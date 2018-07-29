@@ -78,6 +78,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 				return true;
 			case R.id.view_user_information:
 				startActivity(new Intent(MyCoursesActivity.this, View_UserInformation.class));
+				return true;
 
 			case R.id.log_out:
 				startActivity(new Intent(MyCoursesActivity.this, Logout_Activity.class));
