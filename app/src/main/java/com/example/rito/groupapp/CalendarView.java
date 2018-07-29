@@ -16,10 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Button;
 
@@ -27,19 +28,11 @@ import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-
-import static java.util.Arrays.sort;
 
 /**
  * CalendarView Activity displays all courses that a student is registered for sorted by
@@ -63,12 +56,11 @@ public class CalendarView extends AppCompatActivity {
     private Context context = this;
     private int courseListSize = 4;
     private String selectedCourse;
-    public TextView monday[] = new TextView[courseListSize];
-    public TextView tuesday[] = new TextView[courseListSize];
-    public TextView wednesday[] = new TextView[courseListSize];
-    public TextView thursday[] = new TextView[courseListSize];
-    public TextView friday[] = new TextView[courseListSize];
-    public CRN_Data courseList[];
+    public ArrayList<TextView> monday = new ArrayList<TextView>();
+    public ArrayList<TextView> tuesday = new ArrayList<TextView>();
+    public ArrayList<TextView> wednesday = new ArrayList<TextView>();
+    public ArrayList<TextView> thursday = new ArrayList<TextView>();
+    public ArrayList<TextView> friday = new ArrayList<TextView>();
     public ArrayList<CRN_Data> calendarCourses = new ArrayList<CRN_Data>();
     public int counter;
     private Term filterTerm = null;
@@ -285,8 +277,6 @@ public class CalendarView extends AppCompatActivity {
 
 		//Recall, this wont work unless a user is signed in.
 		if(MainActivity.currentUser != null) {
-			courseList = new CRN_Data[MainActivity.currentUser.getRegistration().keySet().toArray().length];
-			//calendarCourses = new ArrayList<CRN_Data>();
 			for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
 
 				String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
@@ -309,10 +299,6 @@ public class CalendarView extends AppCompatActivity {
 								populateCalendar();
 							}
 						}
-						/*
-						if(calendarCourses.size() == courseList.length){
-							populateCalendar();
-						}*/
 					}
 
 					@Override
@@ -376,12 +362,12 @@ public class CalendarView extends AppCompatActivity {
         }
     }
 
-    public void displayCourse(TextView[] selected, CRN_Data course){
+    public void displayCourse(ArrayList<TextView> selected, CRN_Data course){
         for(int i = 0; i < courseListSize; i++) {
-            if(selected[i].getText().length() == 0) {
-                selected[i].setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
+            if(selected.get(i).getText().length() == 0) {
+                selected.get(i).setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
-                selected[i].setOnClickListener(new View.OnClickListener() {
+                selected.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         TextView t = (TextView) view;
@@ -452,61 +438,119 @@ public class CalendarView extends AppCompatActivity {
                 });
                 break;
             }
+            else if(i-1 == courseListSize){
+                increaseCalendarSize();
+            }
         }
+    }
+
+    /**@since 2018-07-29
+     * @Author Dryden and Yuhao
+     * Fixes a bug that occurs when many courses are added to calendar.
+     */
+    public void increaseCalendarSize(){
+        courseListSize++;
+
+        TableLayout tl=(TableLayout)findViewById(R.id.table_layout);
+        TableRow newTableRow = new TableRow(this);
+        newTableRow.setLayoutParams(new TableLayout.LayoutParams( TableLayout.LayoutParams.FILL_PARENT,TableLayout.LayoutParams.WRAP_CONTENT));
+
+        TableLayout.LayoutParams lparams = new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+
+        TextView textview = new TextView(this);
+        textview.setText("");
+        textview.setLayoutParams(lparams);
+        newTableRow.addView(textview);
+        monday.add(textview);
+
+        TextView textview1 = new TextView(this);
+        textview1.setText("");
+        textview1.setLayoutParams(lparams);
+        newTableRow.addView(textview1);
+        tuesday.add(textview1);
+
+        TextView textview2 = new TextView(this);
+        textview2.setText("");
+        textview2.setLayoutParams(lparams);
+        newTableRow.addView(textview2);
+        wednesday.add(textview2);
+
+        TextView textview3 = new TextView(this);
+        textview3.setText("");
+        textview3.setLayoutParams(lparams);
+        newTableRow.addView(textview3);
+        thursday.add(textview3);
+
+        TextView textview4 = new TextView(this);
+        textview4.setText("");
+        textview4.setLayoutParams(lparams);
+        newTableRow.addView(textview4);
+        friday.add(textview4);
+
+        tl.addView(newTableRow, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
     }
 
 
     // Method fills list of TextViews and clears all old courses
     public void populateTextViewLists(){
-        monday[0] = findViewById(R.id.m_body);
-        monday[1] = findViewById(R.id.m1_body);
-        monday[2] = findViewById(R.id.m2_body);
-        monday[3] = findViewById(R.id.m3_body);
+        courseListSize = 4;
+        monday.clear();
+        tuesday.clear();
+        wednesday.clear();
+        thursday.clear();
+        friday.clear();
 
-        monday[0].setText("");
-        monday[1].setText("");
-        monday[2].setText("");
-        monday[3].setText("");
+        monday.add((TextView) findViewById(R.id.m_body));
+        monday.add((TextView)findViewById(R.id.m1_body));
+        monday.add((TextView)findViewById(R.id.m2_body));
+        monday.add((TextView)findViewById(R.id.m3_body));
 
-        tuesday[0] = findViewById(R.id.t_body);
-        tuesday[1] = findViewById(R.id.t1_body);
-        tuesday[2] = findViewById(R.id.t2_body);
-        tuesday[3] = findViewById(R.id.t3_body);
+        monday.get(0).setText("");
+        monday.get(1).setText("");
+        monday.get(2).setText("");
+        monday.get(3).setText("");
 
-        tuesday[0].setText("");
-        tuesday[1].setText("");
-        tuesday[2].setText("");
-        tuesday[3].setText("");
+        tuesday.add((TextView)findViewById(R.id.t_body));
+        tuesday.add((TextView)findViewById(R.id.t1_body));
+        tuesday.add((TextView)findViewById(R.id.t2_body));
+        tuesday.add((TextView) findViewById(R.id.t3_body));
 
-        wednesday[0] = findViewById(R.id.w_body);
-        wednesday[1] = findViewById(R.id.w1_body);
-        wednesday[2] = findViewById(R.id.w2_body);
-        wednesday[3] = findViewById(R.id.w3_body);
+        tuesday.get(0).setText("");
+        tuesday.get(1).setText("");
+        tuesday.get(2).setText("");
+        tuesday.get(3).setText("");
 
-        wednesday[0].setText("");
-        wednesday[1].setText("");
-        wednesday[2].setText("");
-        wednesday[3].setText("");
+        wednesday.add((TextView)findViewById(R.id.w_body));
+        wednesday.add((TextView)findViewById(R.id.w1_body));
+        wednesday.add((TextView)findViewById(R.id.w2_body));
+        wednesday.add((TextView)findViewById(R.id.w3_body));
 
-        thursday[0] = findViewById(R.id.r_body);
-        thursday[1] = findViewById(R.id.r1_body);
-        thursday[2] = findViewById(R.id.r2_body);
-        thursday[3] = findViewById(R.id.r3_body);
+        wednesday.get(0).setText("");
+        wednesday.get(1).setText("");
+        wednesday.get(2).setText("");
+        wednesday.get(3).setText("");
 
-        thursday[0].setText("");
-        thursday[1].setText("");
-        thursday[2].setText("");
-        thursday[3].setText("");
+        thursday.add((TextView)findViewById(R.id.r_body));
+        thursday.add((TextView)findViewById(R.id.r1_body));
+        thursday.add((TextView)findViewById(R.id.r2_body));
+        thursday.add((TextView)findViewById(R.id.r3_body));
 
-        friday[0] = findViewById(R.id.f_body);
-        friday[1] = findViewById(R.id.f1_body);
-        friday[2] = findViewById(R.id.f2_body);
-        friday[3] = findViewById(R.id.f3_body);
+        thursday.get(0).setText("");
+        thursday.get(1).setText("");
+        thursday.get(2).setText("");
+        thursday.get(3).setText("");
 
-        friday[0].setText("");
-        friday[1].setText("");
-        friday[2].setText("");
-        friday[3].setText("");
+        friday.add((TextView)findViewById(R.id.f_body));
+        friday.add((TextView)findViewById(R.id.f1_body));
+        friday.add((TextView)findViewById(R.id.f2_body));
+        friday.add((TextView)findViewById(R.id.f3_body));
+
+        friday.get(0).setText("");
+        friday.get(1).setText("");
+        friday.get(2).setText("");
+        friday.get(3).setText("");
     }
 
     public int getCourseListSize(){
