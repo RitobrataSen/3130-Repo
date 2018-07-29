@@ -148,9 +148,9 @@ public class Database extends Application {
 		});
 	}
 	public void updateUser(User oldusr, User newusr){
-		DatabaseReference refOld = this.db.getReference(oldusr.getPath());
+		DatabaseReference refOld = this.db.getReference(oldusr.createPath());
 		refOld.setValue(null);
-		DatabaseReference refNew = this.db.getReference(newusr.getPath());
+		DatabaseReference refNew = this.db.getReference(newusr.createPath());
 		refNew.setValue(newusr);
 		MainActivity.currentUser = newusr;
 	}
