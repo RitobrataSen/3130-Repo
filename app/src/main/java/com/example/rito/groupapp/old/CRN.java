@@ -96,10 +96,8 @@ public class CRN implements Serializable {
 
 	@Override
 	public String toString(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
-/*		return String.format("%s\n%s\n%s, %s %s\n%s", crn, term_code, course_code,
-				section_number, section_type, instructor);
-*/		return this.crn;
+
+	return this.crn;
 	}
 
 	@Exclude //ignores method from javadocs

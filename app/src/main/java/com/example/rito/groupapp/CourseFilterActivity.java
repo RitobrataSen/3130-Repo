@@ -65,13 +65,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 	private int duration = Toast.LENGTH_LONG;
 	private String text = "";
 
-	/*
-	0 = term selection
-	1 = subject selection
-	2 = course selection
-	1 = course type selection
-	2 = crn selection
-	*/
+
 	private int filterState = 0;
 	private Term filterTerm = null;
 	private Subject filterSubject = null;
@@ -80,9 +74,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 	private CRN_Data filterCRN = null;
 
 	private boolean displaySelection = false;
-	// flag to determine the current view type,
-	// true = selected courses display;
-	// false = course selection display,
 
 	private String student = "Student2";
 
@@ -602,14 +593,13 @@ public class CourseFilterActivity extends AppCompatActivity {
 				"/" +  subject.getSubject_code());
 		lv = findViewById(R.id.listView);
 		firebaseAdapter = new FirebaseListAdapter<Course>(this, Course.class,
-				//android.R.layout.simple_list_item_1, db.getDbRef()) {
+
 				R.layout.item_course_selection, db.getDbRef()) {
 
 			@Override
 			protected void populateView(View v, Course model, int position) {
-				//TextView courseRow = (TextView)v.findViewById(android.R.id.text1);
+
 				boolean cc = false;
-				//courseRow.setText(model.toString2());
 				Course course = getItem(position);
 				TextView ccode = (TextView) v.findViewById(R.id.courseCode);
 				TextView cname = (TextView) v.findViewById(R.id.courseName);
@@ -838,13 +828,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 								public void onDataChange(DataSnapshot dataSnapshot) {
 									if (!(dataSnapshot.hasChild("registration")) ||
 											!(dataSnapshot.child("registration").hasChild(crn_data.getCrn()))) {
-										//save data
-										/*
-										db.addRemoveCourse(
-												crn_data.getCrn(),
-												MainActivity.currentUser.getUsername(),
-												true);
-										 */
+
 
 										//append Processed_CRN object
 										pcd.setCrn(crn_data.getCrn());
@@ -977,9 +961,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 	public void populateCRN(CourseType coursetype){// params: listview reference,
 
 		filterState = 4;
-		//filterTerm = null;
-		//filterSubject = null;
-		//filterCourse = course;
+
 		filterCourseType = coursetype;
 		filterCRN = null;
 

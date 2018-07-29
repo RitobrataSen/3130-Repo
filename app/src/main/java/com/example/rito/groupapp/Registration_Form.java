@@ -60,8 +60,6 @@ public class Registration_Form extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl
-         //       ("https://group-10-9598f.firebaseio.com").child("STUDENT");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration__form);

@@ -105,13 +105,6 @@ public class CourseRegistration extends AppCompatActivity{
         uid = user.getUsername();
 
         Log.d("debug.print", user.toString());
-        /*
-        termSpinner = findViewById(R.id.term);
-        ArrayAdapter<CharSequence> adapterTerm = ArrayAdapter.createFromResource(this,
-                R.array.terms_array, android.R.layout.simple_spinner_item);
-        adapterTerm.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        termSpinner.setAdapter(adapterTerm);
-        */
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override

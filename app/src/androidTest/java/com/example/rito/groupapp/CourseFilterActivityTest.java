@@ -21,6 +21,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasEntry;
 
+/**
+ * This class ensures that the functionality for viewing the courses by terms
+ * Ensures that the list is properly populated
+ *
+ * @author Ritobrata Sen, Gobii Vivagananda, Yuhao Hu
+ * @DateComplete 10 July 2018
+ */
+
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

@@ -3,6 +3,13 @@ package com.example.rito.groupapp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * CourseType shows the program if the course that is currently selected has any form of
+ * extra required classes; Lab/Tutorial
+ *
+ * @author Gobii Vivagananda, Yuhao Hu
+ * @completed 28th July 2018
+ */
 public class CourseType {
 	private boolean core;
 	private String descrip;

@@ -41,12 +41,7 @@ public class Student implements Serializable {
 		this.registration.putAll(registration);
 	}
 
-	//methods
-	/*
-	public String getUid(){
-		return this.uid;
-	}
-	*/
+
 	public String getEmail(){
 		return this.email;
 	}
@@ -60,11 +55,7 @@ public class Student implements Serializable {
 		return this.registration;
 	}
 
-	/*
-	public void setUid(String uid){
-		this.uid = uid;
-	}
-	*/
+
 	public void setEmail(String email){
 		this.email = email;
 	}
@@ -77,21 +68,21 @@ public class Student implements Serializable {
 
 	public void setRegistration(HashMap<String, Boolean> registration){
 		//to add/ remove individual pairs get entire hash map first then call
-		//hash map functions: hashMap.put(k, v) or hashMap.remove(k)
+
 		this.registration = new HashMap<>();
 		this.registration.putAll(registration);
 	}
 
 	@Override
 	public String toString(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+
 		return String.format("%s\n%s\n%s", this.username, this.email, this.registration);
 	}
 
 	@Exclude
 	public HashMap<String, Object> toMap() {
 		HashMap<String, Object> result = new HashMap<>();
-		//result.put("uid", this.uid);
+
 		result.put("email", this.email);
 		result.put("username", this.username);
 		result.put("password", this.password);

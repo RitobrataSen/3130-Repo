@@ -281,7 +281,7 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 	}
 
 	public String join(String [] arr){
-		//String days = TextUtils.join(" ", arr);
+
 		String days = "";
 		for (String x : arr){
 			if (!(x.equalsIgnoreCase(""))){
@@ -295,9 +295,11 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 		return days;
 	}
 
-	// CompareTo Method created to improve sorting in calendar.
-	// @since 7/25/2018
-	// @author Dryden Pick and Yuhao Hu.
+	/**CompareTo Method created to improve sorting in calendar.
+	 * 	 @since 7/25/2018
+		 @author Dryden Pick and Yuhao Hu.
+	 */
+
 	public int compareTo(CRN_Data other){
 		if(this.getStart_Time() == null){
 			return -1;

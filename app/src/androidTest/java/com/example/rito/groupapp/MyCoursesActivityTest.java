@@ -22,6 +22,13 @@ import static org.hamcrest.CoreMatchers.anything;
 
 //import android.test.suitebuilder.annotation.LargeTest;
 
+/**
+ * This classes ensures the functionality of the MyCoursesActivity by ensuring that the list is
+ * populated with the classes that the user is registered for.
+ *
+ * @author Gobii Vivagananda, Ritobrata Sen, Yuhao Hu
+ * @dateComplete 10 July 2018
+ */
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -39,11 +46,7 @@ public class MyCoursesActivityTest {
 		onView(withId(R.id.user_number)).perform(typeText("ea2"));
 		onView(withId(R.id.user_pw)).perform(typeText("pw2"));
 		onView(withId(R.id.login_submit_button)).perform(click());
-		/*
-		while (MainActivity.currentUser != null){
-			Thread.sleep(1000);
-		}
-		*/
+
 
 		//add course to deregister
 		db.addRemoveCourse("31202", "Student2", true);

@@ -23,6 +23,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.containsString;
 
+/**
+ * This espresso test checks to see if a course is actually being added to an user.
+ * It ensures that the functionality that enables this works properly.
+ *
+ * @author Gobii Viviagananda, Shane Mitravitz
+ * @DateComplete 28 July 2018
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class CourseAddingTest {
@@ -49,12 +56,7 @@ public class CourseAddingTest {
         onView(withId(R.id.add)).check(matches(isClickable()));
         onView(withId(R.id.add)).check(matches(withText("ADD")));
 
-        /*
-        //spinner
-        onView(withId(R.id.term)).perform(click());
-        onData(anything()).atPosition(1).perform(click());
-        onView(withId(R.id.term)).check(matches(withSpinnerText(containsString("2018 Summer"))));
-        */
+
 
         //text view
         onView(withId(R.id.crn)).perform(typeText("11623"));

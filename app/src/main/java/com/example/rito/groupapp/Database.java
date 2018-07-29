@@ -109,11 +109,7 @@ public class Database extends Application {
 
 	public void addUser(String email, String username, String password){
 		int result = -1;
-		/*
-		0 = success
-		1 = username exists
-		2 = email exists
-		 */
+
 		DatabaseReference ref;
 
 		//check if username exists

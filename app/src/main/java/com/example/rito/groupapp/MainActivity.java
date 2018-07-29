@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("debug.print", "main_activity: Login clicked");
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
 
-                //  startActivity(new Intent(MainActivity.this, ReadCourses.class));
             }
         });
 

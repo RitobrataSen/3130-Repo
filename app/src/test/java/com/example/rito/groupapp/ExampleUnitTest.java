@@ -24,21 +24,7 @@ public class ExampleUnitTest {
         Assert.assertTrue(password.length()>7);
         c++;
     }
-//    @Test
-//    public void valid_username_chars() {
-//        Assert.assertTrue(username.matches("^[A-Za-z0-9]+$"));
-//        c++;
-//    }
-//    @Test
-//    public void valid_password_chars() {
-//        Assert.assertTrue(password.matches("^[A-Za-z0-9]+$"));
-//        c++;
-//    }
-//    @Test
-//    public void one_spec_char() {
-//        Assert.assertEquals(5, password.matches("^.*[^a-zA-Z0-9].*$"));
-//        c++;
-//    }
+
 
     @AfterClass
     public static void run_once() {

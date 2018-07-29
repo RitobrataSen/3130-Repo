@@ -65,7 +65,7 @@ public class Subject implements Serializable {
 
 	@Override
 	public String toString(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+
 		return String.format("%s (%s)", this.subject_description, this.subject_code);
 	}
 

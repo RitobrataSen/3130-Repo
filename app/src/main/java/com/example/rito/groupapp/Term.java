@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Term implements Serializable {
 	private String term_code;
 	private String term_description;
-	//public String uid;
+
 
 	public Term(){
 	}
@@ -24,7 +24,7 @@ public class Term implements Serializable {
 	public Term(String term_code, String term_description){
 		this.term_code = term_code;
 		this.term_description = term_description;
-		//this.uid = uid;
+
 	}
 
 
@@ -62,7 +62,7 @@ public class Term implements Serializable {
 
 	@Override
 	public String toString(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
+
 		return String.format("%s (%s)", term_description, term_code);
 	}
 
