@@ -52,6 +52,8 @@
         <activity
             android:name=".MyCoursesActivity"
             android:label="@string/to_view_remove_registration"></activity>
+        <activity android:name=".RecoveryEmailActivity"
+            android:label="Recover My Account" ></activity>
     </application>
 
 </manifest>

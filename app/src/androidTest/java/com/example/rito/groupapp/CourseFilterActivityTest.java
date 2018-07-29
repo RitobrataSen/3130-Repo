@@ -9,17 +9,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.*;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.hasEntry;
+
 
 /**
  * This class ensures that the functionality for viewing the courses by terms
@@ -40,7 +38,7 @@ public class CourseFilterActivityTest {
 	public void testCourseFilter() throws InterruptedException {
 		//login to app
 		onView(withId(R.id.login_button)).perform(click());
-		onView(withId(R.id.user_number)).perform(typeText("ea2"));
+		onView(withId(R.id.user_email)).perform(typeText("ea2"));
 		onView(withId(R.id.user_pw)).perform(typeText("pw2"));
 		onView(withId(R.id.login_submit_button)).check(matches(isClickable()));
 		onView(withId(R.id.login_submit_button)).perform(click());

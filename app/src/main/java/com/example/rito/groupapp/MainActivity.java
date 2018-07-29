@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d("debug.print", "main_activity: Login clicked");
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
-
             }
         });
 

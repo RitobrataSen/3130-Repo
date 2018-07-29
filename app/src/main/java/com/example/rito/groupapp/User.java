@@ -38,7 +38,7 @@ public class User implements Serializable {
     }
 
     public User(String email, String username,
-                   String password, HashMap<String, Boolean> registration) {
+                String password, HashMap<String, Boolean> registration) {
 
         this.email = email;
         this.username = username;

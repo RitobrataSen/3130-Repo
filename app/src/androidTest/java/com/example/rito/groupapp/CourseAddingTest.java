@@ -42,7 +42,7 @@ public class CourseAddingTest {
 
         //login to app
         onView(withId(R.id.login_button)).perform(click());
-        onView(withId(R.id.user_number)).perform(typeText("ea2"));
+        onView(withId(R.id.user_email)).perform(typeText("ea2"));
         onView(withId(R.id.user_pw)).perform(typeText("pw2"));
         onView(withId(R.id.login_submit_button)).perform(click());
 

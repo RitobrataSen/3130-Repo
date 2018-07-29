@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
  * @since   07-06-18
  */
 public class MainContentLogin extends AppCompatActivity {
-
+    Button forgotPasswordButton;
     Button loginButton;
     EditText userEmail;
     EditText userPassword;
@@ -44,7 +44,7 @@ public class MainContentLogin extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-				userEmail = findViewById(R.id.user_number);
+				userEmail = findViewById(R.id.user_email);
                 userPassword = findViewById(R.id.user_pw);
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
@@ -75,6 +75,7 @@ public class MainContentLogin extends AppCompatActivity {
                                     ref.removeEventListener(this);
                                     MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
+									return;
 
                                 }
 
@@ -92,6 +93,12 @@ public class MainContentLogin extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+            }
+        });
+        forgotPasswordButton = findViewById(R.id.forgot_password);
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                startActivity(new Intent(MainContentLogin.this,RecoveryEmailActivity.class));
             }
         });
     }
