@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
+import com.example.rito.groupapp.old.CRN;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,6 +76,8 @@ public class MyCoursesActivity extends AppCompatActivity {
 			case R.id.go_to_view_remove_registered:
 				startActivity(new Intent(MyCoursesActivity.this, MyCoursesActivity.class));
 				return true;
+			case R.id.view_user_information:
+				startActivity(new Intent(MyCoursesActivity.this, View_UserInformation.class));
 
 			case R.id.log_out:
 				startActivity(new Intent(MyCoursesActivity.this, Logout_Activity.class));

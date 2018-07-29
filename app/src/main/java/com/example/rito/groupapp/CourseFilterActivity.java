@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -115,7 +116,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 				Log.d("debug.print", "CFA, MENU MyCoursesActivity:");
 				startActivity(new Intent(CourseFilterActivity.this, MyCoursesActivity.class));
 				return true;
-
+			case R.id.view_user_information:
+				Log.d("debug.print","CFA, MENU View_Information");
+				startActivity(new Intent(CourseFilterActivity.this, View_UserInformation.class));
+				return true;
 			case R.id.log_out:
 				Log.d("debug.print", "CFA, MENU Logout_Activity:");
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));

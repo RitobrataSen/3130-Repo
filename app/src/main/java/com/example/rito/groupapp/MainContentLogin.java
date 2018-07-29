@@ -22,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
  * found true, the currentUser in MainActivity is updated, and the logged-in
  * intent is initialized.
  *
+ * Dryden added the currentUser Global object in a refactor following the main creation of main activity login.
+ *
  * @author  Shane, Divanno, Dryden
  * @since   07-06-18
  */
@@ -46,8 +48,6 @@ public class MainContentLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
-
         setContentView(R.layout.content_main);
         loginButton = findViewById(R.id.login_submit_button);
         loginButton.setOnClickListener(new View.OnClickListener() {

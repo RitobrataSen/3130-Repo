@@ -1,22 +1,38 @@
 package com.example.rito.groupapp;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
 
+import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static java.util.Arrays.sort;
 
@@ -25,21 +41,33 @@ import static java.util.Arrays.sort;
  * day. Plans exist for expanding this to short all activities based on start time.
  *
  * @author   Dryden and Shane
- * @since    2018-07-08
+ * @completed   2018-07-08
+ *
+ * @since 2018-07-19
+ * @author Ritobrata Sen, Qu Yuze
+ * @updated: The an added functionality to the menu was added so that the user can now
+ * navigate and view their information.
+ *
+ * @since 2018-07-28
+ * @author Dryden and Yuhao
+ * @updated: Created a popup displaying a course's specific information and created a filter to filter courses by term.
  */
 public class CalendarView extends AppCompatActivity {
 
+
+    private Context context = this;
     private int courseListSize = 4;
+    private final ArrayList<String> codeList = new ArrayList<>();
+    private String selectedCourse;
     public TextView monday[] = new TextView[courseListSize];
     public TextView tuesday[] = new TextView[courseListSize];
     public TextView wednesday[] = new TextView[courseListSize];
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
-    public Course courseList[];
-    public CRN_Data calendarCourses[];
+    public CRN_Data courseList[];
+    public ArrayList<CRN_Data> calendarCourses;
     public int counter;
-    public Button course_button;
-    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
+    public static String selectedCRN;
 
 
     private Toolbar hdrToolBar;
@@ -70,6 +98,8 @@ public class CalendarView extends AppCompatActivity {
             case R.id.go_to_view_remove_registered:
                 startActivity(new Intent(CalendarView.this, MyCoursesActivity.class));
                 return true;
+            case R.id.view_user_information:
+                startActivity(new Intent(CalendarView.this, View_UserInformation.class));
 
             case R.id.log_out:
                 startActivity(new Intent(CalendarView.this, Logout_Activity.class));
@@ -89,75 +119,145 @@ public class CalendarView extends AppCompatActivity {
 
         populateTextViewLists();
 
-
+        //Recall, this wont work unless a user is signed in.
         if(MainActivity.currentUser != null) {
-            courseList = new Course[MainActivity.currentUser.getRegistration().keySet().toArray().length];
-            calendarCourses = new CRN_Data[courseList.length];
+            courseList = new CRN_Data[MainActivity.currentUser.getRegistration().keySet().toArray().length];
+            calendarCourses = new ArrayList<CRN_Data>();
             for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
-                        //Recall, this wont work unless a user is signed in.
+
                 String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
 
-                //Query courseSchedule = databaseRef.child("CRN_DATA").child(crn);
-                Database db = new Database("CRN_DATA/" + crn);
-                DatabaseReference courseSchedule = db.getDbRef();
-                Log.d("debug.print", courseSchedule.toString());
-
                 counter = i;
-                //Log.d("Dryden", courseSchedule.toString());
-                courseSchedule.addListenerForSingleValueEvent(new ValueEventListener() {
+                Database db = new Database("CRN_DATA/" + crn);
+                db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                      //  Log.d("Dryden", "checking to see if exists");
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-
-                            CRN_Data toAdd = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
-                            calendarCourses[counter] = toAdd;
-
-                            if (toAdd.getDays().get("mon")) {
-                                displayCourse(monday, toAdd);
-                            }
-                            if (toAdd.getDays().get("tue")) {
-                                displayCourse(tuesday, toAdd);
-                            }
-                            if (toAdd.getDays().get("wed")) {
-                                displayCourse(wednesday, toAdd);
-                            }
-                            if (toAdd.getDays().get("thu")) {
-                                displayCourse(thursday, toAdd);
-                            }
-                            if (toAdd.getDays().get("fri")) {
-                                displayCourse(friday, toAdd);
-                            }
+                            CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                            calendarCourses.add(curr);
+                        }
+                        if(calendarCourses.size() == courseList.length){
+                            populateCalendar();
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        Log.d("debug.print", "The read failed: " + databaseError.getCode());
                     }
                 });
             }
         }
         else{
             CRN_Data c = new CRN_Data();
-            c.setCourse_Code("Error");
-            c.setCourse_Name("User Failed to Login");
+            c.setCrn("Error");
+            c.setCourse_Code("User Failed to Login");
             c.setStart_Time("0:00");
             c.setEnd_Time("0:00");
             displayCourse(monday, c);
         }
     }
 
+    public void populateCalendar(){
+        Collections.sort(calendarCourses);
+        for(int i = 0; i < calendarCourses.size(); i++) {
+            if (calendarCourses.get(i).getDays().get("mon")) {
+                displayCourse(monday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("tue")) {
+                displayCourse(tuesday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("wed")) {
+                displayCourse(wednesday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("thu")) {
+                displayCourse(thursday, calendarCourses.get(i));
+            }
+            if (calendarCourses.get(i).getDays().get("fri")) {
+                displayCourse(friday, calendarCourses.get(i));
+            }
+        }
+    }
 
     public void displayCourse(TextView[] selected, CRN_Data course){
         for(int i = 0; i < courseListSize; i++) {
             if(selected[i].getText().length() == 0) {
-                selected[i].setText(course.getCourse_Name() + "\n" + course.getCourse_Code() + "\nTime:" + course
+                selected[i].setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
+                selected[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView t = (TextView) view;
+                        selectedCourse = "";
+                        for(int i=0; i<5; i++){
+                            selectedCourse += t.getText().charAt(i);
+                        }
+                        if(selectedCourse != "") {
+                            CRN_Data displayed = new CRN_Data();
+                            Database db = new Database("CRN_DATA/" + selectedCourse);
+                            db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+                                        final Dialog dialog = new Dialog(context);
+                                        dialog.setContentView(R.layout.item_crn_selection_full);
+                                        //dialog.setTitle("Title...");
+
+                                        // set the custom dialog components - text, image and button
+                                        String []  arr = curr.getToStringArray(1);
+
+                                        TextView title = (TextView) dialog.findViewById(R.id.title);
+
+                                        TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+                                        TextView line2 = (TextView) dialog.findViewById(R.id.line2);
+                                        TextView line3 = (TextView) dialog.findViewById(R.id.line3);
+                                        TextView line4 = (TextView) dialog.findViewById(R.id.line4);
+                                        TextView line5 = (TextView) dialog.findViewById(R.id.line5);
+                                        TextView line6 = (TextView) dialog.findViewById(R.id.line6);
+                                        TextView line7 = (TextView) dialog.findViewById(R.id.line7);
+                                        TextView line8 = (TextView) dialog.findViewById(R.id.line8);
+
+                                        title.setText("Add Course");
+
+                                        line1.setText(arr[0]);
+                                        line2.setText(arr[1]);
+                                        line3.setText(arr[2]);
+                                        line4.setText(arr[3]);
+                                        line5.setText(arr[4]);
+                                        line6.setText(arr[5]);
+                                        line7.setText(arr[6]);
+                                        line8.setText(arr[7]);
+
+                                        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                        // if button is clicked, close the custom dialog
+                                        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+
+                                        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+                                        dialogButtonCancel.setVisibility(View.INVISIBLE);
+                                        dialog.show();
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.d("debug.print", "The read failed: " + databaseError.getCode());
+                                }
+                            });
+                        }
+                        }
+                });
                 break;
             }
         }
-
     }
+
 
     // Method fills list of TextViews and clears all old courses
     public void populateTextViewLists(){
@@ -215,4 +315,5 @@ public class CalendarView extends AppCompatActivity {
     public int getCourseListSize(){
         return courseListSize;
     }
+
 }
