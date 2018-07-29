@@ -93,6 +93,7 @@ public class CourseRegistration extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_register);
 
+        Log.d("debug.print","onCreate CourseRegistration");
         hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(hdrToolBar);
 
@@ -104,8 +105,6 @@ public class CourseRegistration extends AppCompatActivity{
         User user = MainActivity.currentUser;
         uid = user.getUsername();
 
-        Log.d("debug.print", user.toString());
-
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +112,6 @@ public class CourseRegistration extends AppCompatActivity{
                 input_crn = crn.getText().toString();
                 DatabaseReference ref_ce = db_ce.getDb().getReference("CRN_DATA/" +
                         input_crn);
-                Log.d("debug.print",ref_ce.toString());
                 ref_ce.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -123,8 +121,8 @@ public class CourseRegistration extends AppCompatActivity{
                         if (dataSnapshot.exists()) {
                             long max = Integer.parseInt(dataSnapshot.child("max").getValue()
                                     .toString());
-                            long cur = dataSnapshot.child("ENROLLMENT").exists() ?
-                                    dataSnapshot.child("ENROLLMENT").getChildrenCount() : 0;
+                            long cur = dataSnapshot.child("enrollment").exists() ?
+                                    dataSnapshot.child("enrollment").getChildrenCount() : 0;
 
                             //Checking the number of student that enrolled in this course is full or not
                             if (max > cur) {

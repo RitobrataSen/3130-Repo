@@ -85,14 +85,25 @@ public class User implements Serializable {
     public String toString(){
         return String.format("%s %s %s", this.email, this.username, this.password);
     }
-    public String createPath(){
-        return String.format(String.format("STUDENT/%s", this.username));
-    }
+    public String createPath() {
+		return String.format(String.format("STUDENT/%s", this.username));
+	}
+
+    public boolean compareRegistration(User u){
+		//we cant use equals unless we check if it is null first
+		//this
 
 
-    public boolean equals(User u){
-		boolean flag = true;
+    	if (this.registration  == u.getRegistration()){
+			// checks if 2 hashmaps are both null or both store the same address
+  			return true;
+		} else {
+			//use the equals method to check if both hashmaps are the same
+			return (this.registration.equals(u.getRegistration()));
+		}
 
+
+		/*
 		for (String x : this.registration.keySet()){
 			if (!(u.getRegistration().containsKey(x))){
 				Log.d("debug.print", x + " is in U but not in CURRENTUSER");
@@ -106,10 +117,17 @@ public class User implements Serializable {
 				return false;
 			}
 		}
+		*/
+
+	}
+
+    public boolean equals(User u){
 
 		if (this.email.equalsIgnoreCase(u.getEmail()) &&
 				this.username.equalsIgnoreCase(u.getUsername()) &&
-				this.password.equalsIgnoreCase(u.getPassword())
+				this.password.equals(u.getPassword()) &&
+				//this.registration.equals(u.getRegistration())
+				compareRegistration(u)
 		){
 			Log.d("debug.print", "U = CURRENTUSER");
 			return true;

@@ -60,9 +60,10 @@ public class Registration_Form extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration__form);
+        Log.d("debug.print","onCreate Registration_Form");
+
         username = (EditText)findViewById(R.id.user_name);
         password = (EditText)findViewById(R.id.password);
         password2 = (EditText)findViewById(R.id.password_validate);

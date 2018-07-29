@@ -41,10 +41,12 @@ public class RecoveryEmailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("debug.print", "RecoveryEmailActivity: onCreate");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recovery_email_activity);
+
+        Log.d("debug.print","onCreate RecoveryEmailActivity");
+
         sendEmail = findViewById(R.id.send_email);
         returnToMCL = findViewById(R.id.return_to_MCL);
 
