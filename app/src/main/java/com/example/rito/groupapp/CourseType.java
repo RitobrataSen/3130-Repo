@@ -3,6 +3,13 @@ package com.example.rito.groupapp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * CourseType shows the program if the course that is currently selected has any form of
+ * extra required classes; Lab/Tutorial
+ *
+ * @author Gobii Vivagananda, Yuhao Hu
+ * @completed 28th July 2018
+ */
 public class CourseType {
 	private boolean core;
 	private String descrip;
@@ -63,15 +70,15 @@ public class CourseType {
 		return this.descrip;
 	}
 
-	public String getTerm_code() {
+	public String getTerm_Code() {
 		return this.term_code;
 	}
 
-	public String getSubject_code() {
+	public String getSubject_Code() {
 		return this.subject_code;
 	}
 
-	public String getCourse_code() {
+	public String getCourse_Code() {
 		return this.course_code;
 	}
 
@@ -87,22 +94,22 @@ public class CourseType {
 		this.descrip = descrip;
 	}
 
-	public void setTerm_code(String term_code) {
+	public void setTerm_Code(String term_code) {
 		this.term_code = term_code;
 	}
 
-	public void setSubject_code(String subject_code) {
+	public void setSubject_Code(String subject_code) {
 		this.subject_code = subject_code;
 	}
 
-	public void setCourse_code(String course_code) {
+	public void setCourse_Code(String course_code) {
 		this.course_code = course_code;
 	}
 
 	public void setKeys(ArrayList<String> keys) {
 		this.keys = keys;
 	}
-
+/*
 	public void setKeys(HashMap<String, Boolean> keys) {
 		this.keys = new ArrayList<>();
 		if (keys != null) {
@@ -111,14 +118,14 @@ public class CourseType {
 			}
 		}
 	}
-
+*/
 	public boolean equals(CourseType ct){
 		if (ct == null){
 			return false;
 		} else if (
-				this.term_code.equals(ct.getTerm_code())
-				&& this.subject_code.equals(ct.getSubject_code())
-				&& this.course_code.equals(ct.getCourse_code())
+				this.term_code.equals(ct.getTerm_Code())
+				&& this.subject_code.equals(ct.getSubject_Code())
+				&& this.course_code.equals(ct.getCourse_Code())
 				&& this.core == ct.getCore()
 		){
 			return true;

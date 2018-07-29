@@ -21,10 +21,12 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+
     public static User currentUser;
 
     Button loginButton;
     Button registerButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d("debug.print", "main_activity: Login clicked");
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
+
             }
         });
 

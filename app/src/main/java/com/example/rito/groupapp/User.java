@@ -1,5 +1,7 @@
 package com.example.rito.groupapp;
 
+import android.util.Log;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
@@ -13,7 +15,7 @@ import java.io.Serializable;
  * In MainActivity, currentUser is of type User, and is used to populate
  * the application views.
  *
- * @author  Ritobrata, Qu, Gobii
+ * @author  Ritobrata, Yuhao Hu, Gobii
  * @completed   07-09-18
  *
  * @since
@@ -83,8 +85,39 @@ public class User implements Serializable {
     public String toString(){
         return String.format("%s %s %s", this.email, this.username, this.password);
     }
-    public String getPath(){
+    public String createPath(){
         return String.format(String.format("STUDENT/%s", this.username));
+    }
+
+
+    public boolean equals(User u){
+		boolean flag = true;
+
+		for (String x : this.registration.keySet()){
+			if (!(u.getRegistration().containsKey(x))){
+				Log.d("debug.print", x + " is in U but not in CURRENTUSER");
+				return false;
+			}
+		}
+
+		for (String x : u.getRegistration().keySet()){
+			if (!((this.registration.containsKey(x)))){
+				Log.d("debug.print", x + " is in CURRENTUSER but not in U");
+				return false;
+			}
+		}
+
+		if (this.email.equalsIgnoreCase(u.getEmail()) &&
+				this.username.equalsIgnoreCase(u.getUsername()) &&
+				this.password.equalsIgnoreCase(u.getPassword())
+		){
+			Log.d("debug.print", "U = CURRENTUSER");
+			return true;
+		}
+
+		Log.d("debug.print", "U != CURRENTUSER");
+		return false;
+
     }
 
     @Exclude

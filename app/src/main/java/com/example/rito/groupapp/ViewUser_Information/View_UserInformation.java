@@ -1,8 +1,12 @@
 package com.example.rito.groupapp.ViewUser_Information;
 import com.example.rito.groupapp.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,7 +40,10 @@ public class View_UserInformation extends AppCompatActivity {
     private EditText et1, et2, et3,et4,et5;
     private Button bt1;
     private Toolbar hdrToolBar;
-
+    private DatabaseReference databaseRef;
+	private int em_len = 1;
+	private int un_len = 1;
+	private int pw_len = 1;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -74,7 +81,7 @@ public class View_UserInformation extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
-    private DatabaseReference databaseRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +92,6 @@ public class View_UserInformation extends AppCompatActivity {
 
 
        final Database db = new Database();
-        databaseRef = db.getDb().getReference("STUDENT");
 
         if (MainActivity.currentUser != null) {
             //initializing the textViews
@@ -106,13 +112,13 @@ public class View_UserInformation extends AppCompatActivity {
 
             //displaying the information
             tv1.setText(String.valueOf("Email"));
-            et1.setText(MainActivity.currentUser.getEmail().toString());
+            et1.setText(MainActivity.currentUser.getEmail());
 
             tv2.setText(String.valueOf("Username"));
-            et2.setText(MainActivity.currentUser.getUsername().toString());
+            et2.setText(MainActivity.currentUser.getUsername());
 
             tv3.setText(String.valueOf("Password"));
-            et3.setText(MainActivity.currentUser.getPassword().toString());
+            et3.setText(MainActivity.currentUser.getPassword());
 
             tv4.setText(String.valueOf("New Password"));
             tv5.setText(String.valueOf("Confirm Password"));
@@ -121,31 +127,102 @@ public class View_UserInformation extends AppCompatActivity {
             //updating the information
             bt1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
+                    databaseRef = db.getDb().getReference("STUDENT");
+                    databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(DataSnapshot dataSnapshot) {
+							//check if username is a child of STUDENT
+							CharSequence text;
+							boolean exists = false;
 
-                    if(!MainActivity.currentUser.getUsername().toString().equals(et2.getText().toString())){
-                    User user1 = new User(et1.getText().toString(),et2.getText().toString(),et3.getText().toString(),MainActivity.currentUser.getRegistration());
-                     db.updateUser(MainActivity.currentUser,user1);
-                    }
-                    if(!MainActivity.currentUser.getEmail().toString().equals(et1.getText().toString())){
-                        User user1 = new User(et1.getText().toString(),et2.getText().toString(),et3.getText().toString(),MainActivity.currentUser.getRegistration());
-                        db.updateUser(MainActivity.currentUser,user1);
+							final Context context = getApplicationContext();
+							final int duration = Toast.LENGTH_SHORT;
+							final Database db = new Database();
+							String un = et2.getText().toString();
+							String pw1 = et4.getText().toString();
+							String pw2 = et5.getText().toString();
+							String pw = MainActivity.currentUser.getPassword();
+							String em = et1.getText().toString();
+							if (!(pw1.equals("")) && !(pw2.equals(""))){
+								pw = pw1;
+							}
+
+							if (dataSnapshot.child(un).exists() && !(un.equalsIgnoreCase
+									(MainActivity.currentUser.getUsername()))) {
+								if(un.length() != 0){
+									text = "Sorry, username already exists.";
+									Toast toast = Toast.makeText(context, text, duration);
+									toast.show();
+								}
+								exists = true;
+							}else if(!(pw1.equals("")) && !(pw2.equals("")) && !(pw1.equals(pw2))){
+								text = "Sorry, passwords do not match.";
+								Toast toast = Toast.makeText(context, text, duration);
+								toast.show();
+								exists = true;
+							//apply field validation here
+							} else if(un.length() < un_len ||
+									pw.length() < pw_len ||
+									em.length() < em_len){
+								text = "Sorry, 1 or more fields are not correct.";
+								Toast toast = Toast.makeText(context, text, duration);
+								toast.show();
+								exists = true;
+							}
+							else {
+								//verify if email/ username exists
+								for (DataSnapshot data : dataSnapshot.getChildren()) {
+									User u = data.getValue(User.class);
+
+									if (u.getEmail().equalsIgnoreCase(em) &&
+											!(em.equalsIgnoreCase(
+													MainActivity.currentUser.getEmail()))){
+										text = "Sorry, email already exists.";
+										Toast toast = Toast.makeText(context, text, duration);
+										toast.show();
+										exists = true;
+										break;
+									} else if (u.getUsername().equalsIgnoreCase(un) &&
+											!(un.equalsIgnoreCase(
+													MainActivity.currentUser.getUsername()))){
+										text = "Sorry, username already exists.";
+										Toast toast = Toast.makeText(context, text, duration);
+										toast.show();
+										exists = true;
+										break;
+									}
+								}
+							}
+
+							if (!(exists)) {
+								User user1 = new User(em, un, pw,
+										MainActivity.currentUser.getRegistration());
+
+								if (user1.equals(MainActivity.currentUser)){
+									text = "You did not make any changes!";
+									Toast toast = Toast.makeText(context, text, duration);
+									toast.show();
+								} else {
+									db.updateUser(MainActivity.currentUser, user1);
+									text = "Update Successful!";
+									Toast toast = Toast.makeText(context, text, duration);
+									toast.show();
+									startActivity(new Intent(View_UserInformation.this,
+											CourseFilterActivity.class));
+								}
+
+							}
+
+						}
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
-                    if(MainActivity.currentUser.getPassword().toString()!=et4.getText().toString() && et4.getText().toString().equals(et5.getText().toString()) && et4.getText().length()>0 && et5.getText().length()>0){
-                        User user1 = new User(et1.getText().toString(),et2.getText().toString(),et5.getText().toString(),MainActivity.currentUser.getRegistration());
-                        db.updateUser(MainActivity.currentUser,user1);
+                    });
 
-                    }
-                    if(MainActivity.currentUser.getUsername().toString().equals(et2.getText().toString())&&MainActivity.currentUser.getEmail().toString().equals(et1.getText().toString())
-                            &&MainActivity.currentUser.getPassword().toString()!=et4.getText().toString()&& et1.getText().length()>0
-                            && et2.getText().length()>0 && et3.getText().length()>0 && et4.getText().length()>0 && et5.getText().length()>0){
-
-                        Toast.makeText(getBaseContext(), "Update Successful", Toast.LENGTH_LONG).show();
-                    }
 
                 }
-
-
-
 
         });
     }

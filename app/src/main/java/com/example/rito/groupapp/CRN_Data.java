@@ -16,7 +16,7 @@ import java.util.HashMap;
  */
 
 @IgnoreExtraProperties //only maps fields during serialization
-public class CRN_Data implements Serializable {
+public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 
 	private String crn;
 	private String term_code;
@@ -182,6 +182,11 @@ public class CRN_Data implements Serializable {
 		));
 	}
 
+	public long getCur(){
+		long cur = this.enrollment != null ? this.enrollment.size() : 0;
+		return cur;
+	}
+
 	@Override
 	public String toString(){
 		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
@@ -201,8 +206,9 @@ public class CRN_Data implements Serializable {
 				this.days.get("fri") ? "F" : ""
 		};
 
-		String days = TextUtils.join(" ", arr);
-		int curr = this.enrollment.size();
+		String days = join(arr);
+		System.out.println(days);
+		System.out.println(this.days);
 
 		str = String.format(
 				"CRN: %s" +
@@ -230,14 +236,14 @@ public class CRN_Data implements Serializable {
 			this.days.get("fri") ? "F" : ""
 		};
 
-		String days = TextUtils.join(" ", arr);
+		String days = join(arr);
 		int curr = this.enrollment.size();
 
 		str = String.format(
 				"CRN: %s" +
 				"\tCourse: %s (%s)" +
 				"\tSection: %s - %s" +
-				"\tStart/ End Times: %s to %s" +
+				"\tStart/ End Times: %s" +
 				"\tDays: %s" +
 				"\tEnrollment (Current / Max): %s / %s" +
 				"\tLocation:\n%s" +
@@ -246,8 +252,10 @@ public class CRN_Data implements Serializable {
 				this.crn,
 				this.course_name, this.course_code,
 				this.section_number, this.section_type,
-				this.start_time, this.end_time,
-				days,
+				this.start_time.equalsIgnoreCase("CD") ?
+						"Consult Department" : this.start_time + " to " + this.end_time,
+				days.equalsIgnoreCase("") ?
+						"Consult Department" : days,
 				curr, this.max,
 				this.location,
 				this.instructor)
@@ -270,6 +278,36 @@ public class CRN_Data implements Serializable {
 				return this.toString_CFA_Basic().split("\t");
 		}
 
+	}
+
+	public String join(String [] arr){
+
+		String days = "";
+		for (String x : arr){
+			if (!(x.equalsIgnoreCase(""))){
+				if (days.equalsIgnoreCase("")){
+					days = x;
+				} else {
+					days = days + " " + x;
+				}
+			}
+		}
+		return days;
+	}
+
+	/**CompareTo Method created to improve sorting in calendar.
+	 * 	 @since 7/25/2018
+		 @author Dryden Pick and Yuhao Hu.
+	 */
+
+	public int compareTo(CRN_Data other){
+		if(this.getStart_Time() == null){
+			return -1;
+		}
+		if(other.getStart_Time() == null){
+			return 1;
+		}
+		return this.getStart_Time().compareTo(other.getStart_Time());
 	}
 
 }

@@ -1,8 +1,6 @@
 package com.example.rito.groupapp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,65 +22,62 @@ import com.google.firebase.database.ValueEventListener;
  * found true, the currentUser in MainActivity is updated, and the logged-in
  * intent is initialized.
  *
- * Forgot password button redirects to new activity. All entry forms now error checked.
+ * Dryden added the currentUser Global object in a refactor following the main creation of main activity login.
  *
  * @author  Shane, Divanno, Dryden
  * @since   07-06-18
  */
-
 public class MainContentLogin extends AppCompatActivity {
 
     Button loginButton;
-    Button forgotPasswordButton; //sends email
-
     EditText userEmail;
     EditText userPassword;
+    Button Submit;
     User currentUser;
     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("debug.print", "mainContentLogin: onCreate");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-
         loginButton = findViewById(R.id.login_submit_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View view) {
-                userEmail = findViewById(R.id.user_email);
+				userEmail = findViewById(R.id.user_number);
                 userPassword = findViewById(R.id.user_pw);
-                if(userEmail.getText().toString().isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Enter an email first!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(userPassword.getText().toString().isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Enter your password!", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
 
-                //full credit for snapshot query access to user Upendrah Shah @
-                //https://stackoverflow.com/questions/45136779/login-using-email-stored-in-firebase-realtime-database
-                Query student_exists_query = databaseRef.child("STUDENT");
-                student_exists_query.addListenerForSingleValueEvent(new ValueEventListener() {
+				Database db = new Database("STUDENT");
+				final DatabaseReference ref = db.getDbRef();
+                Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
+
+                ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean emailExists = false;
+						boolean emailExists = false;
+                        Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
+
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
+
                                 User currentUser = (User) student.getValue(User.class);
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
+
                                 emailExists = true;
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-									MainActivity.currentUser = currentUser;
+
+                                    ref.removeEventListener(this);
+                                    MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
+
                                 }
+
                                 else {
                                     Toast.makeText(getApplicationContext(), "Incorrect password, please try again!", Toast.LENGTH_LONG).show();
                                 }
@@ -97,14 +92,6 @@ public class MainContentLogin extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-            }
-        });
-
-        //Branch: Account_Recovery
-        forgotPasswordButton = findViewById(R.id.forgot_password);
-        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                startActivity(new Intent(MainContentLogin.this,RecoveryEmailActivity.class));
             }
         });
     }

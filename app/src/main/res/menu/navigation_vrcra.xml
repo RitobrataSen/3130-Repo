@@ -9,12 +9,8 @@ this is for the viewRemoveCourseRegistration activity bottom navigation view
         android:icon="@drawable/ic_back_white_24dp"
         android:checkable="false"
         android:title="@string/title_back" />
-<!--    <item
-        android:id="@+id/navigation_reset"
-        android:icon="@drawable/ic_reset_black_24dp"
-        android:checkable="false"
-        android:title="@string/title_reset" />
--->
+
+
     <item
         android:id="@+id/navigation_deregister"
         android:icon="@drawable/ic_remove_black_18dp"

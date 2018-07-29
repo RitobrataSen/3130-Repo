@@ -23,6 +23,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.containsString;
 
+/**
+ * This espresso test checks to see if a course is actually being added to an user.
+ * It ensures that the functionality that enables this works properly.
+ *
+ * @author Gobii Viviagananda, Shane Mitravitz
+ * @DateComplete 28 July 2018
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class CourseAddingTest {
@@ -31,17 +38,17 @@ public class CourseAddingTest {
 
     @Test
     public void courseAddingTest(){
-        //navigate through login into add course by crn
+
+
+        //login to app
         onView(withId(R.id.login_button)).perform(click());
         onView(withId(R.id.user_email)).perform(typeText("ea2"));
         onView(withId(R.id.user_pw)).perform(typeText("pw2"));
-
-        //submit forms
         onView(withId(R.id.login_submit_button)).perform(click());
 
         //navigate with menu
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Add CRN")).perform(click());
+        onView(withText("Add Courses")).perform(click());
 
         //button
         onView(withId(R.id.drop)).check(matches(isClickable()));
@@ -49,10 +56,7 @@ public class CourseAddingTest {
         onView(withId(R.id.add)).check(matches(isClickable()));
         onView(withId(R.id.add)).check(matches(withText("ADD")));
 
-        //spinner
-        onView(withId(R.id.term)).perform(click());
-        onData(anything()).atPosition(1).perform(click());
-        onView(withId(R.id.term)).check(matches(withSpinnerText(containsString("2018 Summer"))));
+
 
         //text view
         onView(withId(R.id.crn)).perform(typeText("11623"));
