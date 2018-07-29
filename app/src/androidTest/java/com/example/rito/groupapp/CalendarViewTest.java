@@ -48,12 +48,12 @@ public class CalendarViewTest {
         for(int i=0; i < mActivityTestRule.getActivity().getCourseListSize(); i++){
             // If populateTextViewLists did not succeed then this is crash, as null.getText will not work.
             if(i+1 < mActivityTestRule.getActivity().getCourseListSize()){
-                assertTrue(mActivityTestRule.getActivity().monday[i+1].getText().equals(""));
+                assertTrue(mActivityTestRule.getActivity().monday.get(i+1).getText().equals(""));
             }
-            assertTrue(mActivityTestRule.getActivity().tuesday[i].getText().equals(""));
-            assertTrue(mActivityTestRule.getActivity().wednesday[i].getText().equals(""));
-            assertTrue(mActivityTestRule.getActivity().thursday[i].getText().equals(""));
-            assertTrue(mActivityTestRule.getActivity().friday[i].getText().equals(""));
+            assertTrue(mActivityTestRule.getActivity().tuesday.get(i).getText().equals(""));
+            assertTrue(mActivityTestRule.getActivity().wednesday.get(i).getText().equals(""));
+            assertTrue(mActivityTestRule.getActivity().thursday.get(i).getText().equals(""));
+            assertTrue(mActivityTestRule.getActivity().friday.get(i).getText().equals(""));
         }
     }
 }
