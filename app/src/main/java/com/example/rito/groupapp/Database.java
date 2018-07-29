@@ -1,12 +1,10 @@
 package com.example.rito.groupapp;
 
 import android.app.Application;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +24,7 @@ import com.google.firebase.database.ValueEventListener;
  of courses.
  *
  * @author   Gobii, Rito, Yuhao
- * @Completed   2018-07-08
- *
- * @Since 2018-07-17
- * Added a method that allowed the database to update any user information
+ * @since    2018-07-08
  */
 
 public class Database extends Application {
@@ -48,7 +43,6 @@ public class Database extends Application {
 		this.dbRef = ref;
 
 	}
-
 	public Database(String refPath){
 
 		FirebaseDatabase fb;
@@ -77,21 +71,13 @@ public class Database extends Application {
 	}
 
 
-	public boolean equals (Database db){
-
-		return (
-				this.db.getReference().toString().equals(db.getDb().getReference().toString())
-				&& this.dbRef.toString().equals(db.getDbRef().toString())
-				);
-	}
-
-
+	//set methods------------------------------------------------------------------------------------------------------------------
 	public void addRemoveCourse(String crn, String username, boolean val){
 		DatabaseReference ref;
 
 		//remove from: COURSE_ENROLLMENT/<crn>/ENROLLMENT/<username> = null
 		String pathEnrollment = String.format(
-				"CRN_DATA/%s/enrollment/%s", crn, username);
+				"COURSE_ENROLLMENT/%s/ENROLLMENT/%s", crn, username);
 
 		ref = this.db.getReference(pathEnrollment);
 		ref.setValue(val ? val : null);
@@ -103,10 +89,12 @@ public class Database extends Application {
 		ref = this.db.getReference(pathRegistration);
 		ref.setValue(val ? val : null);
 
-		//refresh the currentUser variable
-		updateCurrentUser(username);
-	}
 
+		//decrement curr by 1: COURSE_ENROLLMENT/<crn>/curr/<> = null
+		//***NOTE curr field is not necessary as we can just get a
+		// child count of ENROLLMENT HashMap
+
+	}
 	public void addUser(String email, String username, String password){
 		int result = -1;
 
@@ -126,7 +114,6 @@ public class Database extends Application {
 
 		updateCurrentUser(username);
 	}
-
 	public void updateCurrentUser(String username){
 		//refresh the currentUser variable
 		DatabaseReference ref = this.db.getReference("STUDENT/" + username);
@@ -149,6 +136,12 @@ public class Database extends Application {
 		DatabaseReference refNew = this.db.getReference(newusr.createPath());
 		refNew.setValue(newusr);
 		MainActivity.currentUser = newusr;
+	}
+
+	public void readData(){
+		System.out.println("READDATA METHOD");
+		System.out.println(this.dbRef.toString());//.child("TERMS").toString());
+		System.out.println("READDATA SUCCESS");
 	}
 
 }

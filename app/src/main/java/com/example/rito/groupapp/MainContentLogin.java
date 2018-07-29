@@ -75,6 +75,7 @@ public class MainContentLogin extends AppCompatActivity {
                                     ref.removeEventListener(this);
                                     MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
+									return;
 
                                 }
 
