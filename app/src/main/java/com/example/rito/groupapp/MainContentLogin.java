@@ -47,71 +47,42 @@ public class MainContentLogin extends AppCompatActivity {
     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("debug.print", "mainContentLogin: onCreate");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-
         loginButton = findViewById(R.id.login_submit_button);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
 
-
             public void onClick(View view) {
-
-
-                userEmail = findViewById(R.id.user_number);
+				userEmail = findViewById(R.id.user_number);
                 userPassword = findViewById(R.id.user_pw);
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
 
-                //full credit for snapshot query access to user Upendrah Shah @
-                //https://stackoverflow.com/questions/45136779/login-using-email-stored-in-firebase-realtime-database
-                Query student_exists_query = databaseRef.child("STUDENT");
-                student_exists_query.addListenerForSingleValueEvent(new ValueEventListener() {
+				Database db = new Database("STUDENT");
+				final DatabaseReference ref = db.getDbRef();
+                Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
+
+                ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean emailExists = false;
+						boolean emailExists = false;
+                        Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
 
-                        //System.out.println(dataSnapshot.getChildrenCount());
-                        //System.out.println(dataSnapshot.toString());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
-                                //System.out.println("for loop");
-                                //System.out.println(student.toString());
-                                final User currentUser = (User) student.getValue(User.class);
-                                //System.out.println("User: " + currentUser);
 
+                                User currentUser = (User) student.getValue(User.class);
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
+
                                 emailExists = true;
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
 
-                                    //set event listener to update current user whenever it is
-                                    //changed
-                                    /*
-                                    Database db = new Database("STUDENT/" + currentUser.getUsername());
-                                    db.getDbRef().addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            User user = (User) dataSnapshot.getValue(User.class);
-                                            Log.d("debug.print", "currentUser data changed. " +
-                                                    "Updating variable stored at MainActivity" +
-                                                    ".currentUser: " + user.toString());
-                                            MainActivity.currentUser = user;
-                                        }
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            Log.d("debug.print", "The read failed: " + databaseError.getCode());
-                                        }
-                                    });
-                                    */
-                                    userEmail.setText(null);
-                                    userPassword.setText(null);
-									MainActivity.currentUser = currentUser;
+                                    ref.removeEventListener(this);
+                                    MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
 
                                 }

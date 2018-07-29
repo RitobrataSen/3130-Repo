@@ -32,6 +32,7 @@ public class CourseTest{
             Assert.assertTrue(c1.getCourse_code().matches(no));
             testNum++;
         }
+
         @Test
         public void checkSet_GetCourseName(){
             String name= "Intro to Computer Science";
@@ -39,6 +40,7 @@ public class CourseTest{
             Assert.assertTrue(c1.getCourse_name().matches(name));
             testNum++;
         }
+
         @Test
         public void checkSet_GetSubjectCode(){
             String SC= "V1234";
@@ -54,27 +56,41 @@ public class CourseTest{
             Assert.assertTrue(c1.getTerm_code().matches(TC));
             testNum++;
         }
+
         @Test
         public void checkHasSupplement(){
             boolean supp = true;
-
             c1.setHas_supplement(supp);
             Assert.assertTrue(c1.getHas_supplement());
             testNum++;
         }
+
         @Test
         public void checkEquals(){
-            Course c2 = new Course();
+            c1.setTerm_code("TERM");
+            c1.setSubject_code("SUBJECT");
+            c1.setCourse_code("COURSE");
+
+            Course c2 = new Course(
+                    c1.getTerm_code(),
+                    c1.getSubject_code(),
+                    c1.getCourse_code(),
+                    c1.getCourse_name(),
+                    c1.getHas_supplement(),
+                    c1.getCore(),
+                    c1.getSupplement()
+            );
             Assert.assertTrue(c1.equals(c2));
             testNum++;
-
         }
+
         @Test
         public void checkToString(){
             String s = c1.toString();
             Assert.assertTrue(c1.toString().equals(s));
             testNum++;
         }
+
         @Test
         public void checkToString2(){
             String s = c1.toString2();
@@ -84,6 +100,7 @@ public class CourseTest{
             testNum++;
 
         }
+
         @Test
         public void checkHashMap(){
             HashMap newMap = new HashMap();
@@ -91,10 +108,12 @@ public class CourseTest{
             Assert.assertTrue(c1.toMap().equals(newMap));
             testNum++;
         }
+
         @After
         public void runAfterEach() {
             System.out.println("Test number: "+testNum + " passed");
         }
+
         @AfterClass
         public static void runAfterAll(){
             System.out.print("All " + testNum + " passed");

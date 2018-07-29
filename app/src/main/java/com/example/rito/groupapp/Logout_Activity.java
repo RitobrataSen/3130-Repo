@@ -21,9 +21,15 @@ public class Logout_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
         MainActivity.currentUser = null;
-        Toast.makeText(getBaseContext(),"logout was successful",Toast.LENGTH_LONG).show();
-        startActivity(new Intent(Logout_Activity.this, MainActivity.class));
-        }
 
+        Intent intent = new Intent(Logout_Activity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Toast.makeText(getBaseContext(),"logout was successful",Toast.LENGTH_LONG).show();
+        Logout_Activity.this.startActivity(intent);
+        finish();
     }
+
+}
 

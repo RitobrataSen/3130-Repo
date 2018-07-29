@@ -1,4 +1,6 @@
 package com.example.rito.groupapp;
+import android.util.Log;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -116,21 +118,21 @@ public class Course implements Serializable {
 		return String.format("COURSE/%s/%s/%s",
 				this.term_code, this.subject_code, this.course_code);
 	}
-/*
+
 	public boolean equals(Course c){
 		if (c == null){
 			return false;
 		} else if (
 				this.term_code.equals(c.getTerm_code())
-				&& this.subject_code.equals(c.getSubject_code())
-				&& this.course_code.equals(c.getCourse_code())
-		){
+						&& this.subject_code.equals(c.getSubject_code())
+						&& this.course_code.equals(c.getCourse_code())
+				){
 			return true;
 		}
 		return false;
 	}
-*/
 
+	/*
 	public boolean equals(Course c){
 
 		//if (!(c == null)){
@@ -158,18 +160,10 @@ public class Course implements Serializable {
 			return true;
 
 		}
-
-
-
-
-
 		//}
-
-
-
 		return false;
-
 	}
+	*/
 
 	@Override
 	public String toString(){

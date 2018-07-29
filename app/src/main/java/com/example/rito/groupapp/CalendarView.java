@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
@@ -57,7 +62,6 @@ public class CalendarView extends AppCompatActivity {
 
     private Context context = this;
     private int courseListSize = 4;
-    private final ArrayList<String> codeList = new ArrayList<>();
     private String selectedCourse;
     public TextView monday[] = new TextView[courseListSize];
     public TextView tuesday[] = new TextView[courseListSize];
@@ -65,12 +69,14 @@ public class CalendarView extends AppCompatActivity {
     public TextView thursday[] = new TextView[courseListSize];
     public TextView friday[] = new TextView[courseListSize];
     public CRN_Data courseList[];
-    public ArrayList<CRN_Data> calendarCourses;
+    public ArrayList<CRN_Data> calendarCourses = new ArrayList<CRN_Data>();
     public int counter;
-    public static String selectedCRN;
-
-
+    private Term filterTerm = null;
+	private int filterState = 0;
     private Toolbar hdrToolBar;
+	private ListView lv;
+	private HorizontalScrollView cal;
+	private ConstraintLayout conLayout;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,54 +115,244 @@ public class CalendarView extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 
 	}
+
+	private BottomNavigationView
+			.OnNavigationItemSelectedListener
+			mOnNavigationItemSelectedListener =
+			new BottomNavigationView
+					.OnNavigationItemSelectedListener() {
+
+				@Override
+				public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+					int o = 0;
+					String t, m;
+					switch (item.getItemId()) {
+						case R.id.navigation_back:
+							getPreviousState();
+							return true;
+
+						case R.id.navigation_reset:
+
+							t = "Reset Calendar View";
+							m = "Are you sure you want to reset your current Calendar View?";
+							o = 0;
+							popupMsg(t, m, o);
+							return true;
+
+					}
+
+					return false;
+
+				}
+			};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
+		lv = findViewById(R.id.listView);
+		cal = findViewById(R.id.hsv);
+
+		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(hdrToolBar);
 
-        populateTextViewLists();
+		conLayout = findViewById(R.id.constraint_layout);
 
-        //Recall, this wont work unless a user is signed in.
-        if(MainActivity.currentUser != null) {
-            courseList = new CRN_Data[MainActivity.currentUser.getRegistration().keySet().toArray().length];
-            calendarCourses = new ArrayList<CRN_Data>();
-            for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
-
-                String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
-
-                counter = i;
-                Database db = new Database("CRN_DATA/" + crn);
-                db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
-                            calendarCourses.add(curr);
-                        }
-                        if(calendarCourses.size() == courseList.length){
-                            populateCalendar();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d("debug.print", "The read failed: " + databaseError.getCode());
-                    }
-                });
-            }
-        }
-        else{
-            CRN_Data c = new CRN_Data();
-            c.setCrn("Error");
-            c.setCourse_Code("User Failed to Login");
-            c.setStart_Time("0:00");
-            c.setEnd_Time("0:00");
-            displayCourse(monday, c);
-        }
+		populateTerm();
     }
+
+    public void applyNewConstraints(int v){
+
+		ConstraintSet set = new ConstraintSet();
+    	//change toolbar constraints
+		set.clone(conLayout);
+		set.connect(
+				R.id.toolbar, ConstraintSet.BOTTOM,
+				v, ConstraintSet.TOP);
+		//change bottom navigation view constraints
+		set.connect(
+				R.id.navigation, ConstraintSet.TOP,
+				v, ConstraintSet.BOTTOM);
+
+		set.applyTo(conLayout);
+
+	}
+
+	public void popupMsg(String t, String m, int o){
+
+		// custom dialog
+		final Dialog dialog = new Dialog(context);
+
+		dialog.setContentView(R.layout.item_popup_msg);
+
+		TextView title = (TextView) dialog.findViewById(R.id.title);
+		TextView line1 = (TextView) dialog.findViewById(R.id.line1);
+
+		title.setText(t);
+		line1.setText(m);
+
+		Button popUpMsgButtonCancel = (Button) dialog.findViewById(R.id.popUpMsgButtonCancel);
+		popUpMsgButtonCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		Button popUpMsgButtonOK = (Button) dialog.findViewById(R.id.popUpMsgButtonOK);
+
+		switch(o){
+			case 0:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						populateTerm();
+						dialog.dismiss();
+					}
+				});
+				break;
+			default:
+				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+
+		}
+
+		dialog.show();
+	}
+
+	public void getPreviousState(){
+		switch (filterState){
+			case 0:
+				populateTerm();
+				break;
+			case 1:
+				populateTerm();
+				break;
+			default:
+				populateTerm();
+				break;
+		}
+	}
+
+    public void populateTerm() {
+		filterState = 0;
+		filterTerm = null;
+		lv.setAdapter(null);
+		lv.setVisibility(View.VISIBLE);
+		cal.setVisibility(View.GONE);
+		applyNewConstraints(R.id.listView);
+
+        FirebaseListAdapter<Term> firebaseAdapter;
+        Database db = new Database("TERM");
+        lv = findViewById(R.id.listView);
+        firebaseAdapter = new FirebaseListAdapter<Term>(this, Term.class,
+                android.R.layout.simple_list_item_1, db.getDbRef()) {
+            @Override
+            protected void populateView(View v, Term model, int position) {
+                TextView termRow = (TextView)v.findViewById(android.R.id.text1);
+                termRow.setText(model.toString());
+            }
+        };
+
+        lv.setAdapter(firebaseAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Term term = (Term) parent.getItemAtPosition(position);
+				createCalendar(term);
+            }
+        });
+    }
+
+    public void createCalendar(Term term){
+		filterState = 1;
+		filterTerm = term;
+		lv.setAdapter(null);
+		lv.setVisibility(View.GONE);
+		cal.setVisibility(View.VISIBLE);
+		applyNewConstraints(R.id.hsv);
+
+    	populateTextViewLists();
+		calendarCourses.clear();
+
+		//Recall, this wont work unless a user is signed in.
+		if(MainActivity.currentUser != null) {
+			courseList = new CRN_Data[MainActivity.currentUser.getRegistration().keySet().toArray().length];
+			//calendarCourses = new ArrayList<CRN_Data>();
+			for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
+
+				String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
+
+				counter = i;
+				Database db = new Database("CRN_DATA/" + crn);
+				db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
+					@Override
+					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+						if (dataSnapshot.exists()) {
+							CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
+							Log.d("debug.print",
+									"CUR: " + curr.getTerm_Code() +
+											" FT: " + filterTerm.getTerm_code());
+
+							if (curr.getTerm_Code().equals(filterTerm.getTerm_code())){
+								Log.d("debug.print","equal");
+								appendCRN_Data(curr);
+								populateTextViewLists();
+								populateCalendar();
+							}
+						}
+						/*
+						if(calendarCourses.size() == courseList.length){
+							populateCalendar();
+						}*/
+					}
+
+					@Override
+					public void onCancelled(DatabaseError databaseError) {
+						Log.d("debug.print", "The read failed: " + databaseError.getCode());
+					}
+				});
+			}
+		}
+		else{
+			CRN_Data c = new CRN_Data();
+			c.setCrn("Error");
+			c.setCourse_Code("User Failed to Login");
+			c.setStart_Time("0:00");
+			c.setEnd_Time("0:00");
+			displayCourse(monday, c);
+		}
+	}
+
+	//public boolean markSelection(boolean add){
+	public void appendCRN_Data(CRN_Data crn){
+		boolean sel = false;
+		ArrayList<CRN_Data> newSelectedCourses = new ArrayList<>();
+
+		if (!(crn == null)){
+			for (CRN_Data x : calendarCourses) {
+				if(!(x.equals(crn))){
+					newSelectedCourses.add(x);
+				} else {
+					sel = true;
+				}
+			}
+
+			calendarCourses = newSelectedCourses;
+
+			if (!(sel)){
+				calendarCourses.add(crn);
+			}
+		}
+	}
+
 
     public void populateCalendar(){
         Collections.sort(calendarCourses);
@@ -218,7 +414,7 @@ public class CalendarView extends AppCompatActivity {
                                         TextView line7 = (TextView) dialog.findViewById(R.id.line7);
                                         TextView line8 = (TextView) dialog.findViewById(R.id.line8);
 
-                                        title.setText("Add Course");
+                                        title.setText("Class Details");
 
                                         line1.setText(arr[0]);
                                         line2.setText(arr[1]);

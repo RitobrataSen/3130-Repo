@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+//import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
@@ -48,7 +48,7 @@ public class CourseRegistration extends AppCompatActivity{
     private EditText crn;
     private String input_crn, term, selectTerm;
     //private int cur;
-    private Spinner termSpinner;
+    //private Spinner termSpinner;
     private String uid;
     private Toolbar hdrToolBar;
 
@@ -105,17 +105,17 @@ public class CourseRegistration extends AppCompatActivity{
         uid = user.getUsername();
 
         Log.d("debug.print", user.toString());
-
+        /*
         termSpinner = findViewById(R.id.term);
         ArrayAdapter<CharSequence> adapterTerm = ArrayAdapter.createFromResource(this,
                 R.array.terms_array, android.R.layout.simple_spinner_item);
         adapterTerm.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         termSpinner.setAdapter(adapterTerm);
+        */
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("debug.print", "on click add");
                 Database db_ce = new Database();
                 input_crn = crn.getText().toString();
                 DatabaseReference ref_ce = db_ce.getDb().getReference("CRN_DATA/" +
@@ -125,12 +125,9 @@ public class CourseRegistration extends AppCompatActivity{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Read the inputed string from users
-                        Log.d("debug.print", "onDataChange START");
 
-                        Log.d("debug.print", "1");
                         //Checking if crn exists
                         if (dataSnapshot.exists()) {
-                            Log.d("debug.print", "2");
                             long max = Integer.parseInt(dataSnapshot.child("max").getValue()
                                     .toString());
                             long cur = dataSnapshot.child("ENROLLMENT").exists() ?
@@ -138,7 +135,6 @@ public class CourseRegistration extends AppCompatActivity{
 
                             //Checking the number of student that enrolled in this course is full or not
                             if (max > cur) {
-                                Log.d("debug.print", "3");
                                 final Database db_st = new Database("STUDENT/" + uid);
                                 DatabaseReference ref_st = db_st.getDbRef();
 
@@ -203,7 +199,6 @@ public class CourseRegistration extends AppCompatActivity{
                 ref_st.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d("debug.print", "on data change");
                         input_crn = crn.getText().toString();
 
                         //Checking if the inputted course is enrolled by the student or not

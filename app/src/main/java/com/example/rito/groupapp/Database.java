@@ -48,6 +48,7 @@ public class Database extends Application {
 		this.dbRef = ref;
 
 	}
+
 	public Database(String refPath){
 
 		FirebaseDatabase fb;
@@ -76,13 +77,21 @@ public class Database extends Application {
 	}
 
 
-	//set methods------------------------------------------------------------------------------------------------------------------
+	public boolean equals (Database db){
+
+		return (
+				this.db.getReference().toString().equals(db.getDb().getReference().toString())
+				&& this.dbRef.toString().equals(db.getDbRef().toString())
+				);
+	}
+
+
 	public void addRemoveCourse(String crn, String username, boolean val){
 		DatabaseReference ref;
 
 		//remove from: COURSE_ENROLLMENT/<crn>/ENROLLMENT/<username> = null
 		String pathEnrollment = String.format(
-				"COURSE_ENROLLEMENT/%s/ENROLLMENT/%s", crn, username);
+				"CRN_DATA/%s/enrollment/%s", crn, username);
 
 		ref = this.db.getReference(pathEnrollment);
 		ref.setValue(val ? val : null);
@@ -94,11 +103,8 @@ public class Database extends Application {
 		ref = this.db.getReference(pathRegistration);
 		ref.setValue(val ? val : null);
 
-
-		//decrement curr by 1: COURSE_ENROLLMENT/<crn>/curr/<> = null
-		//***NOTE curr field is not necessary as we can just get a
-		// child count of ENROLLMENT HashMap
-
+		//refresh the currentUser variable
+		updateCurrentUser(username);
 	}
 
 	public void addUser(String email, String username, String password){
@@ -121,11 +127,30 @@ public class Database extends Application {
 		User user = new User(email, username, password, hm);
 		ref = this.db.getReference(pathUsername);
 		ref.setValue(user);
+
+		updateCurrentUser(username);
+	}
+
+	public void updateCurrentUser(String username){
+		//refresh the currentUser variable
+		DatabaseReference ref = this.db.getReference("STUDENT/" + username);
+		ref.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(DataSnapshot dataSnapshot) {
+				User user = (User) dataSnapshot.getValue(User.class);
+				MainActivity.currentUser = user;
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+
+			}
+		});
 	}
 	public void updateUser(User oldusr, User newusr){
-		DatabaseReference refOld = this.db.getReference(oldusr.getPath());
+		DatabaseReference refOld = this.db.getReference(oldusr.createPath());
 		refOld.setValue(null);
-		DatabaseReference refNew = this.db.getReference(newusr.getPath());
+		DatabaseReference refNew = this.db.getReference(newusr.createPath());
 		refNew.setValue(newusr);
 		MainActivity.currentUser = newusr;
 	}

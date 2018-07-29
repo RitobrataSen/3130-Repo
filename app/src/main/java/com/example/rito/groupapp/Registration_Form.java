@@ -46,14 +46,17 @@ import java.util.HashMap;
 
 public class Registration_Form extends AppCompatActivity {
     public DatabaseReference databaseRef;
-    Button submit;
-    EditText username;
-    EditText password, password2;
-    EditText email;
+    private Button submit;
+    private EditText username;
+    private EditText password, password2;
+    private EditText email;
     int result;
-    String un;
-    String pw;
-    String em ;
+    private String un;
+    private String pw;
+    private String em ;
+    private int em_len = 1;
+    private int un_len = 1;
+    private int pw_len = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +102,17 @@ public class Registration_Form extends AppCompatActivity {
                                     toast.show();
                                 }
                                 exists = true;
-                            }else if(password.getText().toString().equals( password2.getText().toString())==false){
+                            }else if(!(password.getText().toString().equals( password2.getText().toString()))){
+                                text = "Sorry, passwords do not match.";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
                                 exists = true;
-                            } else if(un.length() == 0 || pw.length() == 0 || em.length() == 0){
+                            } else if(un.length() < un_len ||
+                                    pw.length() < pw_len ||
+                                    em.length() < em_len){
+                                text = "Sorry, 1 or more fields are not correct.";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
                                 exists = true;
                             }
                             else {
@@ -111,6 +122,12 @@ public class Registration_Form extends AppCompatActivity {
 
                                     if (u.getEmail().equalsIgnoreCase(em)) {
                                         text = "Sorry, email already exists.";
+                                        Toast toast = Toast.makeText(context, text, duration);
+                                        toast.show();
+                                        exists = true;
+                                        break;
+                                    } else if (u.getUsername().equalsIgnoreCase(un)){
+                                        text = "Sorry, username already exists.";
                                         Toast toast = Toast.makeText(context, text, duration);
                                         toast.show();
                                         exists = true;
@@ -136,7 +153,7 @@ public class Registration_Form extends AppCompatActivity {
 
                 }
 
-                if(password.getText().toString().equals( password2.getText().toString())==false){
+                if(!(password.getText().toString().equals(password2.getText().toString()))){
                     Toast.makeText(getBaseContext(), "passwords not the same", Toast.LENGTH_LONG).show();
                 }
                 if( un.length() == 0 ){
