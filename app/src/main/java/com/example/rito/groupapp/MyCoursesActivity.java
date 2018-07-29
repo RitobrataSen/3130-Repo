@@ -99,12 +99,10 @@ public class MyCoursesActivity extends AppCompatActivity {
 					int option;
 					switch (item.getItemId()) {
 						case R.id.navigation_back:
-							Log.d("debug.print", "VRCR, navigation_back:");
 							populateTerm();
 							return true;
 
 						case R.id.navigation_deregister:
-							Log.d("debug.print", "VRCR, navigation_deregister:");
 							title = "Deregister Selected Courses";
 							msg = "You are about to deregister for all selected courses. Please " +
 									"confirm to continue.";
@@ -121,10 +119,11 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("debug.print", "VRCR, onCreate:");
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_courses);
+
+		Log.d("debug.print","onCreate MyCoursesActivity");
 
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -132,7 +131,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(hdrToolBar);
 
-		Log.d("debug.print", "VRCR, populateRegisteredCourses CALL:");
 		populateTerm();
 	}
 
@@ -216,13 +214,10 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 	public void populateRegisteredCourses(){
 
-		Log.d("debug.print", "VRCR, populateRegisteredCourses START:");
-
 		Database db = new Database("STUDENT/" + username);
 		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
-				Log.d("debug.print", "VRCR, onDataChange START:");
 				CharSequence text;
 				Context context = getApplicationContext();
 				int duration = Toast.LENGTH_LONG;
@@ -233,7 +228,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 					for (String k : std.getRegistration().keySet()){
 						if (std.getRegistration().get(k)){
 							Database dbCRN = new Database("CRN_DATA/" + k);
-							Log.d("debug.print", "VRCR, onDataChange dbref patch: " + dbCRN.dbRef.toString());
 
 							dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 								@Override
@@ -242,11 +236,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 									boolean sel = false;
 									ArrayList<CRN_Data> newRegisteredCourses = new ArrayList<>();
-
-									Log.d("debug.print", "VRCR, populateCurrentSelection " +
-											"crn:" + crn);
-									Log.d("debug.print", "VRCR, populateCurrentSelection " +
-											"registeredCourses:" + registeredCourses);
 
 									if (!(crn == null)){
 										for (CRN_Data x : registeredCourses) {
@@ -289,29 +278,24 @@ public class MyCoursesActivity extends AppCompatActivity {
 	}
 
 	public void populateCurrentSelection(){
-		Log.d("debug.print", "VRCR, populateCurrentSelection START:");
-		Log.d("debug.print", "VRCR, populateCurrentSelection 1:");
 		CharSequence text;
 		Context context = getApplicationContext();
 		int duration = Toast.LENGTH_LONG;
 
 
 		lv = findViewById(R.id.listView);
-		Log.d("debug.print", "VRCR, populateCurrentSelection 2:");
 
 		lv.setAdapter(new ArrayAdapter<CRN_Data>(
 				this, R.layout.item_registration , registeredCourses){
 
 			@Override
 			public View getView (int position, View view, ViewGroup parent){
-				Log.d("debug.print", "VRCR, populateCurrentSelection 3:");
 
 				if (view == null) {
 					view = LayoutInflater.from(getContext()).inflate(R.layout.item_registration, parent,
 							false);
 				}
 
-				Log.d("debug.print", "VRCR, populateCurrentSelection 4:");
 				CRN_Data crnObj = getItem(position);
 				TextView ccode = (TextView) view.findViewById(R.id.course_code);
 				TextView snumber = (TextView) view.findViewById(R.id.section_number);
@@ -319,7 +303,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 				TextView tcode = (TextView) view.findViewById(R.id.term_code);
 				TextView crn = (TextView) view.findViewById(R.id.crn);
 
-				Log.d("debug.print", "VRCR, populateCurrentSelection 5:");
 				ccode.setText(String.format("Course Code:%s", crnObj.getCourse_Code()));
 				snumber.setText(String.format("Section Number:%s", crnObj.getSection_Number()));
 				stype.setText(String.format("Section Type:%s", crnObj.getSection_Type()));
@@ -334,7 +317,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.d("debug.print", "VRCR, populateCurrentSelection 6:");
+
 				CRN_Data crnObj = (CRN_Data) parent.getItemAtPosition(position);
 				boolean sel = false;
 				ArrayList<CRN_Data> newDeletedCourses = new ArrayList<>();
@@ -362,7 +345,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 	}
 
 	public void deregisterCourses(){
-		Log.d("debug.print", "VRCR, deregisterCourses START:");
 
 		if(deletedCourses.size() > 0){
 			for (CRN_Data x : deletedCourses){

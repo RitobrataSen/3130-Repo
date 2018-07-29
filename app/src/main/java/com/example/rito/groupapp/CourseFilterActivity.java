@@ -75,8 +75,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	private boolean displaySelection = false;
 
-	private String student = "Student2";
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -89,30 +87,24 @@ public class CourseFilterActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
-				Log.d("debug.print", "CFA, MENU CourseFilterActivity:");
 				startActivity(new Intent(CourseFilterActivity.this, CourseFilterActivity.class));
 				return true;
 
 			case R.id.go_to_calender:
-				Log.d("debug.print", "CFA, MENU CalendarView:");
 				startActivity(new Intent(CourseFilterActivity.this, CalendarView.class));
 				return true;
 
 			case R.id.go_to_add_crn:
-				Log.d("debug.print", "CFA, MENU CourseRegistration:");
 				startActivity(new Intent(CourseFilterActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
-				Log.d("debug.print", "CFA, MENU MyCoursesActivity:");
 				startActivity(new Intent(CourseFilterActivity.this, MyCoursesActivity.class));
 				return true;
 			case R.id.view_user_information:
-				Log.d("debug.print","CFA, MENU View_Information");
 				startActivity(new Intent(CourseFilterActivity.this, View_UserInformation.class));
 				return true;
 			case R.id.log_out:
-				Log.d("debug.print", "CFA, MENU Logout_Activity:");
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
 				return true;
 		}
@@ -163,7 +155,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 						toast.show();
 
 					} else {
-						Log.d("debug.print", "DONE");
 						t = "Register Classes";
 						m = "Do you want register for all selected classes identified by " +
 								"their CRNs?";
@@ -181,10 +172,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_filter);
+
+		Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
+		Log.d("debug.print","onCreate CourseFilterActivity");
+
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 		Toolbar hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
@@ -250,18 +243,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 		}
 	}
 
-	public void addCRNs(){
-
-	}
-
 	public void populateCurrentSelection(int type){
 		//0 = view crn
 		//1 = view selected crn
 		filterCRN = null;
-		Log.d("debug.print", "selected CORE" + selectedCoreCourses.toString());
-		Log.d("debug.print", "selected SUPPLEMENT" + selectedSupplementCourses.toString());
-		Log.d("debug.print", "view CORE" + viewCoreCourses.toString());
-		Log.d("debug.print", "view SUPPLEMENT" + viewSupplementCourses.toString());
 
 		lv = findViewById(R.id.listView);
 
@@ -364,7 +349,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 						tv = hmap.get("line" + (i + 1));
 						tv.append(ss);
 						tv.append(v);
-						Log.d("debug.print", t + " " + v + " " + "line" + i);
 					}
 
 
@@ -691,12 +675,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 				TextView row = (TextView)view.findViewById(android.R.id.text1);
 				row.setText(coursetype.toString());
 
-				Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
 				boolean cc = false;
 
 				for (CRN_Data x : selectedCoreCourses) {
-					Log.d("debug.print", String.format("%s %s", x.isCore(), x.toString()));
-					Log.d("debug.print", String.format("%s %s", coursetype.getCore(), coursetype.getDescrip()));
 
 					if(
 							x.getTerm_Code().equals(coursetype.getTerm_Code())
@@ -829,6 +810,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 									if (!(dataSnapshot.hasChild("registration")) ||
 											!(dataSnapshot.child("registration").hasChild(crn_data.getCrn()))) {
 
+										//save data
+										db.addRemoveCourse(
+												crn_data.getCrn(),
+												MainActivity.currentUser.getUsername(),
+												true);
 
 										//append Processed_CRN object
 										pcd.setCrn(crn_data.getCrn());
@@ -970,23 +956,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 		viewCoreCourses = new ArrayList<>();
 		viewSupplementCourses = new ArrayList<>();
 
-		Log.d("debug.print", String.format("%s\n%s\n%s\n%s\n%s\n%s\n",
-				coursetype.getCore(),
-				coursetype.getDescrip(),
-				coursetype.getTerm_Code(),
-				coursetype.getSubject_Code(),
-				coursetype.getCourse_Code(),
-				coursetype.getKeys()
-		));
-
 		for (String k : coursetype.getKeys()){
 			Database dbCRN = new Database("CRN_DATA/" + k);
 			dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 					CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
-					Log.d("debug.print", crn_data.toString());
-					Log.d("debug.print", "days: " + crn_data.getDays().toString());
 
 					if (filterCourseType.getCore()){
 						viewCoreCourses.add(crn_data);

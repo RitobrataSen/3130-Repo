@@ -52,7 +52,7 @@ public class CalendarViewTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("My Calendar")).perform(click());
 
-        //click last term
+        //click last term and view calendar
         Thread.sleep(1000);
         onData(anything()).inAdapterView(withId(R.id.listView)).atPosition(3).perform(click());
         Thread.sleep(1000);

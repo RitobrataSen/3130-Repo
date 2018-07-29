@@ -143,6 +143,8 @@ public class CalendarView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
+
+		Log.d("debug.print","onCreate CalendarView");
 		lv = findViewById(R.id.listView);
 		cal = findViewById(R.id.hsv);
 
@@ -288,12 +290,8 @@ public class CalendarView extends AppCompatActivity {
 					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 						if (dataSnapshot.exists()) {
 							CRN_Data curr = (CRN_Data) dataSnapshot.getValue(CRN_Data.class);
-							Log.d("debug.print",
-									"CUR: " + curr.getTerm_Code() +
-											" FT: " + filterTerm.getTerm_code());
 
 							if (curr.getTerm_Code().equals(filterTerm.getTerm_code())){
-								Log.d("debug.print","equal");
 								appendCRN_Data(curr);
 								populateTextViewLists();
 								populateCalendar();

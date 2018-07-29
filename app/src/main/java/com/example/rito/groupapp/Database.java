@@ -75,45 +75,65 @@ public class Database extends Application {
 	public void addRemoveCourse(String crn, String username, boolean val){
 		DatabaseReference ref;
 
-		//remove from: COURSE_ENROLLMENT/<crn>/ENROLLMENT/<username> = null
+		//set: CRN_DATA/<crn>/enrollment/<username> = null
 		String pathEnrollment = String.format(
-				"COURSE_ENROLLMENT/%s/ENROLLMENT/%s", crn, username);
+				"CRN_DATA/%s/enrollment/%s", crn, username);
 
 		ref = this.db.getReference(pathEnrollment);
 		ref.setValue(val ? val : null);
 
-		//remove from: STUDENT/<username>/registration/<crn> = null
+		//set: STUDENT/<username>/registration/<crn> = null
 		String pathRegistration = String.format(
 				"STUDENT/%s/registration/%s", username, crn);
 
 		ref = this.db.getReference(pathRegistration);
 		ref.setValue(val ? val : null);
 
-
-		//decrement curr by 1: COURSE_ENROLLMENT/<crn>/curr/<> = null
-		//***NOTE curr field is not necessary as we can just get a
-		// child count of ENROLLMENT HashMap
+		//refresh the currentUser variable
+		updateCurrentUser(username);
 
 	}
 	public void addUser(String email, String username, String password){
-		int result = -1;
-
+		boolean verify = false;
 		DatabaseReference ref;
-
-		//check if username exists
-		String pathUsername = String.format(
-				"STUDENT/%s", username);
-
-		Log.d("debug.print", "UPE: " +
-				username + "," + password + "," + email);
+		String pathUsername;
 
 		HashMap<String, Boolean> hm = new HashMap<>();
 		User user = new User(email, username, password, hm);
-		ref = this.db.getReference(pathUsername);
-		ref.setValue(user);
 
-		updateCurrentUser(username);
+		verify = verifyUser(user);
+		if (verify){
+			pathUsername = user.createPath();
+			ref = this.db.getReference(pathUsername);
+			ref.setValue(user);
+			updateCurrentUser(username);
+		} else {
+			Log.d("debug.print", "null email, username, and or password");
+			Log.d("debug.print", "NEW USER: " + user.toString());
+			Log.d("debug.print", String.format("VERIFY: %s", verify));
+		}
+
 	}
+
+	public void updateUser(User oldusr, User newusr){
+
+		boolean verify = verifyUser(newusr);
+		if (verify && oldusr.compareRegistration(newusr)){
+			DatabaseReference refOld = this.db.getReference(oldusr.createPath());
+			refOld.setValue(null);
+			DatabaseReference refNew = this.db.getReference(newusr.createPath());
+			refNew.setValue(newusr);
+			updateCurrentUser(newusr.getUsername());
+		} else {
+			Log.d("debug.print", "null email, username, and or password");
+			Log.d("debug.print", "NEW USER: " + newusr.toString());
+			Log.d("debug.print", "OLD USER: " + oldusr.toString());
+			Log.d("debug.print", String.format("COMPARE REGISTRATION: %s", oldusr
+					.compareRegistration(newusr)));
+			Log.d("debug.print", String.format("VERIFY: %s", verify));
+		}
+	}
+
 	public void updateCurrentUser(String username){
 		//refresh the currentUser variable
 		DatabaseReference ref = this.db.getReference("STUDENT/" + username);
@@ -130,18 +150,14 @@ public class Database extends Application {
 			}
 		});
 	}
-	public void updateUser(User oldusr, User newusr){
-		DatabaseReference refOld = this.db.getReference(oldusr.createPath());
-		refOld.setValue(null);
-		DatabaseReference refNew = this.db.getReference(newusr.createPath());
-		refNew.setValue(newusr);
-		MainActivity.currentUser = newusr;
-	}
 
-	public void readData(){
-		System.out.println("READDATA METHOD");
-		System.out.println(this.dbRef.toString());//.child("TERMS").toString());
-		System.out.println("READDATA SUCCESS");
+	public boolean verifyUser(User user) {
+		return (!((user.getEmail() == null) ||
+				(user.getEmail().equals("")) ||
+				(user.getUsername() == null) ||
+				(user.getUsername().equals("")) ||
+				(user.getPassword() == null) ||
+				(user.getPassword().equals(""))
+		));
 	}
-
 }

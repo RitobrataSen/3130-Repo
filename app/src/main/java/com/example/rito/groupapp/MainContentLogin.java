@@ -38,8 +38,12 @@ public class MainContentLogin extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
+
+        Log.d("debug.print","onCreate MainContentLogin");
+
         loginButton = findViewById(R.id.login_submit_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -51,13 +55,11 @@ public class MainContentLogin extends AppCompatActivity {
 
 				Database db = new Database("STUDENT");
 				final DatabaseReference ref = db.getDbRef();
-                Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
 
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 						boolean emailExists = false;
-                        Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
 
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {

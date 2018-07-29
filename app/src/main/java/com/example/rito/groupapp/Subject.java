@@ -47,10 +47,6 @@ public class Subject implements Serializable {
 		this.term_code = term_code;
 	}
 
-	public String generatePath(){
-		return String.format("SUBJECTS/%s/%s", this.term_code, this.subject_code);
-	}
-
 	public boolean equals(Subject s){
 		if (s == null){
 			return false;
