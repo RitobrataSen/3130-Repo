@@ -829,6 +829,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 									if (!(dataSnapshot.hasChild("registration")) ||
 											!(dataSnapshot.child("registration").hasChild(crn_data.getCrn()))) {
 
+										//save data
+										db.addRemoveCourse(
+												crn_data.getCrn(),
+												MainActivity.currentUser.getUsername(),
+												true);
 
 										//append Processed_CRN object
 										pcd.setCrn(crn_data.getCrn());

@@ -42,7 +42,7 @@ public class CalendarViewTest {
     public void calendarViewTest() throws InterruptedException {
         //login to app
         onView(withId(R.id.login_button)).perform(click());
-        onView(withId(R.id.user_number)).perform(typeText("ea2"));
+        onView(withId(R.id.user_email)).perform(typeText("ea2"));
         onView(withId(R.id.user_pw)).perform(typeText("pw2"));
         onView(withId(R.id.login_submit_button)).check(matches(isClickable()));
         onView(withId(R.id.login_submit_button)).perform(click());
@@ -52,7 +52,7 @@ public class CalendarViewTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("My Calendar")).perform(click());
 
-        //click last term
+        //click last term and view calendar
         Thread.sleep(1000);
         onData(anything()).inAdapterView(withId(R.id.listView)).atPosition(3).perform(click());
         Thread.sleep(1000);
