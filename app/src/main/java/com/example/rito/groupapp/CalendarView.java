@@ -385,7 +385,7 @@ public class CalendarView extends AppCompatActivity {
             if(selected.get(i).getText().length() == 0) {
                 selected.get(i).setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
-                selected.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+                selected.get(i).setBackgroundResource(R.drawable.cell_shape_event);
                 selected.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -485,7 +485,7 @@ public class CalendarView extends AppCompatActivity {
         textview.setHeight(height);
         textview.setPadding(10,10,10,10);
         textview.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
-        textview.setBackgroundResource(R.drawable.cell_shape_event);
+        textview.setBackgroundResource(R.drawable.cell_shape_no_event);
         textview.setVisibility(View.VISIBLE);
         newTableRow.addView(textview);
         monday.add(textview);
@@ -496,7 +496,7 @@ public class CalendarView extends AppCompatActivity {
         textview1.setHeight(height);
         textview1.setPadding(10,10,10,10);
         textview1.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
-        textview1.setBackgroundResource(R.drawable.cell_shape_event);
+        textview1.setBackgroundResource(R.drawable.cell_shape_no_event);
         textview1.setVisibility(View.VISIBLE);
         newTableRow.addView(textview1);
         tuesday.add(textview1);
@@ -507,7 +507,7 @@ public class CalendarView extends AppCompatActivity {
         textview2.setHeight(height);
         textview2.setPadding(10,10,10,10);
         textview2.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
-        textview2.setBackgroundResource(R.drawable.cell_shape_event);
+        textview2.setBackgroundResource(R.drawable.cell_shape_no_event);
         textview2.setVisibility(View.VISIBLE);
         newTableRow.addView(textview2);
         wednesday.add(textview2);
@@ -518,7 +518,7 @@ public class CalendarView extends AppCompatActivity {
         textview3.setPadding(10,10,10,10);
         textview3.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview3.setText("");
-        textview3.setBackgroundResource(R.drawable.cell_shape_event);
+        textview3.setBackgroundResource(R.drawable.cell_shape_no_event);
         textview3.setVisibility(View.VISIBLE);
         newTableRow.addView(textview3);
         thursday.add(textview3);
@@ -529,7 +529,7 @@ public class CalendarView extends AppCompatActivity {
         textview4.setPadding(10,10,10,10);
         textview4.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview4.setText("");
-        textview4.setBackgroundResource(R.drawable.cell_shape_event);
+        textview4.setBackgroundResource(R.drawable.cell_shape_no_event);
         textview4.setVisibility(View.VISIBLE);
         newTableRow.addView(textview4);
         friday.add(textview4);
@@ -563,7 +563,7 @@ public class CalendarView extends AppCompatActivity {
         thursday.clear();
         friday.clear();
 
-        monday.add((TextView) findViewById(R.id.m_body));
+        monday.add((TextView)findViewById(R.id.m_body));
         monday.add((TextView)findViewById(R.id.m1_body));
         monday.add((TextView)findViewById(R.id.m2_body));
         monday.add((TextView)findViewById(R.id.m3_body));
@@ -612,7 +612,19 @@ public class CalendarView extends AppCompatActivity {
         friday.get(1).setText("");
         friday.get(2).setText("");
         friday.get(3).setText("");
-    }
+
+        int i = 0;
+        for (TextView t : monday){
+			monday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+			tuesday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+			wednesday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+			thursday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+			friday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+			i++;
+		}
+
+
+	}
 
     public int getCourseListSize(){
         return courseListSize;

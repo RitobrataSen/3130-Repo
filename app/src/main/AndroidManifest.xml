@@ -24,8 +24,8 @@
             android:label="Login"></activity>
         <activity
             android:name=".View_UserInformation"
-            android:parentActivityName=".MainContentLogin">
-
+            android:parentActivityName=".MainContentLogin"
+            android:label="@string/to_view_info">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
