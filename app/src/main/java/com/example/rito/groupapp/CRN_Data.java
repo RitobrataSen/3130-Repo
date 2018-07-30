@@ -295,13 +295,23 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 	 */
 
 	public int compareTo(CRN_Data other){
+
+		if  (this.equals(other)){
+			return 0;
+		} else if (this.start_time.equals(other.getStart_Time())){
+			return this.getEnd_Time().compareTo(other.getEnd_Time());
+		}
+
+
 		if(this.getStart_Time() == null){
 			return -1;
 		}
 		if(other.getStart_Time() == null){
 			return 1;
 		}
-		return this.getStart_Time().compareTo(other.getStart_Time());
+		return this.getStart_Time().compareTo(other.getStart_Time()) == 0 ?
+				this.getEnd_Time().compareTo(other.getEnd_Time()):
+				this.getStart_Time().compareTo(other.getStart_Time());
 	}
 
 }
