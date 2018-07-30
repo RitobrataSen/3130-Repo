@@ -483,7 +483,7 @@ public class CalendarView extends AppCompatActivity {
         textview.setText("");
         textview.setWidth(width);
         textview.setHeight(height);
-        textview.setPadding(5,5,5,5);
+        textview.setPadding(10,10,10,10);
         textview.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview.setBackgroundResource(R.drawable.cell_shape_event);
         textview.setVisibility(View.VISIBLE);
@@ -494,7 +494,7 @@ public class CalendarView extends AppCompatActivity {
         textview1.setText("");
         textview1.setWidth(width);
         textview1.setHeight(height);
-        textview1.setPadding(5,5,5,5);
+        textview1.setPadding(10,10,10,10);
         textview1.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview1.setBackgroundResource(R.drawable.cell_shape_event);
         textview1.setVisibility(View.VISIBLE);
@@ -505,7 +505,7 @@ public class CalendarView extends AppCompatActivity {
         textview2.setText("");
         textview2.setWidth(width);
         textview2.setHeight(height);
-        textview2.setPadding(5,5,5,5);
+        textview2.setPadding(10,10,10,10);
         textview2.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview2.setBackgroundResource(R.drawable.cell_shape_event);
         textview2.setVisibility(View.VISIBLE);
@@ -515,7 +515,7 @@ public class CalendarView extends AppCompatActivity {
         TextView textview3 = new TextView(this);
         textview3.setWidth(width);
         textview3.setHeight(height);
-        textview3.setPadding(5,5,5,5);
+        textview3.setPadding(10,10,10,10);
         textview3.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview3.setText("");
         textview3.setBackgroundResource(R.drawable.cell_shape_event);
@@ -526,7 +526,7 @@ public class CalendarView extends AppCompatActivity {
         TextView textview4 = new TextView(this);
         textview4.setWidth(width);
         textview4.setHeight(height);
-        textview4.setPadding(5,5,5,5);
+        textview4.setPadding(10,10,10,10);
         textview4.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview4.setText("");
         textview4.setBackgroundResource(R.drawable.cell_shape_event);

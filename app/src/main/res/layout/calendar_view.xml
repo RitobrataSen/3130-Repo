@@ -62,10 +62,10 @@
 
                     <TextView
                         android:id="@+id/monday"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell_shape_title"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:textStyle="bold"
                         android:text="Monday"
                         android:textColor="@color/cellTitleColour"
@@ -73,10 +73,10 @@
 
                     <TextView
                         android:id="@+id/tuesday"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell_shape_title"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:textStyle="bold"
                         android:text="Tuesday"
                         android:textColor="@color/cellTitleColour"
@@ -84,10 +84,10 @@
 
                     <TextView
                         android:id="@+id/wednesday"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell_shape_title"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:textStyle="bold"
                         android:text="Wednesday"
                         android:textColor="@color/cellTitleColour"
@@ -95,10 +95,10 @@
 
                     <TextView
                         android:id="@+id/thursday"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell_shape_title"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:textStyle="bold"
                         android:text="Thursday"
                         android:textColor="@color/cellTitleColour"
@@ -106,10 +106,10 @@
 
                     <TextView
                         android:id="@+id/friday"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/cell_shape_title"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:textStyle="bold"
                         android:text="Friday"
                         android:textColor="@color/cellTitleColour"
@@ -124,47 +124,47 @@
 
                     <TextView
                         android:id="@+id/m_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
                     <TextView
                         android:id="@+id/t_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/w_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/r_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/f_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </TableRow>
@@ -177,47 +177,47 @@
 
                     <TextView
                         android:id="@+id/m1_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
                     <TextView
                         android:id="@+id/t1_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/w1_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/r1_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/f1_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </TableRow>
@@ -230,47 +230,47 @@
 
                     <TextView
                         android:id="@+id/m2_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
                     <TextView
                         android:id="@+id/t2_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/w2_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/r2_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/f2_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </TableRow>
@@ -285,44 +285,44 @@
                         android:layout_width="100dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
                     <TextView
                         android:id="@+id/t3_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/w3_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/r3_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/f3_body"
-                        android:layout_width="110dp"
+                        android:layout_width="140dp"
                         android:layout_height="115dp"
                         android:background="@drawable/cell_shape_event"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </TableRow>
