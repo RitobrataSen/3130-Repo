@@ -23,8 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
-import com.example.rito.groupapp.old.CRN;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,7 +38,6 @@ import java.util.ArrayList;
  * @since    2018-07-08
  */
 public class MyCoursesActivity extends AppCompatActivity {
-	//MyCoursesActivity
 	private ListView lv;
 	private ArrayList<CRN_Data> registeredCourses = new ArrayList<>();
 	private ArrayList<CRN_Data> deletedCourses = new ArrayList<>();
@@ -57,9 +54,9 @@ public class MyCoursesActivity extends AppCompatActivity {
 		return true;
 	}
 
-	//refactor toolbar for i3
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		//main navigation menu
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
 				startActivity(new Intent(MyCoursesActivity.this, CourseFilterActivity.class));
@@ -87,6 +84,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	//in activity navigation
 	private BottomNavigationView
 			.OnNavigationItemSelectedListener
 			mOnNavigationItemSelectedListener =
@@ -109,11 +107,8 @@ public class MyCoursesActivity extends AppCompatActivity {
 							option = 0;
 							popupMsg(title, msg, option);
 							return true;
-
 					}
-
 					return false;
-
 				}
 			};
 
@@ -122,18 +117,15 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_courses);
-
 		Log.d("debug.print","onCreate MyCoursesActivity");
-
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(hdrToolBar);
-
 		populateTerm();
 	}
 
+	//populate a list of terms
 	public void populateTerm() {
 		currentTerm = null;
 		registeredCourses.clear();
@@ -163,19 +155,16 @@ public class MyCoursesActivity extends AppCompatActivity {
 		});
 	}
 
+	//activity specific popup messages
 	public void popupMsg(String t, String m, int o){
 
 		// custom dialog
 		final Dialog dialog = new Dialog(context);
-
 		dialog.setContentView(R.layout.item_popup_msg);
-
 		TextView title = (TextView) dialog.findViewById(R.id.title);
 		TextView line1 = (TextView) dialog.findViewById(R.id.line1);
-
 		title.setText(t);
 		line1.setText(m);
-
 		Button popUpMsgButtonCancel = (Button) dialog.findViewById(R.id.popUpMsgButtonCancel);
 		popUpMsgButtonCancel.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -183,7 +172,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 				dialog.dismiss();
 			}
 		});
-
 		Button popUpMsgButtonOK = (Button) dialog.findViewById(R.id.popUpMsgButtonOK);
 
 		switch(o){
@@ -212,15 +200,13 @@ public class MyCoursesActivity extends AppCompatActivity {
 		dialog.show();
 	}
 
+	//populate a listed of registered courses for the selected term
 	public void populateRegisteredCourses(){
 
 		Database db = new Database("STUDENT/" + username);
 		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
-				CharSequence text;
-				Context context = getApplicationContext();
-				int duration = Toast.LENGTH_LONG;
 
 				if (dataSnapshot.child("registration").exists()){
 					User std = dataSnapshot.getValue(User.class);
@@ -267,7 +253,6 @@ public class MyCoursesActivity extends AppCompatActivity {
 				} else {
 					populateCurrentSelection();
 				}
-
 			}
 
 			@Override
@@ -277,14 +262,10 @@ public class MyCoursesActivity extends AppCompatActivity {
 		});
 	}
 
-	public void populateCurrentSelection(){
-		CharSequence text;
-		Context context = getApplicationContext();
-		int duration = Toast.LENGTH_LONG;
 
+	public void populateCurrentSelection(){
 
 		lv = findViewById(R.id.listView);
-
 		lv.setAdapter(new ArrayAdapter<CRN_Data>(
 				this, R.layout.item_registration , registeredCourses){
 
@@ -344,6 +325,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 	}
 
+	//used to deregister all selected courses
 	public void deregisterCourses(){
 
 		if(deletedCourses.size() > 0){

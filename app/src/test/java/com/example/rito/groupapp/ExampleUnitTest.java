@@ -25,7 +25,6 @@ public class ExampleUnitTest {
         c++;
     }
 
-
     @AfterClass
     public static void run_once() {
         System.out.println(c + "/4 passed");

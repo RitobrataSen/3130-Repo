@@ -34,7 +34,6 @@ public class Database extends Application {
 
 	//constructors
 	public Database(){
-
 		FirebaseDatabase fb;
 		fb = FirebaseDatabase.getInstance();
 		this.db = fb;
@@ -44,14 +43,12 @@ public class Database extends Application {
 
 	}
 	public Database(String refPath){
-
 		FirebaseDatabase fb;
 		fb = FirebaseDatabase.getInstance();
 		this.db = fb;
 		DatabaseReference ref;
 		ref = fb.getReference(refPath);
 		this.dbRef = ref;
-
 	}
 
 	public FirebaseDatabase getDb() {
@@ -112,7 +109,6 @@ public class Database extends Application {
 			Log.d("debug.print", "NEW USER: " + user.toString());
 			Log.d("debug.print", String.format("VERIFY: %s", verify));
 		}
-
 	}
 
 	public void updateUser(User oldusr, User newusr){
@@ -146,7 +142,6 @@ public class Database extends Application {
 
 			@Override
 			public void onCancelled(DatabaseError databaseError) {
-
 			}
 		});
 	}

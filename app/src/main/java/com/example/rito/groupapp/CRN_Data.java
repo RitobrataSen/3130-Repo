@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @since    2018-07-08
  */
 
-@IgnoreExtraProperties //only maps fields during serialization
+@IgnoreExtraProperties
 public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 
 	private String crn;
@@ -140,6 +140,7 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 		this.subject_code = subject_code;
 	}
 
+	@Exclude
 	public HashMap<String, Object> toMap() {
 		HashMap<String, Object> result = new HashMap<>();
 		result.put("crn", this.crn);
@@ -175,6 +176,7 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 		return false;
 	}
 
+	//returns true if this course is a core (not a lab or tut)
 	public boolean isCore(){
 		return (!(
 				this.section_type.equalsIgnoreCase("lab") ||
@@ -182,22 +184,18 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 		));
 	}
 
-	public long getCur(){
-		long cur = this.enrollment != null ? this.enrollment.size() : 0;
-		return cur;
+	//returns current number of users registered for this course
+	public long countCur(){
+		return (this.enrollment != null ? this.enrollment.size() : 0);
 	}
 
 	@Override
 	public String toString(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
 		return String.format("<%s-%s-%s-%s>", this.crn, this.term_code, this.course_code, this.section_type);
-		//return this.crn;
 	}
 
 	public String toString_CFA_Basic(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
 		String str;
-
 		String [] arr = {
 				this.days.get("mon") ? "M" : "",
 				this.days.get("tue") ? "T" : "",
@@ -219,13 +217,11 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 				this.course_name, this.course_code,
 				this.start_time, this.end_time,
 				days)
-
 		;
 		return str;
 	}
 
 	public String toString_CFA_Full(){
-		//return String.format("(TermCode: %s, TermDescription: %s)", term_code, term_description);
 		String str;
 
 		String [] arr = {
@@ -258,9 +254,7 @@ public class CRN_Data implements Serializable, Comparable<CRN_Data> {
 						"Consult Department" : days,
 				curr, this.max,
 				this.location,
-				this.instructor)
-
-				;
+				this.instructor);
 		return str;
 	}
 

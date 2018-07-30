@@ -4,10 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
@@ -26,7 +23,6 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     //fields
-    //private String uid;
     private String email;
     private String username;
     private String password;
@@ -34,7 +30,7 @@ public class User implements Serializable {
 
     //constructors
     public User() {
-        this.registration = new HashMap<String, Boolean>();
+        this.registration = new HashMap<>();
     }
 
     public User(String email, String username,
@@ -78,22 +74,16 @@ public class User implements Serializable {
         this.registration.putAll(registration);
     }
 
-    public void updateCurrentUser(User u){
-        MainActivity.currentUser = u;
-    }
-
     public String toString(){
         return String.format("%s %s %s", this.email, this.username, this.password);
     }
+
     public String createPath() {
 		return String.format(String.format("STUDENT/%s", this.username));
 	}
 
     public boolean compareRegistration(User u){
 		//we cant use equals unless we check if it is null first
-		//this
-
-
     	if (this.registration  == u.getRegistration()){
 			// checks if 2 hashmaps are both null or both store the same address
   			return true;
@@ -101,32 +91,12 @@ public class User implements Serializable {
 			//use the equals method to check if both hashmaps are the same
 			return (this.registration.equals(u.getRegistration()));
 		}
-
-
-		/*
-		for (String x : this.registration.keySet()){
-			if (!(u.getRegistration().containsKey(x))){
-				Log.d("debug.print", x + " is in U but not in CURRENTUSER");
-				return false;
-			}
-		}
-
-		for (String x : u.getRegistration().keySet()){
-			if (!((this.registration.containsKey(x)))){
-				Log.d("debug.print", x + " is in CURRENTUSER but not in U");
-				return false;
-			}
-		}
-		*/
-
 	}
 
     public boolean equals(User u){
-
 		if (this.email.equalsIgnoreCase(u.getEmail()) &&
 				this.username.equalsIgnoreCase(u.getUsername()) &&
 				this.password.equals(u.getPassword()) &&
-				//this.registration.equals(u.getRegistration())
 				compareRegistration(u)
 		){
 			Log.d("debug.print", "U = CURRENTUSER");
@@ -135,13 +105,11 @@ public class User implements Serializable {
 
 		Log.d("debug.print", "U != CURRENTUSER");
 		return false;
-
     }
 
     @Exclude
     public HashMap<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        //result.put("uid", this.uid);
         result.put("email", this.email);
         result.put("username", this.username);
         result.put("password", this.password);

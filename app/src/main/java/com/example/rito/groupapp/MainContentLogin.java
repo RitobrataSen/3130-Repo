@@ -12,8 +12,6 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 /**
@@ -32,9 +30,7 @@ public class MainContentLogin extends AppCompatActivity {
     Button loginButton;
     EditText userEmail;
     EditText userPassword;
-    Button Submit;
     User currentUser;
-    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,6 @@ public class MainContentLogin extends AppCompatActivity {
                 userPassword = findViewById(R.id.user_pw);
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
-
 				Database db = new Database("STUDENT");
 				final DatabaseReference ref = db.getDbRef();
 
@@ -73,12 +68,10 @@ public class MainContentLogin extends AppCompatActivity {
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-
                                     ref.removeEventListener(this);
                                     MainActivity.currentUser = currentUser;
 									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
 									return;
-
                                 }
 
                                 else {

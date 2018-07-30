@@ -43,25 +43,6 @@ public class CourseType {
 		}
 	}
 
-	public CourseType(
-			boolean core,
-			String term_code,
-			String subject_code,
-			String course_code,
-			ArrayList<String> keys
-	){
-		this.core = core;
-		this.descrip = core ?
-				"Core classes (lectures, co-op, etc)" :
-				"Supplementary classes (labs, tutorials, etc)";
-
-		this.term_code = term_code;
-		this.subject_code = subject_code;
-		this.course_code = course_code;
-
-		this.keys = keys;
-	}
-
 	public boolean getCore(){
 		return this.core;
 	}
@@ -109,16 +90,7 @@ public class CourseType {
 	public void setKeys(ArrayList<String> keys) {
 		this.keys = keys;
 	}
-/*
-	public void setKeys(HashMap<String, Boolean> keys) {
-		this.keys = new ArrayList<>();
-		if (keys != null) {
-			for(String x : keys.keySet()){
-				this.keys.add(x);
-			}
-		}
-	}
-*/
+
 	public boolean equals(CourseType ct){
 		if (ct == null){
 			return false;

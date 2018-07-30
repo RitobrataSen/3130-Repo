@@ -17,7 +17,6 @@ public class Term implements Serializable {
 	private String term_code;
 	private String term_description;
 
-
 	public Term(){
 	}
 
@@ -26,7 +25,6 @@ public class Term implements Serializable {
 		this.term_description = term_description;
 
 	}
-
 
 	public String getTerm_code(){
 		return this.term_code;
@@ -43,11 +41,6 @@ public class Term implements Serializable {
 	public void setTerm_description(String term_description){
 		this.term_description = term_description;
 	}
-
-	public String generatePath(){
-		return String.format("TERMS/%s", this.term_code);
-	}
-
 
 	public boolean equals(Term t){
 		if (t == null){
@@ -66,12 +59,11 @@ public class Term implements Serializable {
 		return String.format("%s (%s)", term_description, term_code);
 	}
 
-	@Exclude //ignores method from javadocs
+	@Exclude
 	public HashMap<String, Object> toMap() {
 		HashMap<String, Object> result = new HashMap<>();
 		result.put("term_code", this.term_code);
 		result.put("term_description", this.term_description);
-		//result.put("uid", this.uid);
 		return result;
 	}
 

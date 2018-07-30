@@ -1,15 +1,11 @@
 package com.example.rito.groupapp;
 
-import com.example.rito.groupapp.*;
-
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
@@ -20,6 +16,7 @@ import java.util.HashMap;
  * @author  Ritobrata Sen, Yuhao Yu, Gobii Vivagananda
  * @since   06-18-18
  */
+
 public class TermTest {
     private static int testNum=0;
     private Term t1 = new Term();
@@ -30,6 +27,7 @@ public class TermTest {
         Assert.assertTrue(t1.getTerm_code().matches(tc));
         testNum++;
     }
+
     @Test
     public void checkSet_GetTermDescription(){
         String td = "Maths";
@@ -37,6 +35,7 @@ public class TermTest {
         Assert.assertTrue(t1.getTerm_description().matches(td));
         testNum++;
     }
+
     @Test
     public void checkToMap(){
         HashMap<String,Object> hm = new HashMap<>();
@@ -49,6 +48,7 @@ public class TermTest {
     public void runAfterEach() {
         System.out.println("Test number: "+testNum + " passed");
     }
+
     @AfterClass
     public static void runAfterAll(){
         System.out.print("All " + testNum + " passed");

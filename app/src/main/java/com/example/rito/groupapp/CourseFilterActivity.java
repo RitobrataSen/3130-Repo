@@ -23,18 +23,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
-
-import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,31 +49,22 @@ public class CourseFilterActivity extends AppCompatActivity {
 	private ListView lv;
 	private ArrayList<CRN_Data> selectedCoreCourses = new ArrayList<>();
 	private ArrayList<CRN_Data> selectedSupplementCourses = new ArrayList<>();
-
 	private ArrayList<CRN_Data> viewCoreCourses = new ArrayList<>();
 	private ArrayList<CRN_Data> viewSupplementCourses = new ArrayList<>();
-
 	private ArrayList<ProcessedCRN> processedCRN = new ArrayList<>();
-
-	private TextView mTextMessage;
-
 	private Context context = this;
 	private int duration = Toast.LENGTH_LONG;
 	private String text = "";
-
-
 	private int filterState = 0;
 	private Term filterTerm = null;
 	private Subject filterSubject = null;
 	private Course filterCourse = null;
 	private CourseType filterCourseType = null;
 	private CRN_Data filterCRN = null;
-
 	private boolean displaySelection = false;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main, menu);
 		return true;
@@ -85,6 +72,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		//main navigation menu
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
 				startActivity(new Intent(CourseFilterActivity.this, CourseFilterActivity.class));
@@ -112,6 +100,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	//in activity navigation
 	private BottomNavigationView
 				.OnNavigationItemSelectedListener
 				mOnNavigationItemSelectedListener =
@@ -147,7 +136,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 					return true;
 
 				case R.id.navigation_done:
-					//getPreviousState();
 					if (selectedCoreCourses.size() == 0 && selectedSupplementCourses.size() == 0){
 						text = "You have not selected any courses. Please select at least 1 " +
 								"course to register, and try again.";
@@ -184,7 +172,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 		setSupportActionBar(hdrToolBar);
 
 		Intent intent = getIntent();
-		//selectedCourses = new ArrayList<>();
 		populateTerm();
 
 	}
@@ -249,7 +236,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 		filterCRN = null;
 
 		lv = findViewById(R.id.listView);
-
 		ArrayList<CRN_Data> selectedCRN;
 
 		//get arraylist
@@ -318,7 +304,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 					// custom dialog
 					final Dialog dialog = new Dialog(context);
 					dialog.setContentView(R.layout.item_crn_selection_full);
-					//dialog.setTitle("Title...");
 
 					// set the custom dialog components - text, image and button
 					String []  arr = crn_data.getToStringArray(1);
@@ -351,28 +336,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 						tv.append(v);
 					}
 
-
-					/*
-					TextView line1 = (TextView) dialog.findViewById(R.id.line1);
-					TextView line2 = (TextView) dialog.findViewById(R.id.line2);
-					TextView line3 = (TextView) dialog.findViewById(R.id.line3);
-					TextView line4 = (TextView) dialog.findViewById(R.id.line4);
-					TextView line5 = (TextView) dialog.findViewById(R.id.line5);
-					TextView line6 = (TextView) dialog.findViewById(R.id.line6);
-					TextView line7 = (TextView) dialog.findViewById(R.id.line7);
-					TextView line8 = (TextView) dialog.findViewById(R.id.line8);
-
-					line1.setText(arr[0]);
-					line2.setText(arr[1]);
-					line3.setText(arr[2]);
-					line4.setText(arr[3]);
-					line5.setText(arr[4]);
-					line6.setText(arr[5]);
-					line7.setText(arr[6]);
-					line8.setText(arr[7]);
-					*/
-
-
 					Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 					// if button is clicked, close the custom dialog
 					dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
@@ -388,8 +351,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 						@Override
 						public void onClick(View v) {
 							boolean sel = markSelection();
-							//view.setBackgroundResource(R.color.transparent);
-							//view.setBackgroundResource(R.color.colorSelected);
 							dialog.dismiss();
 							populateCurrentSelection(0);
 						}
@@ -444,12 +405,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 				}
 			});
 			lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-
 		}
-
-
 	}
 
+	//used to populate a list of terms from firebase
 	public void populateTerm() {
 		filterState = 0;
 		filterTerm = null;
@@ -503,6 +462,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 		});
 	}
 
+	//used to populate a list of subjects from firebase
 	public void populateSubject(Term term){
 		filterState = 1;
 		filterTerm = term;
@@ -563,6 +523,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 		});
 	}
 
+	//used to populate a list of courses from firebase
 	public void populateCourse(Subject subject){// params: listview reference, selected object
 		filterState = 2;
 		//filterTerm = null;
@@ -577,7 +538,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 				"/" +  subject.getSubject_code());
 		lv = findViewById(R.id.listView);
 		firebaseAdapter = new FirebaseListAdapter<Course>(this, Course.class,
-
 				R.layout.item_course_selection, db.getDbRef()) {
 
 			@Override
@@ -641,10 +601,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
-	public void populateCourseType(Course course) {// params: listview reference,
+	//used to populate a list of course types (sore and supplement)
+	public void populateCourseType(Course course) {
 		filterState = 3;
-		//filterTerm = null;
-		//filterSubject = null;
+
 		filterCourse = course;
 		filterCourseType = null;
 		filterCRN = null;
@@ -724,6 +684,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
+	//displays a list of all processed crns when selected courses have been added (or omitted)
 	public void displayProcessedCRN(){
 		lv = findViewById(R.id.listView);
 		lv.setAdapter(new ArrayAdapter<ProcessedCRN>(
@@ -750,8 +711,6 @@ public class CourseFilterActivity extends AppCompatActivity {
 					row3.setImageDrawable(getResources().getDrawable(R.drawable.ic_fail_red_24dp,
 							getApplicationContext().getTheme()));
 				}
-
-
 				return view;
 			}
 		});
@@ -775,7 +734,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
-
+	//used to add all courses in currently selected
 	public void addSelection(){
 		filterState = 5;
 
@@ -798,7 +757,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 					if (dataSnapshot.exists()) {
 						final CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
 						long max = Integer.parseInt(crn_data.getMax());
-						long cur = crn_data.getCur();
+						long cur = crn_data.countCur();
 						//Checking the number of student that enrolled in this course is full or not
 						if (max > cur) {
 							DatabaseReference ref;
@@ -881,21 +840,16 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
+	//activity specific popup messages
 	public void popupMsg(String t, String m, int o){
 
 		// custom dialog
 		final Dialog dialog = new Dialog(context);
 		dialog.setContentView(R.layout.item_popup_msg);
-
-
-
-
 		TextView title = (TextView) dialog.findViewById(R.id.title);
 		TextView line1 = (TextView) dialog.findViewById(R.id.line1);
-
 		title.setText(t);
 		line1.setText(m);
-
 		Button popUpMsgButtonCancel = (Button) dialog.findViewById(R.id.popUpMsgButtonCancel);
 		popUpMsgButtonCancel.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -903,9 +857,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 				dialog.dismiss();
 			}
 		});
-
 		Button popUpMsgButtonOK = (Button) dialog.findViewById(R.id.popUpMsgButtonOK);
-
 
 		switch(o){
 			case 0:
@@ -938,21 +890,17 @@ public class CourseFilterActivity extends AppCompatActivity {
 						dialog.dismiss();
 					}
 				});
-
 		}
-
 		dialog.show();
 	}
 
+	//used to display a list of all crn for selected criteria from firebase
 	public void populateCRN(CourseType coursetype){// params: listview reference,
 
 		filterState = 4;
-
 		filterCourseType = coursetype;
 		filterCRN = null;
-
 		boolean core = coursetype.getCore();
-
 		viewCoreCourses = new ArrayList<>();
 		viewSupplementCourses = new ArrayList<>();
 
@@ -981,7 +929,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 	}
 
-	//public boolean markSelection(boolean add){
+	//used to add/ remove courses from selection
 	public boolean markSelection(){
 		CRN_Data crn = filterCRN;
 		boolean core = filterCourseType.getCore();
@@ -1016,6 +964,8 @@ public class CourseFilterActivity extends AppCompatActivity {
 		return sel;
 	}
 
+	//navigate to a selected crn in the course filter tree when a row is clicked from the
+	// selectiom list
 	public void navigateToSelection(CRN_Data crn_data){
 		filterTerm = null;
 		filterSubject = null;
