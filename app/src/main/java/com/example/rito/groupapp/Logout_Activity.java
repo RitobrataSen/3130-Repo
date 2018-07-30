@@ -16,12 +16,10 @@ import android.widget.Toast;
  */
 public class Logout_Activity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         Log.d("debug.print","onCreate Logout_Activity");
 
         MainActivity.currentUser = null;

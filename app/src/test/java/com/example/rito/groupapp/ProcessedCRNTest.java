@@ -1,4 +1,3 @@
-
 package com.example.rito.groupapp;
 
 import org.junit.After;
@@ -8,8 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.HashMap;
-
 @RunWith(JUnit4.class)
 /**
  * This is a JUnit test for the CRN.Java class. It ensures that all the methods that are going
@@ -18,6 +15,7 @@ import java.util.HashMap;
  * @author    Ritobrata Sen, Yuhao Yu, Gobii Vivagananda
  * @since     07-14-18
  */
+
 public class ProcessedCRNTest {
 	private static int testNum=0;
 	private ProcessedCRN processedcrn = new ProcessedCRN();
@@ -33,8 +31,6 @@ public class ProcessedCRNTest {
 		testNum++;
 	}
 
-
-
 	@Test
 	public void checkSet_GetMsg(){
 
@@ -43,16 +39,12 @@ public class ProcessedCRNTest {
 		testNum++;
 	}
 
-
-
 	@Test
 	public void checkSet_GetCrn(){
 		processedcrn.setCrn(crn);
 		Assert.assertTrue(processedcrn.getCrn().matches(crn));
 		testNum++;
 	}
-
-
 
 	@Test
 	public void checkEquals(){
@@ -63,8 +55,6 @@ public class ProcessedCRNTest {
 		testNum++;
 	}
 
-
-
 	@Test
 	public void checkToString(){
 		processedcrn.setStatus(status);
@@ -73,9 +63,6 @@ public class ProcessedCRNTest {
 		Assert.assertTrue(processedcrn.toString().equals(sNormal));
 		testNum++;
 	}
-
-
-
 
 	@After
 	public void runAfterEach() {

@@ -3,6 +3,7 @@ package com.example.rito.groupapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -10,6 +11,8 @@ import android.support.constraint.ConstraintSet;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,21 +21,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Button;
 
-import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * CalendarView Activity displays all courses that a student is registered for sorted by
@@ -80,6 +81,7 @@ public class CalendarView extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	//main navigation menu
         switch (item.getItemId()) {
             case R.id.go_to_course:
                 startActivity(new Intent(CalendarView.this, CourseFilterActivity.class));
@@ -109,6 +111,7 @@ public class CalendarView extends AppCompatActivity {
 
 	}
 
+	//in activity navigation
 	private BottomNavigationView
 			.OnNavigationItemSelectedListener
 			mOnNavigationItemSelectedListener =
@@ -175,6 +178,7 @@ public class CalendarView extends AppCompatActivity {
 
 	}
 
+	//activity specific popup message
 	public void popupMsg(String t, String m, int o){
 
 		// custom dialog
@@ -221,6 +225,7 @@ public class CalendarView extends AppCompatActivity {
 		dialog.show();
 	}
 
+	//used for in activity navigation
 	public void getPreviousState(){
 		switch (filterState){
 			case 0:
@@ -235,6 +240,7 @@ public class CalendarView extends AppCompatActivity {
 		}
 	}
 
+	//used for in activity navigation
     public void populateTerm() {
 		filterState = 0;
 		filterTerm = null;
@@ -265,6 +271,7 @@ public class CalendarView extends AppCompatActivity {
         });
     }
 
+    //initializes the create calendar process
     public void createCalendar(Term term){
 		filterState = 1;
 		filterTerm = term;
@@ -316,7 +323,7 @@ public class CalendarView extends AppCompatActivity {
 		}
 	}
 
-	//public boolean markSelection(boolean add){
+	//add a specific crn tot he calendar list
 	public void appendCRN_Data(CRN_Data crn){
 		boolean sel = false;
 		ArrayList<CRN_Data> newSelectedCourses = new ArrayList<>();
@@ -338,7 +345,7 @@ public class CalendarView extends AppCompatActivity {
 		}
 	}
 
-
+	//used to populate the calendar
     public void populateCalendar(){
         Collections.sort(calendarCourses);
         for(int i = 0; i < calendarCourses.size(); i++) {
@@ -360,6 +367,8 @@ public class CalendarView extends AppCompatActivity {
         }
     }
 
+
+    //used to display course information
     public void displayCourse(int day, ArrayList<TextView> selected, CRN_Data course){
         for(int i = 0; i < selected.size(); i++) {
             if(i == selected.size()-1){
@@ -392,26 +401,32 @@ public class CalendarView extends AppCompatActivity {
                                         String []  arr = curr.getToStringArray(1);
 
                                         TextView title = (TextView) dialog.findViewById(R.id.title);
+										title.setText("Class Details");
 
-                                        TextView line1 = (TextView) dialog.findViewById(R.id.line1);
-                                        TextView line2 = (TextView) dialog.findViewById(R.id.line2);
-                                        TextView line3 = (TextView) dialog.findViewById(R.id.line3);
-                                        TextView line4 = (TextView) dialog.findViewById(R.id.line4);
-                                        TextView line5 = (TextView) dialog.findViewById(R.id.line5);
-                                        TextView line6 = (TextView) dialog.findViewById(R.id.line6);
-                                        TextView line7 = (TextView) dialog.findViewById(R.id.line7);
-                                        TextView line8 = (TextView) dialog.findViewById(R.id.line8);
-
-                                        title.setText("Class Details");
-
-                                        line1.setText(arr[0]);
-                                        line2.setText(arr[1]);
-                                        line3.setText(arr[2]);
-                                        line4.setText(arr[3]);
-                                        line5.setText(arr[4]);
-                                        line6.setText(arr[5]);
-                                        line7.setText(arr[6]);
-                                        line8.setText(arr[7]);
+										//bold titles
+										SpannableString ss;
+										String t, v;
+										HashMap<String, TextView> hmap = new HashMap<>();
+										hmap.put("line1", (TextView) dialog.findViewById(R.id.line1));
+										hmap.put("line2", (TextView) dialog.findViewById(R.id.line2));
+										hmap.put("line3", (TextView) dialog.findViewById(R.id.line3));
+										hmap.put("line4", (TextView) dialog.findViewById(R.id.line4));
+										hmap.put("line5", (TextView) dialog.findViewById(R.id.line5));
+										hmap.put("line6", (TextView) dialog.findViewById(R.id.line6));
+										hmap.put("line7", (TextView) dialog.findViewById(R.id.line7));
+										hmap.put("line8", (TextView) dialog.findViewById(R.id.line8));
+										String [] s;
+										TextView tv;
+										for (int i = 0; i < arr.length; i++){
+											s = arr[i].split(":");
+											t = s[0] + ":";
+											v = s[1];
+											ss =  new SpannableString(t);
+											ss.setSpan(new StyleSpan(Typeface.BOLD), 0, ss.length(), 0);
+											tv = hmap.get("line" + (i + 1));
+											tv.append(ss);
+											tv.append(v);
+										}
 
                                         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
                                         // if button is clicked, close the custom dialog

@@ -50,17 +50,7 @@ public class Course implements Serializable {
 
 	}
 
-	public Course(String term_code, String subject_code, String course_code) {
-
-		this.course_code = course_code;
-		this.course_name = "";
-		this.subject_code = subject_code;
-		this.term_code = term_code;
-		this.has_supplement = false;
-		this.core = new HashMap<>();
-		this.supplement = new HashMap<>();
-	}
-		//methods
+	//methods
 
 	//getter/ setter methods
 	public String getCourse_code(){
@@ -111,11 +101,6 @@ public class Course implements Serializable {
 		//hash map functions: hashMap.put(k, v) or hashMap.remove(k)
 		this.supplement = new HashMap<>();
 		this.supplement.putAll(supplement);
-	}
-
-	public String generatePath(){
-		return String.format("COURSE/%s/%s/%s",
-				this.term_code, this.subject_code, this.course_code);
 	}
 
 	public boolean equals(Course c){

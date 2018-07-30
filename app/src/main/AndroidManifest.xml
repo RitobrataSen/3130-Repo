@@ -23,7 +23,7 @@
             android:name=".MainContentLogin"
             android:label="Login"></activity>
         <activity
-            android:name=".ViewUser_Information.View_UserInformation"
+            android:name=".View_UserInformation"
             android:parentActivityName=".MainContentLogin">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->

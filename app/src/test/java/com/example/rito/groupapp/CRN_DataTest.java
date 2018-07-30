@@ -198,7 +198,7 @@ public class CRN_DataTest {
 
 	@Test
 	public void checkGetCur(){
-		Assert.assertTrue(crn_data.getCur() >= 0);
+		Assert.assertTrue(crn_data.countCur() >= 0);
 		testNum++;
 	}
 

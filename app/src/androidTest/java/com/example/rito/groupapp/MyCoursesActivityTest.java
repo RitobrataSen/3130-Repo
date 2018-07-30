@@ -3,11 +3,9 @@ package com.example.rito.groupapp;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -20,8 +18,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
 
-//import android.test.suitebuilder.annotation.LargeTest;
-
 /**
  * This classes ensures the functionality of the MyCoursesActivity by ensuring that the list is
  * populated with the classes that the user is registered for.
@@ -33,10 +29,10 @@ import static org.hamcrest.CoreMatchers.anything;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MyCoursesActivityTest {
+
 	@Rule
 	public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 	public Database db = new Database();
-
 
 	@Test
 	public void testCourseFilter() throws InterruptedException {
@@ -46,7 +42,6 @@ public class MyCoursesActivityTest {
 		onView(withId(R.id.user_email)).perform(typeText("ea2"));
 		onView(withId(R.id.user_pw)).perform(typeText("pw2"));
 		onView(withId(R.id.login_submit_button)).perform(click());
-
 
 		//add course to deregister
 		db.addRemoveCourse("31202", "Student2", true);

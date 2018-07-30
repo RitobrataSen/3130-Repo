@@ -10,13 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 //import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.rito.groupapp.ViewUser_Information.View_UserInformation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +37,6 @@ import com.google.firebase.database.ValueEventListener;
  * navigate and view their information.
  */
 
-//change db:    COURSE_ENROLLEMENT to COURSE_ENROLLMENT
 //uses User and Database object
 
 public class CourseRegistration extends AppCompatActivity{
@@ -62,6 +59,7 @@ public class CourseRegistration extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //main navigation menu
         switch (item.getItemId()) {
             case R.id.go_to_course:
                 startActivity(new Intent(CourseRegistration.this, CourseFilterActivity.class));

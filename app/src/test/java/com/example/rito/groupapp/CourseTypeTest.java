@@ -1,16 +1,12 @@
 
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.old.CRN;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @RunWith(JUnit4.class)
 /**
@@ -20,6 +16,7 @@ import java.util.HashMap;
  * @author    Ritobrata Sen, Yuhao Yu, Gobii Vivagananda
  * @since     07-14-18
  */
+
 public class CourseTypeTest {
 	private static int testNum=0;
 	private CourseType coursetype = new CourseType();
@@ -37,16 +34,12 @@ public class CourseTypeTest {
 		testNum++;
 	}
 
-
-
 	@Test
 	public void checkSet_GetDescrip(){
 		coursetype.setDescrip(descrip);
 		Assert.assertTrue(coursetype.getDescrip().matches(descrip));
 		testNum++;
 	}
-
-
 
 	@Test
 	public void checkSet_GetTerm_Code(){

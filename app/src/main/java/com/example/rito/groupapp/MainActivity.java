@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 /**
  * MainActivity is the first activity that the user interacts with. The user
@@ -21,9 +18,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-
     public static User currentUser;
-
     Button loginButton;
     Button registerButton;
 
@@ -40,14 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Log.d("debug.print", "main_activity: Login clicked");
                 startActivity(new Intent(MainActivity.this, MainContentLogin.class));
             }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Log.d("debug.print", "main_activity: register clicked");
                 startActivity(new Intent(MainActivity.this, Registration_Form.class));
             }
         });

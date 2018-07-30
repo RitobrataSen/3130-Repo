@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
@@ -21,9 +20,7 @@ public class UserTest {
 
     private static int testNum=0;
     private HashMap h1 = new HashMap();
-
     private User user1 = new User("Hello@gmail.com","Hello","123",h1);
-
 
         @Test
         public void checkSet_GetEmail(){
@@ -32,6 +29,7 @@ public class UserTest {
             Assert.assertTrue(user1.getEmail().matches(email));
             testNum++;
         }
+
         @Test
         public void checkSet_GetUsername(){
             String username = "Joe";
@@ -39,6 +37,7 @@ public class UserTest {
             Assert.assertTrue(user1.getUsername().matches(username));
             testNum++;
         }
+
         @Test
         public void checkSet_GetPassword(){
             String password = "password1234";
@@ -46,6 +45,7 @@ public class UserTest {
             Assert.assertTrue(user1.getPassword().matches(password));
             testNum++;
         }
+
         @Test
         public void checkSet_GetHashMap(){
             HashMap h2 = new HashMap();
@@ -53,6 +53,7 @@ public class UserTest {
             Assert.assertTrue(user1.getRegistration().equals(h2));
             testNum++;
         }
+
         @Test
         public void checkToMap(){
             HashMap<String,Object> hm = new HashMap<>();
@@ -60,10 +61,12 @@ public class UserTest {
             Assert.assertTrue(hm.equals(user1.toMap()));
             testNum++;
         }
+
         @After
         public void runAfterEach() {
             System.out.println("Test number: "+testNum + " passed");
         }
+
         @AfterClass
         public static void runAfterAll(){
             System.out.print("All " + testNum + " passed");

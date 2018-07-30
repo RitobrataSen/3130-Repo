@@ -1,9 +1,7 @@
-package com.example.rito.groupapp.ViewUser_Information;
-import com.example.rito.groupapp.*;
+package com.example.rito.groupapp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import android.content.Context;
@@ -17,11 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 /**
  * View_UserInformation displays all the current information of the user that is currently logged into the app
  * It also allows the user to update their information
@@ -151,6 +147,10 @@ public class View_UserInformation extends AppCompatActivity {
 									(MainActivity.currentUser.getUsername()))) {
 								if(un.length() != 0){
 									text = "Sorry, username already exists.";
+									Toast toast = Toast.makeText(context, text, duration);
+									toast.show();
+								} else {
+									text = "Sorry, username cannot be empty.";
 									Toast toast = Toast.makeText(context, text, duration);
 									toast.show();
 								}

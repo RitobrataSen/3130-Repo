@@ -5,7 +5,8 @@ package com.example.rito.groupapp;
  * those values.
  * It has 3 main methods:
  *  cloneData()
- *  	this clones all the information of the current CRN and created a new CRN with the exact same i formation
+ *  	this clones all the information of the current CRN and created a new CRN
+ *  	with the exact same i formation
  *  equal()
  *  	checks to see if two CRN's are equal
  *  toString()

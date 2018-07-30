@@ -3,21 +3,15 @@ package com.example.rito.groupapp;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-//import android.test.suitebuilder.annotation.LargeTest;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.*;
-import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.hasEntry;
-
 
 /**
  * This class ensures that the functionality for viewing the courses by terms
@@ -26,7 +20,6 @@ import static org.hamcrest.Matchers.hasEntry;
  * @author Ritobrata Sen, Gobii Vivagananda, Yuhao Hu
  * @DateComplete 10 July 2018
  */
-
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

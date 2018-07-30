@@ -1,6 +1,4 @@
 package com.example.rito.groupapp;
-import com.example.rito.groupapp.*;
-
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
