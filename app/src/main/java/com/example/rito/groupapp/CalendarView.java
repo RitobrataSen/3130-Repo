@@ -144,7 +144,6 @@ public class CalendarView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
 
-		Log.d("debug.print","onCreate CalendarView");
 		lv = findViewById(R.id.listView);
 		cal = findViewById(R.id.hsv);
 
@@ -274,6 +273,7 @@ public class CalendarView extends AppCompatActivity {
 		cal.setVisibility(View.VISIBLE);
 		applyNewConstraints(R.id.hsv);
 
+        courseListSize = 4;
     	populateTextViewLists();
 		calendarCourses.clear();
 
@@ -312,7 +312,7 @@ public class CalendarView extends AppCompatActivity {
 			c.setCourse_Code("User Failed to Login");
 			c.setStart_Time("0:00");
 			c.setEnd_Time("0:00");
-			displayCourse(monday, c);
+			displayCourse(0,monday, c);
 		}
 	}
 
@@ -343,25 +343,28 @@ public class CalendarView extends AppCompatActivity {
         Collections.sort(calendarCourses);
         for(int i = 0; i < calendarCourses.size(); i++) {
             if (calendarCourses.get(i).getDays().get("mon")) {
-                displayCourse(monday, calendarCourses.get(i));
+                displayCourse(0,monday, calendarCourses.get(i));
             }
             if (calendarCourses.get(i).getDays().get("tue")) {
-                displayCourse(tuesday, calendarCourses.get(i));
+                displayCourse(1,tuesday, calendarCourses.get(i));
             }
             if (calendarCourses.get(i).getDays().get("wed")) {
-                displayCourse(wednesday, calendarCourses.get(i));
+                displayCourse(2,wednesday, calendarCourses.get(i));
             }
             if (calendarCourses.get(i).getDays().get("thu")) {
-                displayCourse(thursday, calendarCourses.get(i));
+                displayCourse(3,thursday, calendarCourses.get(i));
             }
             if (calendarCourses.get(i).getDays().get("fri")) {
-                displayCourse(friday, calendarCourses.get(i));
+                displayCourse(4,friday, calendarCourses.get(i));
             }
         }
     }
 
-    public void displayCourse(ArrayList<TextView> selected, CRN_Data course){
-        for(int i = 0; i < courseListSize; i++) {
+    public void displayCourse(int day, ArrayList<TextView> selected, CRN_Data course){
+        for(int i = 0; i < selected.size(); i++) {
+            if(i == selected.size()-1){
+                selected = increaseCalendarSize(day);
+            }
             if(selected.get(i).getText().length() == 0) {
                 selected.get(i).setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
@@ -436,9 +439,6 @@ public class CalendarView extends AppCompatActivity {
                 });
                 break;
             }
-            else if(i-1 == courseListSize){
-                increaseCalendarSize();
-            }
         }
     }
 
@@ -446,54 +446,69 @@ public class CalendarView extends AppCompatActivity {
      * @Author Dryden and Yuhao
      * Fixes a bug that occurs when many courses are added to calendar.
      */
-    public void increaseCalendarSize(){
-        courseListSize++;
+    public ArrayList<TextView> increaseCalendarSize(int day){
 
         TableLayout tl=(TableLayout)findViewById(R.id.table_layout);
         TableRow newTableRow = new TableRow(this);
-        newTableRow.setLayoutParams(new TableLayout.LayoutParams( TableLayout.LayoutParams.FILL_PARENT,TableLayout.LayoutParams.WRAP_CONTENT));
+        newTableRow.setLayoutParams(new TableLayout.LayoutParams( TableLayout.LayoutParams.MATCH_PARENT,TableLayout.LayoutParams.MATCH_PARENT));
 
         TableLayout.LayoutParams lparams = new TableLayout.LayoutParams(
-                TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                110, 115);
 
         TextView textview = new TextView(this);
         textview.setText("");
         textview.setLayoutParams(lparams);
+        textview.setBackgroundResource(R.drawable.cell_shape);
+        textview.setVisibility(View.VISIBLE);
         newTableRow.addView(textview);
         monday.add(textview);
 
         TextView textview1 = new TextView(this);
         textview1.setText("");
         textview1.setLayoutParams(lparams);
+        textview1.setBackgroundResource(R.drawable.cell_shape);
+        textview1.setVisibility(View.VISIBLE);
         newTableRow.addView(textview1);
         tuesday.add(textview1);
 
         TextView textview2 = new TextView(this);
         textview2.setText("");
         textview2.setLayoutParams(lparams);
+        textview2.setBackgroundResource(R.drawable.cell_shape);
+        textview2.setVisibility(View.VISIBLE);
         newTableRow.addView(textview2);
         wednesday.add(textview2);
 
         TextView textview3 = new TextView(this);
-        textview3.setText("");
+        textview3.setText("old");
         textview3.setLayoutParams(lparams);
+        textview3.setBackgroundResource(R.drawable.cell_shape);
+        textview3.setVisibility(View.VISIBLE);
         newTableRow.addView(textview3);
         thursday.add(textview3);
 
         TextView textview4 = new TextView(this);
         textview4.setText("");
         textview4.setLayoutParams(lparams);
+        textview4.setBackgroundResource(R.drawable.cell_shape);
+        textview4.setVisibility(View.VISIBLE);
         newTableRow.addView(textview4);
         friday.add(textview4);
 
-        tl.addView(newTableRow, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        tl.addView(newTableRow);
+        switch (day){
+            case 0: return monday;
+            case 1: return tuesday;
+            case 2: return wednesday;
+            case 3: return thursday;
+            default: return friday;
+        }
 
     }
 
 
     // Method fills list of TextViews and clears all old courses
     public void populateTextViewLists(){
-        courseListSize = 4;
         monday.clear();
         tuesday.clear();
         wednesday.clear();
