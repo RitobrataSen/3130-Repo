@@ -62,6 +62,7 @@ public class CalendarView extends AppCompatActivity {
     public ArrayList<TextView> wednesday = new ArrayList<TextView>();
     public ArrayList<TextView> thursday = new ArrayList<TextView>();
     public ArrayList<TextView> friday = new ArrayList<TextView>();
+    public ArrayList<TableRow> newRows = new ArrayList<TableRow>();
     public ArrayList<CRN_Data> calendarCourses = new ArrayList<CRN_Data>();
     public int counter;
     private Term filterTerm = null;
@@ -462,17 +463,20 @@ public class CalendarView extends AppCompatActivity {
      * Fixes a bug that occurs when many courses are added to calendar.
      */
     public ArrayList<TextView> increaseCalendarSize(int day){
-
-        TableLayout tl=(TableLayout)findViewById(R.id.table_layout);
+        TableLayout tl = (TableLayout)findViewById(R.id.table_layout);
         TableRow newTableRow = new TableRow(this);
         newTableRow.setLayoutParams(new TableLayout.LayoutParams( TableLayout.LayoutParams.MATCH_PARENT,TableLayout.LayoutParams.MATCH_PARENT));
+        TableLayout.LayoutParams lparams = new TableLayout.LayoutParams(110, 115);
 
-        TableLayout.LayoutParams lparams = new TableLayout.LayoutParams(
-                110, 115);
+        int width = monday.get(0).getWidth();
+        int height = monday.get(0).getHeight();
 
         TextView textview = new TextView(this);
         textview.setText("");
-        textview.setLayoutParams(lparams);
+        textview.setWidth(width);
+        textview.setHeight(height);
+        textview.setPadding(5,5,5,5);
+        textview.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview.setBackgroundResource(R.drawable.cell_shape);
         textview.setVisibility(View.VISIBLE);
         newTableRow.addView(textview);
@@ -480,7 +484,10 @@ public class CalendarView extends AppCompatActivity {
 
         TextView textview1 = new TextView(this);
         textview1.setText("");
-        textview1.setLayoutParams(lparams);
+        textview1.setWidth(width);
+        textview1.setHeight(height);
+        textview1.setPadding(5,5,5,5);
+        textview1.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview1.setBackgroundResource(R.drawable.cell_shape);
         textview1.setVisibility(View.VISIBLE);
         newTableRow.addView(textview1);
@@ -488,29 +495,41 @@ public class CalendarView extends AppCompatActivity {
 
         TextView textview2 = new TextView(this);
         textview2.setText("");
-        textview2.setLayoutParams(lparams);
+        textview2.setWidth(width);
+        textview2.setHeight(height);
+        textview2.setPadding(5,5,5,5);
+        textview2.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview2.setBackgroundResource(R.drawable.cell_shape);
         textview2.setVisibility(View.VISIBLE);
         newTableRow.addView(textview2);
         wednesday.add(textview2);
 
         TextView textview3 = new TextView(this);
-        textview3.setText("old");
-        textview3.setLayoutParams(lparams);
+        textview3.setWidth(width);
+        textview3.setHeight(height);
+        textview3.setPadding(5,5,5,5);
+        textview3.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
+        textview3.setText("");
         textview3.setBackgroundResource(R.drawable.cell_shape);
         textview3.setVisibility(View.VISIBLE);
         newTableRow.addView(textview3);
         thursday.add(textview3);
 
         TextView textview4 = new TextView(this);
+        textview4.setWidth(width);
+        textview4.setHeight(height);
+        textview4.setPadding(5,5,5,5);
+        textview4.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview4.setText("");
-        textview4.setLayoutParams(lparams);
         textview4.setBackgroundResource(R.drawable.cell_shape);
         textview4.setVisibility(View.VISIBLE);
         newTableRow.addView(textview4);
         friday.add(textview4);
 
         tl.addView(newTableRow);
+        newRows.add(newTableRow);
+
+
         switch (day){
             case 0: return monday;
             case 1: return tuesday;
@@ -524,6 +543,12 @@ public class CalendarView extends AppCompatActivity {
 
     // Method fills list of TextViews and clears all old courses
     public void populateTextViewLists(){
+        TableLayout tl = (TableLayout)findViewById(R.id.table_layout);
+        for(int i=0;i < newRows.size();i++){
+            tl.removeView(newRows.get(i));
+        }
+        newRows.clear();
+
         monday.clear();
         tuesday.clear();
         wednesday.clear();
