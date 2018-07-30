@@ -51,7 +51,7 @@ public class MainContentLogin extends AppCompatActivity {
 				Database db = new Database("STUDENT");
 				final DatabaseReference ref = db.getDbRef();
 
-                ref.addValueEventListener(new ValueEventListener() {
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 						boolean emailExists = false;
