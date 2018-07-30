@@ -7,4 +7,10 @@
     <color name="colorSelectedRemoved">#FF4081</color>
     <color name="transparent">#00000000 </color>
     <color name="darkText">#323232</color>
+    <color name="cellFillNoEvent">#f6f6f6</color>
+    <color name="cellFillEvent">#FFFFFF</color>
+    <color name="cellStroke">#e9e9e9</color>
+    <color name="cellTitleColour">#000000</color>
+    <color name="cellFillTitle">#ffe595</color>
+    <color name="cellStrokeTitle">#ffcc33</color>
 </resources>

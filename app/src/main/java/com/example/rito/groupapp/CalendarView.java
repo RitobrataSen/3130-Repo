@@ -19,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -386,6 +385,7 @@ public class CalendarView extends AppCompatActivity {
             if(selected.get(i).getText().length() == 0) {
                 selected.get(i).setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
+                selected.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
                 selected.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -485,7 +485,7 @@ public class CalendarView extends AppCompatActivity {
         textview.setHeight(height);
         textview.setPadding(5,5,5,5);
         textview.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
-        textview.setBackgroundResource(R.drawable.cell_shape);
+        textview.setBackgroundResource(R.drawable.cell_shape_event);
         textview.setVisibility(View.VISIBLE);
         newTableRow.addView(textview);
         monday.add(textview);
@@ -496,7 +496,7 @@ public class CalendarView extends AppCompatActivity {
         textview1.setHeight(height);
         textview1.setPadding(5,5,5,5);
         textview1.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
-        textview1.setBackgroundResource(R.drawable.cell_shape);
+        textview1.setBackgroundResource(R.drawable.cell_shape_event);
         textview1.setVisibility(View.VISIBLE);
         newTableRow.addView(textview1);
         tuesday.add(textview1);
@@ -507,7 +507,7 @@ public class CalendarView extends AppCompatActivity {
         textview2.setHeight(height);
         textview2.setPadding(5,5,5,5);
         textview2.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
-        textview2.setBackgroundResource(R.drawable.cell_shape);
+        textview2.setBackgroundResource(R.drawable.cell_shape_event);
         textview2.setVisibility(View.VISIBLE);
         newTableRow.addView(textview2);
         wednesday.add(textview2);
@@ -518,7 +518,7 @@ public class CalendarView extends AppCompatActivity {
         textview3.setPadding(5,5,5,5);
         textview3.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview3.setText("");
-        textview3.setBackgroundResource(R.drawable.cell_shape);
+        textview3.setBackgroundResource(R.drawable.cell_shape_event);
         textview3.setVisibility(View.VISIBLE);
         newTableRow.addView(textview3);
         thursday.add(textview3);
@@ -529,7 +529,7 @@ public class CalendarView extends AppCompatActivity {
         textview4.setPadding(5,5,5,5);
         textview4.setTextAppearance(this,R.style.TextAppearance_AppCompat_Medium);
         textview4.setText("");
-        textview4.setBackgroundResource(R.drawable.cell_shape);
+        textview4.setBackgroundResource(R.drawable.cell_shape_event);
         textview4.setVisibility(View.VISIBLE);
         newTableRow.addView(textview4);
         friday.add(textview4);
