@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -69,7 +70,7 @@ public class CalendarView extends AppCompatActivity {
 	private int filterState = 0;
     private Toolbar hdrToolBar;
 	private ListView lv;
-	private HorizontalScrollView cal;
+	private ScrollView cal;
 	private ConstraintLayout conLayout;
 
     @Override
@@ -149,7 +150,7 @@ public class CalendarView extends AppCompatActivity {
         setContentView(R.layout.calendar_view);
 
 		lv = findViewById(R.id.listView);
-		cal = findViewById(R.id.hsv);
+		cal = findViewById(R.id.scrollView);
 
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -279,17 +280,20 @@ public class CalendarView extends AppCompatActivity {
 		lv.setAdapter(null);
 		lv.setVisibility(View.GONE);
 		cal.setVisibility(View.VISIBLE);
-		applyNewConstraints(R.id.hsv);
+		applyNewConstraints(R.id.scrollView);
 
         courseListSize = 4;
     	populateTextViewLists();
 		calendarCourses.clear();
 
+		Object [] crn_list = MainActivity.currentUser.getRegistration().keySet().toArray();
 		//Recall, this wont work unless a user is signed in.
 		if(MainActivity.currentUser != null) {
 			for(int i=0; i < MainActivity.currentUser.getRegistration().keySet().toArray().length; i++) {
 
-				String crn = MainActivity.currentUser.getRegistration().keySet().toArray()[i].toString();
+				Log.d("debug.print", crn_list[i].toString());
+
+				String crn = crn_list[i].toString();
 
 				counter = i;
 				Database db = new Database("CRN_DATA/" + crn);
@@ -329,6 +333,8 @@ public class CalendarView extends AppCompatActivity {
 		boolean sel = false;
 		ArrayList<CRN_Data> newSelectedCourses = new ArrayList<>();
 
+		Log.d("debug.print", crn.toString_CFA_Full());
+
 		if (!(crn == null)){
 			for (CRN_Data x : calendarCourses) {
 				if(!(x.equals(crn))){
@@ -339,10 +345,12 @@ public class CalendarView extends AppCompatActivity {
 			}
 
 			calendarCourses = newSelectedCourses;
-
+			Log.d("debug.print", String.format("%s", sel));
 			if (!(sel)){
 				calendarCourses.add(crn);
 			}
+
+			Log.d("debug.print", calendarCourses.toString());
 		}
 	}
 
