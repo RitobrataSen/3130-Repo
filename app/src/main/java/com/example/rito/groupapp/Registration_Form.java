@@ -149,12 +149,12 @@ public class Registration_Form extends AppCompatActivity {
                 if(!(password.getText().toString().equals(password2.getText().toString()))){
                     Toast.makeText(getBaseContext(), "passwords not the same", Toast.LENGTH_LONG).show();
                 }
-                if( un.length() == 0 ){
-                    Toast.makeText(getBaseContext(), "No username entered", Toast.LENGTH_LONG).show();
-                }else if(pw.length() == 0 ){
-                    Toast.makeText(getBaseContext(), "No password entered", Toast.LENGTH_LONG).show();
-                }else if ( em.length() == 0){
+                if( em.length() == 0 ){
                     Toast.makeText(getBaseContext(), "No email entered", Toast.LENGTH_LONG).show();
+                }else if(un.length() == 0 ){
+                    Toast.makeText(getBaseContext(), "No username entered", Toast.LENGTH_LONG).show();
+                }else if ( pw.length() == 0){
+                    Toast.makeText(getBaseContext(), "No password entered", Toast.LENGTH_LONG).show();
                 }
 
             }
