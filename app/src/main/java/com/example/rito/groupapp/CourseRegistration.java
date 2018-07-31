@@ -166,6 +166,7 @@ public class CourseRegistration extends AppCompatActivity{
                                         input_crn +" is full now, please contact the " +
                                                 "instructor.",
                                         Toast.LENGTH_LONG).show();
+                                add.setClickable(true);
 
                             }
                         } else {
@@ -198,7 +199,7 @@ public class CourseRegistration extends AppCompatActivity{
                         input_crn = crn.getText().toString();
 
                         //Checking if the inputted course is enrolled by the student or not
-                        if(dataSnapshot.hasChild("registration") ||
+                        if(dataSnapshot.hasChild("registration") &&
                                 dataSnapshot.child("registration").hasChild(input_crn)){
 
                             //remove the course from student's enroll list
