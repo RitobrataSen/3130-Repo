@@ -174,6 +174,7 @@ public class CourseRegistration extends AppCompatActivity{
                                     getApplicationContext(),
                                     input_crn + " does not exist, please try again!",
                                     Toast.LENGTH_LONG).show();
+                                add.setClickable(true);
                         }
                     }
 
