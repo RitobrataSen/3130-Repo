@@ -106,6 +106,7 @@ public class CourseRegistration extends AppCompatActivity{
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                add.setClickable(false);
                 Database db_ce = new Database();
                 input_crn = crn.getText().toString();
                 DatabaseReference ref_ce = db_ce.getDb().getReference("CRN_DATA/" +
@@ -116,7 +117,7 @@ public class CourseRegistration extends AppCompatActivity{
                         //Read the inputed string from users
 
                         //Checking if crn exists
-                        if (dataSnapshot.exists()) {
+                        if (dataSnapshot.exists() && crn.getText().length()>0) {
                             long max = Integer.parseInt(dataSnapshot.child("max").getValue()
                                     .toString());
                             long cur = dataSnapshot.child("enrollment").exists() ?
@@ -140,6 +141,7 @@ public class CourseRegistration extends AppCompatActivity{
                                                     getApplicationContext(),
                                                     "Success! " + input_crn + " has been added.",
                                                     Toast.LENGTH_LONG).show();
+                                            add.setClickable(true);
                                         } else {
                                             //case for duplicate enrollment
                                             Toast.makeText(
@@ -147,6 +149,9 @@ public class CourseRegistration extends AppCompatActivity{
                                                     "You are already enrolled for " +
                                                             input_crn + "!",
                                                     Toast.LENGTH_LONG).show();
+                                            String str = crn.getText().toString();
+                                            if(str!=crn.getText().toString())
+                                                add.setClickable(true);
                                         }
                                     }
 
@@ -161,6 +166,7 @@ public class CourseRegistration extends AppCompatActivity{
                                         input_crn +" is full now, please contact the " +
                                                 "instructor.",
                                         Toast.LENGTH_LONG).show();
+
                             }
                         } else {
                             //case for the inputted CRN is not exists
