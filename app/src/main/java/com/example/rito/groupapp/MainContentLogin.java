@@ -12,68 +12,66 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-/**/
+/**
+ * MainContentLogin handles user authentication to ensure that the user with
+ * the specified email exists, and that the given password matches. When this is
+ * found true, the currentUser in MainActivity is updated, and the logged-in
+ * intent is initialized.
+ *
+ * Dryden added the currentUser Global object in a refactor following the main creation of main activity login.
+ *
+ * @author  Shane, Divanno, Dryden
+ * @since   07-06-18
+ */
 public class MainContentLogin extends AppCompatActivity {
-
+    Button forgotPasswordButton;
     Button loginButton;
     EditText userEmail;
     EditText userPassword;
-    Button Submit;
-    public User currentUser;
-    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group-10-9598f.firebaseio.com");
+    User currentUser;
 
-    /*
-        @Override
-        public void onStart() {
-            super.onStart();
-            // Check if user is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            updateUI(currentUser);
-        }
-    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
-        loginButton = findViewById(R.id.login_submit_button);
+        Log.d("debug.print","onCreate MainContentLogin");
 
+        loginButton = findViewById(R.id.login_submit_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
 
-
             public void onClick(View view) {
-
-
-                userEmail = findViewById(R.id.user_number);
+				userEmail = findViewById(R.id.user_email);
                 userPassword = findViewById(R.id.user_pw);
                 final String email = userEmail.getText().toString();
                 final String pw = userPassword.getText().toString();
+				Database db = new Database("STUDENT");
+				final DatabaseReference ref = db.getDbRef();
 
-                //full credit for snapshot query access to user Upendrah Shah @
-                //https://stackoverflow.com/questions/45136779/login-using-email-stored-in-firebase-realtime-database
-                Query student_exists_query = databaseRef.child("STUDENT");
-                student_exists_query.addListenerForSingleValueEvent(new ValueEventListener() {
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean emailExists = false;
+						boolean emailExists = false;
 
-                        System.out.println(dataSnapshot.getChildrenCount());
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot student : dataSnapshot.getChildren()) {
+
                                 User currentUser = (User) student.getValue(User.class);
                                 if (!currentUser.getEmail().equals(email)) {
                                     continue;
                                 }
+
                                 emailExists = true;
                                 if (currentUser.getPassword().equals(pw)) {
                                     Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
                                             Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(MainContentLogin.this, ReadCourses.class));
+                                    ref.removeEventListener(this);
                                     MainActivity.currentUser = currentUser;
+									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
+									return;
                                 }
 
                                 else {
@@ -90,6 +88,12 @@ public class MainContentLogin extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+            }
+        });
+        forgotPasswordButton = findViewById(R.id.forgot_password);
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                startActivity(new Intent(MainContentLogin.this,RecoveryEmailActivity.class));
             }
         });
     }

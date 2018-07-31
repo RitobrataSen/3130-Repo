@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+this is for the viewRemoveCourseRegistration activity bottom navigation view
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_back"
+        android:icon="@drawable/ic_back_white_24dp"
+        android:checkable="false"
+        android:title="@string/title_back" />
+
+
+    <item
+        android:id="@+id/navigation_deregister"
+        android:icon="@drawable/ic_remove_black_18dp"
+        android:checkable="false"
+        android:title="@string/title_deregister" />
+
+
+</menu>
+

@@ -1,25 +1,27 @@
 package com.example.rito.groupapp;
 
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.widget.TextView;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.Assert;
-
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.anything;
 
 /**
  * CalendarViewTest ensures that the functions within the Calendar activity work properly.
  * Both displayingCourses and populating a list with textviews are tested.
- *
+ *`
  * @author  Dryden and Shane
  * @since   2018-07-06
  */
@@ -28,26 +30,27 @@ import static junit.framework.Assert.assertTrue;
 public class CalendarViewTest {
 
     @Rule
-    public ActivityTestRule<CalendarView> mActivityTestRule = new ActivityTestRule<>(CalendarView.class);
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void calendarViewTest() {
-        Courses c = new Courses("Error", "User Failed to Login", "", "", "", "");
-        c.SetStime("0:00");
-        c.SetEtime("0:00");
-        onView(withId(R.id.m_body)).check(matches(withText(c.GetCname()+"\n"+c.GetCode()+ "\nTime:"+c.GetSt()+"-"+c.GetEt())));
+    public void calendarViewTest() throws InterruptedException {
+        //login to app
+        onView(withId(R.id.login_button)).perform(click());
+        onView(withId(R.id.user_email)).perform(typeText("ea2"));
+        onView(withId(R.id.user_pw)).perform(typeText("pw2"));
+        onView(withId(R.id.login_submit_button)).check(matches(isClickable()));
+        onView(withId(R.id.login_submit_button)).perform(click());
+
+        //click view courses from menu
+        Thread.sleep(1000);
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("My Calendar")).perform(click());
+
+        //click last term and view calendar
+        Thread.sleep(1000);
+        onData(anything()).inAdapterView(withId(R.id.listView)).atPosition(3).perform(click());
+        Thread.sleep(1000);
+
     }
-    @Test
-    public void calendarListTest() {
-        for(int i=0; i < mActivityTestRule.getActivity().getCourseListSize(); i++){
-            // If populateTextViewLists did not succeed then this is crash, as null.getText will not work.
-            if(i+1 < mActivityTestRule.getActivity().getCourseListSize()){
-                assertTrue(mActivityTestRule.getActivity().monday[i+1].getText().equals(""));
-            }
-            assertTrue(mActivityTestRule.getActivity().tuesday[i].getText().equals(""));
-            assertTrue(mActivityTestRule.getActivity().wednesday[i].getText().equals(""));
-            assertTrue(mActivityTestRule.getActivity().thursday[i].getText().equals(""));
-            assertTrue(mActivityTestRule.getActivity().friday[i].getText().equals(""));
-        }
-    }
+
 }

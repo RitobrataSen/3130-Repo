@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="fill_parent"
+    android:layout_width="300dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+        android:padding="15dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="5dp"
+
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/title"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line1"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line2"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line3"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line4"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line5"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line6"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+    <TextView
+        android:id="@+id/line8"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/line7"
+
+        android:textColor="@color/darkText"
+        android:text="" />
+
+
+    <Button
+        android:id="@+id/dialogButtonCancel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text=" Cancel "
+        android:layout_margin="5dp"
+
+        android:layout_below="@+id/line8"
+
+        />
+
+
+        <Button
+            android:id="@+id/dialogButtonOK"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/line1"
+
+            android:layout_alignTop="@+id/dialogButtonCancel"
+            android:text=" Ok " />
+
+</RelativeLayout>
+</ScrollView>

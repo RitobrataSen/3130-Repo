@@ -1,278 +1,361 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <HorizontalScrollView
-        android:id="@+id/hsv"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:fillViewport="true"
-        android:measureAllChildren="false"
-        android:scrollbars="none" >
-        <TableLayout
-            android:id="@+id/table_layout"
-            android:layout_width="368dp"
-            android:layout_height="495dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+    <!--android:listSelector="@color/colorSelected"-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/HeaderToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow1" >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintBottom_toTopOf="@id/listView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
 
-            <TextView
-                android:id="@+id/monday"
-                android:layout_width="110dp"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:layout_margin="15dp"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="1.0">
+
+        <HorizontalScrollView
+            android:id="@+id/hsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:measureAllChildren="false"
+            android:scrollbars="none"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            >
+
+
+            <TableLayout
+                android:id="@+id/table_layout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Monday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp">
 
-            <TextView
-                android:id="@+id/tuesday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Tuesday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <TableRow
+                    android:id="@+id/tableRow1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/wednesday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Wednesday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    <TextView
+                        android:id="@+id/monday"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cell_shape_title"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Monday"
+                        android:textColor="@color/cellTitleColour"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/thursday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Thursday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    <TextView
+                        android:id="@+id/tuesday"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cell_shape_title"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Tuesday"
+                        android:textColor="@color/cellTitleColour"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/friday"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text="Friday"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow2" >
+                    <TextView
+                        android:id="@+id/wednesday"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cell_shape_title"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Wednesday"
+                        android:textColor="@color/cellTitleColour"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                    <TextView
+                        android:id="@+id/thursday"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cell_shape_title"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Thursday"
+                        android:textColor="@color/cellTitleColour"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/m_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <TextView
+                        android:id="@+id/friday"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cell_shape_title"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Friday"
+                        android:textColor="@color/cellTitleColour"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
 
-
-            <TextView
-                android:id="@+id/t_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/w_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/r_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/f_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow3" >
+                <TableRow
+                    android:id="@+id/tableRow2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
 
-            <TextView
-                android:id="@+id/m1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <TextView
+                        android:id="@+id/m_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
-            <TextView
-                android:id="@+id/t1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    <TextView
+                        android:id="@+id/t_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/w1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    <TextView
+                        android:id="@+id/w_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/r1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/f1_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableRow4" >
+                    <TextView
+                        android:id="@+id/r_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                    <TextView
+                        android:id="@+id/f_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
 
-            <TextView
-                android:id="@+id/m2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TableRow
+                    android:id="@+id/tableRow3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
 
-            <TextView
-                android:id="@+id/t2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/w2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/r2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/f2_body"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:background="@drawable/cell_shape"
-                android:padding="5dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tableRow5" >
-
-                <TextView
-                    android:id="@+id/m3_body"
-                    android:layout_width="100dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <TextView
+                        android:id="@+id/m1_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
-                <TextView
-                    android:id="@+id/t3_body"
-                    android:layout_width="110dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    <TextView
+                        android:id="@+id/t1_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TextView
-                    android:id="@+id/w3_body"
-                    android:layout_width="110dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    <TextView
+                        android:id="@+id/w1_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TextView
-                    android:id="@+id/r3_body"
-                    android:layout_width="110dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-                <TextView
-                    android:id="@+id/f3_body"
-                    android:layout_width="110dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-            </TableRow>
-        </TableLayout>
-    </HorizontalScrollView>
+                    <TextView
+                        android:id="@+id/r1_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/f1_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:id="@+id/m2_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                    <TextView
+                        android:id="@+id/t2_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/w2_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/r2_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/f2_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/m3_body"
+                        android:layout_width="100dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                    <TextView
+                        android:id="@+id/t3_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/w3_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/r3_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/f3_body"
+                        android:layout_width="140dp"
+                        android:layout_height="115dp"
+                        android:background="@drawable/cell_shape_event"
+                        android:padding="10dp"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        style="@style/FooterToolBar"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listView"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:menu="@menu/navigation_cv" />
+
 </android.support.constraint.ConstraintLayout>

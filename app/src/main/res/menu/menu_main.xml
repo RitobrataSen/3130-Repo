@@ -5,13 +5,32 @@
 
     <item
         android:id="@+id/go_to_course"
+        android:icon="@drawable/ic_courses_24dp"
+        android:checkable="false"
         android:title="@string/to_course_view" />
     <item
+        android:id="@+id/go_to_add_crn"
+        android:icon="@drawable/ic_courses_24dp"
+        android:checkable="false"
+        android:title="@string/to_add_crn" />
+    <item
         android:id="@+id/go_to_calender"
+        android:icon="@drawable/ic_calendar_black_24dp"
         android:checkable="false"
         android:title="@string/to_Calender_view" />
     <item
+        android:id="@+id/go_to_view_remove_registered"
+        android:icon="@drawable/ic_vr_registration_black_24dp"
+        android:checkable="false"
+        android:title="@string/to_view_remove_registration" />
+    <item
+        android:id="@+id/view_user_information"
+        android:icon="@drawable/ic_vr_registration_black_24dp"
+        android:checkable="false"
+        android:title="@string/to_view_info" />
+    <item
         android:id="@+id/log_out"
+        android:icon="@drawable/ic_logout_black_24dp"
         android:checkable="false"
         android:title="@string/log_out_option" />
 </menu>
