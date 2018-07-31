@@ -1,26 +1,8 @@
-
-/*
-Java class for Registration activity.
-
-It links with firebase, create custom user object and update it to the daatbase.
-
-This is a child activity of main activity.
-
-Layout xml: activity_registration_form.xml
-additional drawable: background_color_bry.xml
-
-Authour: Yuze Divannno
-Last Modified: July 6th, 2018
- */
-
-
 package com.example.rito.groupapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +11,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
 
 /**
  * The Registration_Form activity accepts new-user input which is used to

@@ -150,11 +150,10 @@ public class CourseRegistration extends AppCompatActivity{
                                                             input_crn + "!",
                                                     Toast.LENGTH_LONG).show();
                                             String str = crn.getText().toString();
-                                            if(str!=crn.getText().toString())
+                                            if(!str.equals(crn.getText().toString()))
                                                 add.setClickable(true);
                                         }
                                     }
-
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                     }
