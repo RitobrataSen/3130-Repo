@@ -386,6 +386,7 @@ public class CalendarView extends AppCompatActivity {
                 selected.get(i).setText(course.getCrn() + "\n" + course.getCourse_Code() + "\nTime:" + course
                         .getStart_Time() + "-" + course.getEnd_Time());
                 selected.get(i).setBackgroundResource(R.drawable.cell_shape_event);
+                selected.get(i).setClickable(true);
                 selected.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -620,6 +621,12 @@ public class CalendarView extends AppCompatActivity {
 			wednesday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
 			thursday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
 			friday.get(i).setBackgroundResource(R.drawable.cell_shape_no_event);
+
+			monday.get(i).setClickable(false);
+			tuesday.get(i).setClickable(false);
+			wednesday.get(i).setClickable(false);
+			thursday.get(i).setClickable(false);
+			friday.get(i).setClickable(false);
 			i++;
 		}
 
