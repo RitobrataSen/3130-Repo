@@ -1,6 +1,7 @@
 package com.example.rito.groupapp;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -62,6 +63,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 	private CourseType filterCourseType = null;
 	private CRN_Data filterCRN = null;
 	private boolean displaySelection = false;
+	private ProgressDialog msg;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,26 +75,37 @@ public class CourseFilterActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//main navigation menu
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+
+		msg.show();
+
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
+				msg.hide();
 				startActivity(new Intent(CourseFilterActivity.this, CourseFilterActivity.class));
 				return true;
 
 			case R.id.go_to_calender:
+				msg.hide();
 				startActivity(new Intent(CourseFilterActivity.this, CalendarView.class));
 				return true;
 
 			case R.id.go_to_add_crn:
+				msg.hide();
 				startActivity(new Intent(CourseFilterActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
+				msg.hide();
 				startActivity(new Intent(CourseFilterActivity.this, MyCoursesActivity.class));
 				return true;
 			case R.id.view_user_information:
+				msg.hide();
 				startActivity(new Intent(CourseFilterActivity.this, View_UserInformation.class));
 				return true;
 			case R.id.log_out:
+				msg.hide();
 				startActivity(new Intent(CourseFilterActivity.this, Logout_Activity.class));
 				return true;
 		}
@@ -109,6 +122,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 		@Override
 		public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+			msg.setTitle("Loading");
+			msg.setMessage("Loading, please wait...");
+			msg.show();
+
 			int o = 0;
 			String t, m;
 			switch (item.getItemId()) {
@@ -120,11 +137,13 @@ public class CourseFilterActivity extends AppCompatActivity {
 					}
 
 					displaySelection = false;
+					msg.hide();
 					return true;
 
 				case R.id.navigation_list:
 					populateCurrentSelection(1);
 					displaySelection = true;
+					msg.hide();
 					return true;
 
 				case R.id.navigation_reset:
@@ -133,12 +152,14 @@ public class CourseFilterActivity extends AppCompatActivity {
 					m = "Are you sure you want to reset your selection?";
 					o = 1;
 					popupMsg(t, m, o);
+					msg.hide();
 					return true;
 
 				case R.id.navigation_done:
 					if (selectedCoreCourses.size() == 0 && selectedSupplementCourses.size() == 0){
 						text = "You have not selected any courses. Please select at least 1 " +
 								"course to register, and try again.";
+						msg.hide();
 						Toast toast = Toast.makeText(getApplicationContext(), text, duration);
 						toast.show();
 
@@ -148,11 +169,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 								"their CRNs?";
 						o = 0;
 						popupMsg(t, m, o);
+						msg.hide();
 						return true;
 					}
-
 			}
-
+			msg.hide();
 			return false;
 
 		}
@@ -162,6 +183,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_filter);
+		msg = new ProgressDialog(CourseFilterActivity.this);
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+		msg.setCancelable(false);
+		msg.show();
 
 		Log.d("debug.print", "line: " + new Exception().getStackTrace()[0].getLineNumber());
 		Log.d("debug.print","onCreate CourseFilterActivity");
@@ -173,6 +199,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 		Intent intent = getIntent();
 		populateTerm();
+		msg.hide();
 
 	}
 
@@ -233,6 +260,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 	public void populateCurrentSelection(int type){
 		//0 = view crn
 		//1 = view selected crn
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
+
 		filterCRN = null;
 
 		lv = findViewById(R.id.listView);
@@ -248,6 +279,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 					this, R.layout.item_crn_selection_basic, selectedCRN){
 				@Override
 				public View getView (int position, View view, ViewGroup parent){
+					msg.setTitle("Populating");
+					msg.setMessage("Populating tables, please wait...");
+					msg.show();
 					if (view == null) {
 						view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection_basic, parent,
 								false);
@@ -289,7 +323,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 					if (!(cc)){
 						view.setBackgroundResource(R.color.transparent);
 					}
-
+					msg.hide();
 					return view;
 				}
 			});
@@ -298,6 +332,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					msg.setTitle("Populating");
+					msg.setMessage("Populating tables, please wait...");
+					msg.show();
 					CRN_Data crn_data = (CRN_Data) parent.getItemAtPosition(position);
 					filterCRN = crn_data;
 
@@ -350,13 +387,18 @@ public class CourseFilterActivity extends AppCompatActivity {
 					dialogButtonOK.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							boolean sel = markSelection();
 							dialog.dismiss();
+							msg.setTitle("Populating");
+							msg.setMessage("Populating tables, please wait...");
+							msg.show();
+							boolean sel = markSelection();
 							populateCurrentSelection(0);
+							msg.hide();
 						}
 					});
 
-					dialog.show();
+					msg.hide();
+					dialog.show();//dialog.hide();
 
 				}
 			});
@@ -373,6 +415,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 					this, R.layout.item_crn_selection_basic, selectedCRN){
 				@Override
 				public View getView (int position, View view, ViewGroup parent){
+					msg.setTitle("Populating");
+					msg.setMessage("Populating tables, please wait...");
+					msg.show();
 					if (view == null) {
 						view = LayoutInflater.from(getContext()).inflate(R.layout.item_crn_selection_basic, parent,
 								false);
@@ -390,7 +435,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 					line2.setText(arr[1]);
 					line3.setText(arr[2]);
 					line4.setText(arr[3]);
-
+					msg.hide();
 					return view;
 				}
 			});
@@ -400,16 +445,24 @@ public class CourseFilterActivity extends AppCompatActivity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					//go to selection
+					msg.setTitle("Populating");
+					msg.setMessage("Populating tables, please wait...");
+					msg.show();
 					CRN_Data crn_data = (CRN_Data) parent.getItemAtPosition(position);
 					navigateToSelection(crn_data);
+					msg.hide();
 				}
 			});
 			lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 		}
+		msg.hide();
 	}
 
 	//used to populate a list of terms from firebase
 	public void populateTerm() {
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 		filterState = 0;
 		filterTerm = null;
 		filterSubject = null;
@@ -424,6 +477,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 				android.R.layout.simple_list_item_1, db.getDbRef()) {
 			@Override
 			protected void populateView(View v, Term model, int position) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				TextView termRow = (TextView)v.findViewById(android.R.id.text1);
 				termRow.setText(model.toString());
 				boolean cc = false;
@@ -449,21 +505,29 @@ public class CourseFilterActivity extends AppCompatActivity {
 				if (!(cc)){
 					v.setBackgroundResource(R.color.transparent);
 				}
-
+				msg.hide();
 			}
 		};
 		lv.setAdapter(firebaseAdapter);
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				Term term = (Term) parent.getItemAtPosition(position);
 				populateSubject(term);
+				msg.hide();
 			}
 		});
+		msg.hide();
 	}
 
 	//used to populate a list of subjects from firebase
 	public void populateSubject(Term term){
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 		filterState = 1;
 		filterTerm = term;
 		filterSubject = null;
@@ -478,6 +542,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 				android.R.layout.simple_list_item_1, db.getDbRef()) {
 			@Override
 			protected void populateView(View v, Subject model, int position) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				TextView subjectRow = (TextView)v.findViewById(android.R.id.text1);
 				subjectRow.setText(model.toString());
 				boolean cc = false;
@@ -510,6 +577,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 					v.setBackgroundResource(R.color.transparent);
 				}
 
+				msg.hide();
 			}
 		};
 		lv.setAdapter(firebaseAdapter);
@@ -517,14 +585,23 @@ public class CourseFilterActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				Subject subject = (Subject) parent.getItemAtPosition(position);
 				populateCourse(subject);
+				msg.hide();
 			}
 		});
+		msg.hide();
 	}
 
 	//used to populate a list of courses from firebase
 	public void populateCourse(Subject subject){// params: listview reference, selected object
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
+
 		filterState = 2;
 		//filterTerm = null;
 		filterSubject = subject;
@@ -542,7 +619,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 
 			@Override
 			protected void populateView(View v, Course model, int position) {
-
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				boolean cc = false;
 				Course course = getItem(position);
 				TextView ccode = (TextView) v.findViewById(R.id.courseCode);
@@ -585,6 +664,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 				if (!(cc)){
 					v.setBackgroundResource(R.color.transparent);
 				}
+				msg.hide();
 			}
 		};
 
@@ -594,17 +674,24 @@ public class CourseFilterActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				Course course = (Course) parent.getItemAtPosition(position);
 				populateCourseType(course);
+				msg.hide();
 			}
 		});
-
+		msg.hide();
 	}
 
 	//used to populate a list of course types (sore and supplement)
 	public void populateCourseType(Course course) {
-		filterState = 3;
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 
+		filterState = 3;
 		filterCourse = course;
 		filterCourseType = null;
 		filterCRN = null;
@@ -627,6 +714,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 			//R.layout.**** IS THE DESIGN FOR THE ROW
 			@Override
 			public View getView (int position, View view, ViewGroup parent){
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				if (view == null) {
 					view = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent,
 							false);
@@ -669,7 +759,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 				if (!(cc)){
 					view.setBackgroundResource(R.color.transparent);
 				}
-
+				msg.hide();
 				return view;
 			}
 		});
@@ -677,21 +767,31 @@ public class CourseFilterActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				CourseType coursetype = (CourseType) parent.getItemAtPosition(position);
 				populateCRN(coursetype);
+				msg.hide();
 			}
 		});
-
+		msg.hide();
 	}
 
 	//displays a list of all processed crns when selected courses have been added (or omitted)
 	public void displayProcessedCRN(){
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 		lv = findViewById(R.id.listView);
 		lv.setAdapter(new ArrayAdapter<ProcessedCRN>(
 				this, R.layout.item_processed_crn , processedCRN){
 			//R.layout.**** IS THE DESIGN FOR THE ROW
 			@Override
 			public View getView (int position, View view, ViewGroup parent){
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				if (view == null) {
 					view = LayoutInflater.from(getContext()).inflate(R.layout.item_processed_crn, parent,
 							false);
@@ -711,6 +811,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 					row3.setImageDrawable(getResources().getDrawable(R.drawable.ic_fail_red_24dp,
 							getApplicationContext().getTheme()));
 				}
+				msg.hide();
 				return view;
 			}
 		});
@@ -719,6 +820,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				ProcessedCRN p = (ProcessedCRN) parent.getItemAtPosition(position);
 				ArrayList<ProcessedCRN> newProcessedCRN = new ArrayList<>();
 
@@ -729,14 +833,18 @@ public class CourseFilterActivity extends AppCompatActivity {
 				}
 				processedCRN = newProcessedCRN;
 				displayProcessedCRN();
+				msg.hide();
 			}
 		});
-
+		msg.hide();
 	}
 
 	//used to add all courses in currently selected
 	public void addSelection(){
 		filterState = 5;
+		msg.setTitle("Course Register");
+		msg.setMessage("Registering for selected courses, please wait...");
+		msg.show();
 
 		ArrayList<CRN_Data> selectedCRN;
 		selectedCRN = new ArrayList<>(selectedCoreCourses);
@@ -752,6 +860,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 			ref.addListenerForSingleValueEvent(new ValueEventListener() {
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) {
+					msg.setTitle("Course Register");
+					msg.setMessage("Registering for selected courses, please wait...");
+					msg.show();
 					//Read the inputted string from users
 					//Checking if crn exists
 					if (dataSnapshot.exists()) {
@@ -766,6 +877,9 @@ public class CourseFilterActivity extends AppCompatActivity {
 							ref.addListenerForSingleValueEvent(new ValueEventListener() {
 								@Override
 								public void onDataChange(DataSnapshot dataSnapshot) {
+									msg.setTitle("Course Register");
+									msg.setMessage("Registering for selected courses, please wait...");
+									msg.show();
 									if (!(dataSnapshot.hasChild("registration")) ||
 											!(dataSnapshot.child("registration").hasChild(crn_data.getCrn()))) {
 
@@ -794,14 +908,19 @@ public class CourseFilterActivity extends AppCompatActivity {
 										processedCRN.add(pcd.cloneData());
 										displayProcessedCRN();
 									}
+									msg.hide();
 								}
 
 								@Override
 								public void onCancelled(DatabaseError databaseError) {
+									msg.hide();
 								}
 							});
 						} else {
 							//case for course is full
+							msg.setTitle("Course Register");
+							msg.setMessage("Registering for selected courses, please wait...");
+							msg.show();
 							pcd.setCrn(dataSnapshot.getKey());
 							pcd.setMsg("Registration failed: Course is full. " +
 									"Please contact the instructor.");
@@ -809,6 +928,7 @@ public class CourseFilterActivity extends AppCompatActivity {
 							//append Processed_CRN object
 							processedCRN.add(pcd.cloneData());
 							displayProcessedCRN();
+							msg.hide();
 						}
 					} else {
 						//case for the inputted CRN is not exists
@@ -819,10 +939,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 						processedCRN.add(pcd.cloneData());
 						displayProcessedCRN();
 					}
+					msg.hide();
 				}
 
 				@Override
 				public void onCancelled(DatabaseError databaseError) {
+					msg.hide();
 				}
 			});
 		}
@@ -838,11 +960,14 @@ public class CourseFilterActivity extends AppCompatActivity {
 		viewCoreCourses.clear();
 		viewSupplementCourses.clear();
 
+		msg.hide();
 	}
 
 	//activity specific popup messages
 	public void popupMsg(String t, String m, int o){
-
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+		msg.show();
 		// custom dialog
 		final Dialog dialog = new Dialog(context);
 		dialog.setContentView(R.layout.item_popup_msg);
@@ -865,7 +990,11 @@ public class CourseFilterActivity extends AppCompatActivity {
 					@Override
 					public void onClick(View v) {
 						dialog.dismiss();
+						msg.setTitle("Course Register");
+						msg.setMessage("Registering for selected courses, please wait...");
+						msg.show();
 						addSelection();
+						msg.hide();
 					}
 				});
 				break;
@@ -891,11 +1020,15 @@ public class CourseFilterActivity extends AppCompatActivity {
 					}
 				});
 		}
+		msg.hide();
 		dialog.show();
 	}
 
 	//used to display a list of all crn for selected criteria from firebase
 	public void populateCRN(CourseType coursetype){// params: listview reference,
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 
 		filterState = 4;
 		filterCourseType = coursetype;
@@ -909,6 +1042,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 			dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+					msg.setTitle("Populating");
+					msg.setMessage("Populating tables, please wait...");
+					msg.show();
+
 					CRN_Data crn_data = dataSnapshot.getValue(CRN_Data.class);
 
 					if (filterCourseType.getCore()){
@@ -918,15 +1055,17 @@ public class CourseFilterActivity extends AppCompatActivity {
 						viewSupplementCourses.add(crn_data);
 					}
 					populateCurrentSelection(0);
+					msg.hide();
 				}
 
 				@Override
 				public void onCancelled(@NonNull DatabaseError databaseError) {
 					Log.d("debug.print", "The read failed: " + databaseError.getCode());
+					msg.hide();
 				}
 			});
 		}
-
+		msg.hide();
 	}
 
 	//used to add/ remove courses from selection
@@ -967,6 +1106,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 	//navigate to a selected crn in the course filter tree when a row is clicked from the
 	// selectiom list
 	public void navigateToSelection(CRN_Data crn_data){
+		msg.setTitle("Navigating");
+		msg.setMessage("Navigating to selection, please wait...");
+		msg.show();
+
 		filterTerm = null;
 		filterSubject = null;
 		filterCourse = null;
@@ -980,6 +1123,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
+				msg.setTitle("Navigating");
+				msg.setMessage("Navigating to selection, please wait...");
+				msg.show();
+
 				filterTerm = dataSnapshot.getValue(Term.class);
 				if (filterTerm != null){
 					Database db = new Database(
@@ -991,6 +1138,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 					db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 						@Override
 						public void onDataChange(DataSnapshot dataSnapshot) {
+							msg.setTitle("Navigating");
+							msg.setMessage("Navigating to selection, please wait...");
+							msg.show();
+
 							filterSubject = dataSnapshot.getValue(Subject.class);
 							if (filterSubject != null){
 								Database db = new Database(
@@ -1003,6 +1154,10 @@ public class CourseFilterActivity extends AppCompatActivity {
 								db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 									@Override
 									public void onDataChange(DataSnapshot dataSnapshot) {
+										msg.setTitle("Navigating");
+										msg.setMessage("Navigating to selection, please wait...");
+										msg.show();
+
 										filterCourse = dataSnapshot.getValue(Course.class);
 										if (filterCourse != null){
 											boolean is_core = filterCRN.isCore();
@@ -1020,10 +1175,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 											toast.show();
 											populateTerm();
 										}
+										msg.hide();
 									}
 									@Override
 									public void onCancelled(DatabaseError databaseError) {
 										Log.d("debug.print", "The read failed: " + databaseError.getCode());
+										msg.hide();
 									}
 								});
 							} else {
@@ -1032,10 +1189,12 @@ public class CourseFilterActivity extends AppCompatActivity {
 								toast.show();
 								populateTerm();
 							}
+							msg.hide();
 						}
 						@Override
 						public void onCancelled(DatabaseError databaseError) {
 							Log.d("debug.print", "The read failed: " + databaseError.getCode());
+							msg.hide();
 						}
 					});
 				} else {
@@ -1044,12 +1203,15 @@ public class CourseFilterActivity extends AppCompatActivity {
 					toast.show();
 					populateTerm();
 				}
+				msg.hide();
 			}
 			@Override
 			public void onCancelled(DatabaseError databaseError) {
 				Log.d("debug.print", "The read failed: " + databaseError.getCode());
+				msg.hide();
 			}
 		});
+		msg.hide();
 	}
 
 }

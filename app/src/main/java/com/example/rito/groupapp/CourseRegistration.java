@@ -1,6 +1,7 @@
 package com.example.rito.groupapp;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class CourseRegistration extends AppCompatActivity{
     //private Spinner termSpinner;
     private String uid;
     private Toolbar hdrToolBar;
+    private ProgressDialog msg;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,26 +62,37 @@ public class CourseRegistration extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //main navigation menu
+        msg.setTitle("Loading");
+        msg.setMessage("Loading, please wait...");
+
+        msg.show();
         switch (item.getItemId()) {
             case R.id.go_to_course:
-                startActivity(new Intent(CourseRegistration.this, CourseFilterActivity.class));
+                msg.hide();
+                startActivity(new Intent(CourseRegistration.this, CourseFilterActivity
+                        .class));
                 return true;
 
             case R.id.go_to_calender:
+                msg.hide();
                 startActivity(new Intent(CourseRegistration.this, CalendarView.class));
                 return true;
 
             case R.id.go_to_add_crn:
+                msg.hide();
                 startActivity(new Intent(CourseRegistration.this, CourseRegistration.class));
                 return true;
 
             case R.id.go_to_view_remove_registered:
+                msg.hide();
                 startActivity(new Intent(CourseRegistration.this, MyCoursesActivity.class));
                 return true;
             case R.id.view_user_information:
+                msg.hide();
                 startActivity(new Intent(CourseRegistration.this, View_UserInformation.class));
                 return true;
             case R.id.log_out:
+                msg.hide();
                 startActivity(new Intent(CourseRegistration.this, Logout_Activity.class));
                 return true;
         }
@@ -90,6 +103,11 @@ public class CourseRegistration extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_register);
+        msg = new ProgressDialog(CourseRegistration.this);
+        msg.setTitle("Loading");
+        msg.setMessage("Loading, please wait...");
+        msg.setCancelable(false);
+        msg.show();
 
         Log.d("debug.print","onCreate CourseRegistration");
         hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
@@ -106,6 +124,10 @@ public class CourseRegistration extends AppCompatActivity{
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                msg.setTitle("Registration");
+                msg.setMessage("Registering for a course, please wait...");
+                msg.show();
+
                 add.setClickable(false);
                 Database db_ce = new Database();
                 input_crn = crn.getText().toString();
@@ -115,6 +137,9 @@ public class CourseRegistration extends AppCompatActivity{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Read the inputed string from users
+                        msg.setTitle("Registration");
+                        msg.setMessage("Registering for a course, please wait...");
+                        msg.show();
 
                         //Checking if crn exists
                         if (dataSnapshot.exists() && crn.getText().length()>0) {
@@ -132,55 +157,67 @@ public class CourseRegistration extends AppCompatActivity{
                                 ref_st.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
+                                        msg.setTitle("Registration");
+                                        msg.setMessage("Registering for a course, please wait...");
+                                        msg.show();
                                         if (!(dataSnapshot.hasChild("registration")) ||
                                                 !(dataSnapshot.child("registration").hasChild(input_crn))) {
 
                                             //save data
                                             db_st.addRemoveCourse(input_crn, uid, true);
+                                            add.setClickable(true);
+                                            msg.hide();
                                             Toast.makeText(
                                                     getApplicationContext(),
                                                     "Success! " + input_crn + " has been added.",
                                                     Toast.LENGTH_LONG).show();
-                                            add.setClickable(true);
+
                                         } else {
                                             //case for duplicate enrollment
+
+                                            String str = crn.getText().toString();
+                                            if (!str.equals(crn.getText().toString())){
+                                                add.setClickable(true);
+                                            }
+                                            msg.hide();
                                             Toast.makeText(
                                                     getApplicationContext(),
                                                     "You are already enrolled for " +
                                                             input_crn + "!",
                                                     Toast.LENGTH_LONG).show();
-                                            String str = crn.getText().toString();
-                                            if(!str.equals(crn.getText().toString()))
-                                                add.setClickable(true);
                                         }
+                                        msg.hide();
                                     }
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
+										msg.hide();
                                     }
                                 });
                             } else {
                                 //case for course is full
+                                add.setClickable(true);
+                                msg.hide();
                                 Toast.makeText(
                                         getApplicationContext(),
                                         input_crn +" is full now, please contact the " +
                                                 "instructor.",
                                         Toast.LENGTH_LONG).show();
-                                add.setClickable(true);
-
                             }
                         } else {
                             //case for the inputted CRN is not exists
+                            add.setClickable(true);
+                            msg.hide();
                             Toast.makeText(
                                     getApplicationContext(),
                                     input_crn + " does not exist, please try again!",
                                     Toast.LENGTH_LONG).show();
-                                add.setClickable(true);
+
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+						msg.hide();
                     }
                 });
             }
@@ -190,11 +227,15 @@ public class CourseRegistration extends AppCompatActivity{
         drop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                msg.setTitle("Deregistration");
+                msg.setMessage("Deregistering for a course, please wait...");
                 final Database db_st = new Database("STUDENT/" + uid);
                 DatabaseReference ref_st =  db_st.getDbRef();
                 ref_st.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        msg.setTitle("Deregistration");
+                        msg.setMessage("Deregistering for a course, please wait...");
                         input_crn = crn.getText().toString();
 
                         //Checking if the inputted course is enrolled by the student or not
@@ -203,11 +244,13 @@ public class CourseRegistration extends AppCompatActivity{
 
                             //remove the course from student's enroll list
                             db_st.addRemoveCourse(input_crn, uid, false);
+                            msg.hide();
                             Toast.makeText(
                                     getApplicationContext(),
                                     input_crn + " is removed!",
                                     Toast.LENGTH_LONG).show();
                         } else {
+                            msg.hide();
                             Toast.makeText(
                                     getApplicationContext(),
                                     "You are not enrolled in "+
@@ -215,14 +258,17 @@ public class CourseRegistration extends AppCompatActivity{
                                             ", please try again.",
                                     Toast.LENGTH_LONG).show();
                         }
+                        msg.hide();
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+						msg.hide();
                     }
                 });
+                msg.hide();
             }
         });
+        msg.hide();
     }
 }

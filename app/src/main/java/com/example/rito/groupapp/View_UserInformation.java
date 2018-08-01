@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,8 @@ public class View_UserInformation extends AppCompatActivity {
 	private int em_len = 1;
 	private int un_len = 1;
 	private int pw_len = 1;
+	private ProgressDialog msg;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -48,40 +51,57 @@ public class View_UserInformation extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.go_to_course:
-                startActivity(new Intent(View_UserInformation.this, CourseFilterActivity.class));
-                return true;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		//main navigation menu
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
 
-            case R.id.go_to_calender:
-                startActivity(new Intent(View_UserInformation.this, CalendarView.class));
-                return true;
+		msg.show();
 
-            case R.id.go_to_add_crn:
-                startActivity(new Intent(View_UserInformation.this, CourseRegistration.class));
-                return true;
+		switch (item.getItemId()) {
+			case R.id.go_to_course:
+				msg.hide();
+				startActivity(new Intent(View_UserInformation.this, CourseFilterActivity.class));
+				return true;
 
-            case R.id.go_to_view_remove_registered:
-                startActivity(new Intent(View_UserInformation.this, MyCoursesActivity.class));
-                return true;
-            case R.id.view_user_information:
-                startActivity(new Intent(View_UserInformation.this, View_UserInformation.class));
+			case R.id.go_to_calender:
+				msg.hide();
+				startActivity(new Intent(View_UserInformation.this, CalendarView.class));
+				return true;
 
-            case R.id.log_out:
-                startActivity(new Intent(View_UserInformation.this, Logout_Activity.class));
-                return true;
-        }
+			case R.id.go_to_add_crn:
+				msg.hide();
+				startActivity(new Intent(View_UserInformation.this, CourseRegistration.class));
+				return true;
 
-        return super.onOptionsItemSelected(item);
+			case R.id.go_to_view_remove_registered:
+				msg.hide();
+				startActivity(new Intent(View_UserInformation.this, MyCoursesActivity.class));
+				return true;
+			case R.id.view_user_information:
+				msg.hide();
+				startActivity(new Intent(View_UserInformation.this, View_UserInformation.class));
+				return true;
+			case R.id.log_out:
+				msg.hide();
+				startActivity(new Intent(View_UserInformation.this, Logout_Activity.class));
+				return true;
+		}
 
-    }
+		return super.onOptionsItemSelected(item);
+	}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__user_information);
+
+		msg = new ProgressDialog(View_UserInformation.this);
+		msg.setCancelable(false);
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+		msg.show();
 
         hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(hdrToolBar);
@@ -123,10 +143,17 @@ public class View_UserInformation extends AppCompatActivity {
             //updating the information
             bt1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    databaseRef = db.getDb().getReference("STUDENT");
+					msg.setTitle("Update Information");
+					msg.setMessage("Validating information, please wait...");
+					msg.show();
+
+					databaseRef = db.getDb().getReference("STUDENT");
                     databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
 						@Override
 						public void onDataChange(DataSnapshot dataSnapshot) {
+							msg.setTitle("Update Information");
+							msg.setMessage("Validating information, please wait...");
+							msg.show();
 							//check if username is a child of STUDENT
 							CharSequence text;
 							boolean exists = false;
@@ -147,16 +174,19 @@ public class View_UserInformation extends AppCompatActivity {
 									(MainActivity.currentUser.getUsername()))) {
 								if(un.length() != 0){
 									text = "Sorry, username already exists.";
+									msg.hide();
 									Toast toast = Toast.makeText(context, text, duration);
 									toast.show();
 								} else {
 									text = "Sorry, username cannot be empty.";
+									msg.hide();
 									Toast toast = Toast.makeText(context, text, duration);
 									toast.show();
 								}
 								exists = true;
 							}else if(!(pw1.equals("")) && !(pw2.equals("")) && !(pw1.equals(pw2))){
 								text = "Sorry, passwords do not match.";
+								msg.hide();
 								Toast toast = Toast.makeText(context, text, duration);
 								toast.show();
 								exists = true;
@@ -165,6 +195,7 @@ public class View_UserInformation extends AppCompatActivity {
 									pw.length() < pw_len ||
 									em.length() < em_len){
 								text = "Sorry, 1 or more fields are not correct.";
+								msg.hide();
 								Toast toast = Toast.makeText(context, text, duration);
 								toast.show();
 								exists = true;
@@ -178,6 +209,7 @@ public class View_UserInformation extends AppCompatActivity {
 											!(em.equalsIgnoreCase(
 													MainActivity.currentUser.getEmail()))){
 										text = "Sorry, email already exists.";
+										msg.hide();
 										Toast toast = Toast.makeText(context, text, duration);
 										toast.show();
 										exists = true;
@@ -186,6 +218,7 @@ public class View_UserInformation extends AppCompatActivity {
 											!(un.equalsIgnoreCase(
 													MainActivity.currentUser.getUsername()))){
 										text = "Sorry, username already exists.";
+										msg.hide();
 										Toast toast = Toast.makeText(context, text, duration);
 										toast.show();
 										exists = true;
@@ -200,11 +233,13 @@ public class View_UserInformation extends AppCompatActivity {
 
 								if (user1.equals(MainActivity.currentUser)){
 									text = "You did not make any changes!";
+									msg.hide();
 									Toast toast = Toast.makeText(context, text, duration);
 									toast.show();
 								} else {
 									db.updateUser(MainActivity.currentUser, user1);
 									text = "Update Successful!";
+									msg.hide();
 									Toast toast = Toast.makeText(context, text, duration);
 									toast.show();
 									startActivity(new Intent(View_UserInformation.this,
@@ -212,21 +247,22 @@ public class View_UserInformation extends AppCompatActivity {
 								}
 
 							}
-
+							msg.hide();
 						}
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
+							msg.hide();
                         }
                     });
 
-
+					msg.hide();
                 }
 
         });
     }
 
+    msg.hide();
 
 }
 }

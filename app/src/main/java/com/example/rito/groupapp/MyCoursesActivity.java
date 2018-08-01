@@ -1,6 +1,7 @@
 package com.example.rito.groupapp;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -45,6 +46,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 	private Term currentTerm;
 	private Toolbar hdrToolBar;
 	private Context context = this;
+	private ProgressDialog msg;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,30 +59,40 @@ public class MyCoursesActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//main navigation menu
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+		msg.show();
+
 		switch (item.getItemId()) {
 			case R.id.go_to_course:
+				msg.hide();
 				startActivity(new Intent(MyCoursesActivity.this, CourseFilterActivity.class));
 				return true;
 
 			case R.id.go_to_calender:
+				msg.hide();
 				startActivity(new Intent(MyCoursesActivity.this, CalendarView.class));
 				return true;
 
 			case R.id.go_to_add_crn:
+				msg.hide();
 				startActivity(new Intent(MyCoursesActivity.this, CourseRegistration.class));
 				return true;
 
 			case R.id.go_to_view_remove_registered:
+				msg.hide();
 				startActivity(new Intent(MyCoursesActivity.this, MyCoursesActivity.class));
 				return true;
 			case R.id.view_user_information:
+				msg.hide();
 				startActivity(new Intent(MyCoursesActivity.this, View_UserInformation.class));
 				return true;
-
 			case R.id.log_out:
+				msg.hide();
 				startActivity(new Intent(MyCoursesActivity.this, Logout_Activity.class));
 				return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -93,21 +105,29 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 				@Override
 				public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-					String title, msg;
+					msg.setTitle("Loading");
+					msg.setMessage("Loading, please wait...");
+					msg.show();
+
+					String title, msg_str;
 					int option;
 					switch (item.getItemId()) {
 						case R.id.navigation_back:
 							populateTerm();
+							msg.hide();
 							return true;
 
 						case R.id.navigation_deregister:
 							title = "Deregister Selected Courses";
-							msg = "You are about to deregister for all selected courses. Please " +
+							msg_str = "You are about to deregister for all selected courses. " +
+									"Please " +
 									"confirm to continue.";
 							option = 0;
-							popupMsg(title, msg, option);
+							popupMsg(title, msg_str, option);
+							msg.hide();
 							return true;
 					}
+					msg.hide();
 					return false;
 				}
 			};
@@ -117,16 +137,27 @@ public class MyCoursesActivity extends AppCompatActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_courses);
+
+		msg = new ProgressDialog(MyCoursesActivity.this);
+		msg.setCancelable(false);
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+		msg.show();
+
 		Log.d("debug.print","onCreate MyCoursesActivity");
 		BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 		hdrToolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(hdrToolBar);
 		populateTerm();
+		msg.hide();
 	}
 
 	//populate a list of terms
 	public void populateTerm() {
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 		currentTerm = null;
 		registeredCourses.clear();
 		deletedCourses.clear();
@@ -138,8 +169,12 @@ public class MyCoursesActivity extends AppCompatActivity {
 				android.R.layout.simple_list_item_1, db.getDbRef()) {
 			@Override
 			protected void populateView(View v, Term model, int position) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				TextView termRow = (TextView)v.findViewById(android.R.id.text1);
 				termRow.setText(model.toString());
+				msg.hide();
 
 			}
 		};
@@ -148,16 +183,23 @@ public class MyCoursesActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				Term term = (Term) firebaseAdapter.getItem(position);
 				currentTerm = term;
 				populateRegisteredCourses();
+				msg.hide();
 			}
 		});
+		msg.hide();
 	}
 
 	//activity specific popup messages
 	public void popupMsg(String t, String m, int o){
-
+		msg.setTitle("Loading");
+		msg.setMessage("Loading, please wait...");
+		msg.show();
 		// custom dialog
 		final Dialog dialog = new Dialog(context);
 		dialog.setContentView(R.layout.item_popup_msg);
@@ -180,14 +222,19 @@ public class MyCoursesActivity extends AppCompatActivity {
 					@Override
 					public void onClick(View v) {
 						dialog.dismiss();
+						msg.setTitle("Loading");
+						msg.setMessage("Loading, please wait...");
+						msg.show();
 						if (deletedCourses.size() > 0){
 							deregisterCourses();
 							populateTerm();
 						}
+						msg.hide();
 					}
 				});
 				break;
 			default:
+				msg.hide();
 				popUpMsgButtonOK.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -196,17 +243,23 @@ public class MyCoursesActivity extends AppCompatActivity {
 				});
 
 		}
-
+		msg.hide();
 		dialog.show();
 	}
 
 	//populate a listed of registered courses for the selected term
 	public void populateRegisteredCourses(){
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 
 		Database db = new Database("STUDENT/" + username);
 		db.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 
 				if (dataSnapshot.child("registration").exists()){
 					User std = dataSnapshot.getValue(User.class);
@@ -218,6 +271,9 @@ public class MyCoursesActivity extends AppCompatActivity {
 							dbCRN.getDbRef().addListenerForSingleValueEvent(new ValueEventListener() {
 								@Override
 								public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+									msg.setTitle("Populating");
+									msg.setMessage("Populating tables, please wait...");
+									msg.show();
 									CRN_Data crn = dataSnapshot.getValue(CRN_Data.class);
 
 									boolean sel = false;
@@ -241,10 +297,12 @@ public class MyCoursesActivity extends AppCompatActivity {
 									}
 
 									populateCurrentSelection();
+									msg.hide();
 								}
 
 								@Override
 								public void onCancelled(@NonNull DatabaseError databaseError) {
+									msg.hide();
 									Log.d("debug.print", "The read failed: " + databaseError.getCode());
 								}
 							});
@@ -253,6 +311,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 				} else {
 					populateCurrentSelection();
 				}
+				msg.hide();
 			}
 
 			@Override
@@ -260,18 +319,23 @@ public class MyCoursesActivity extends AppCompatActivity {
 				Log.d("debug.print", "The read failed: " + databaseError.getCode());
 			}
 		});
+		msg.hide();
 	}
 
 
 	public void populateCurrentSelection(){
-
+		msg.setTitle("Populating");
+		msg.setMessage("Populating tables, please wait...");
+		msg.show();
 		lv = findViewById(R.id.listView);
 		lv.setAdapter(new ArrayAdapter<CRN_Data>(
 				this, R.layout.item_registration , registeredCourses){
 
 			@Override
 			public View getView (int position, View view, ViewGroup parent){
-
+				msg.setTitle("Populating");
+				msg.setMessage("Populating tables, please wait...");
+				msg.show();
 				if (view == null) {
 					view = LayoutInflater.from(getContext()).inflate(R.layout.item_registration, parent,
 							false);
@@ -289,7 +353,7 @@ public class MyCoursesActivity extends AppCompatActivity {
 				stype.setText(String.format("Section Type:%s", crnObj.getSection_Type()));
 				tcode.setText(String.format("Term Code:%s", crnObj.getTerm_Code()));
 				crn.setText(String.format("CRN:%s", crnObj.getCrn()));
-
+				msg.hide();
 				return view;
 			}
 		});
@@ -298,7 +362,9 @@ public class MyCoursesActivity extends AppCompatActivity {
 			// onItemClick method is called everytime a user clicks an item on the list
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+				msg.setTitle("Loading");
+				msg.setMessage("Loading, please wait...");
+				msg.show();
 				CRN_Data crnObj = (CRN_Data) parent.getItemAtPosition(position);
 				boolean sel = false;
 				ArrayList<CRN_Data> newDeletedCourses = new ArrayList<>();
@@ -318,21 +384,24 @@ public class MyCoursesActivity extends AppCompatActivity {
 					view.setBackgroundResource(R.color.colorSelectedRemoved);
 					deletedCourses.add(crnObj);
 				}
-
+				msg.hide();
 			}
 		});
 		lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-
+		msg.hide();
 	}
 
 	//used to deregister all selected courses
 	public void deregisterCourses(){
-
+		msg.setTitle("Deregistration");
+		msg.setMessage("Deregistering course, please wait...");
+		msg.show();
 		if(deletedCourses.size() > 0){
 			for (CRN_Data x : deletedCourses){
 				Database db = new Database();
 				db.addRemoveCourse(x.getCrn(), username, false);
 			}
 		}
+		msg.hide();
 	}
 }

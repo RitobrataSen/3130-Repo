@@ -1,5 +1,7 @@
 package com.example.rito.groupapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +28,13 @@ import com.google.firebase.database.ValueEventListener;
  * @since   07-06-18
  */
 public class MainContentLogin extends AppCompatActivity {
-    Button forgotPasswordButton;
-    Button loginButton;
-    EditText userEmail;
-    EditText userPassword;
-    User currentUser;
+    private Button forgotPasswordButton;
+    private Button loginButton;
+    private EditText userEmail;
+    private EditText userPassword;
+    private ProgressDialog msg;
+    private String toast_msg;
+    private int duration = Toast.LENGTH_LONG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,50 +48,65 @@ public class MainContentLogin extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+				msg = new ProgressDialog(MainContentLogin.this);
+				msg.setTitle("Login");
+				msg.setMessage("Verifying credentials, please wait...");
+				msg.setCancelable(false);
+				msg.show();
+
 				userEmail = findViewById(R.id.user_email);
-                userPassword = findViewById(R.id.user_pw);
-                final String email = userEmail.getText().toString();
-                final String pw = userPassword.getText().toString();
+				userPassword = findViewById(R.id.user_pw);
+
+				final String email = userEmail.getText().toString();
+				final String pw = userPassword.getText().toString();
 				Database db = new Database("STUDENT");
-				final DatabaseReference ref = db.getDbRef();
+				final DatabaseReference ref;
 
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-						boolean emailExists = false;
+				toast_msg = "Invalid username and/ or password combination, " +
+						"please try again!";
 
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot student : dataSnapshot.getChildren()) {
+				if (email.equals("") || pw.equals("")){
+					toast_msg= "One or more required fields were not entered. Please verify and " +
+							"try again.";
+					msg.hide();
+					Toast.makeText(getApplicationContext(), toast_msg, duration).show();
+				} else {
+					ref = db.getDbRef();
+					ref.addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(DataSnapshot dataSnapshot) {
+							boolean emailExists = false;
 
-                                User currentUser = (User) student.getValue(User.class);
-                                if (!currentUser.getEmail().equals(email)) {
-                                    continue;
-                                }
+							if (dataSnapshot.exists()) {
+								for (DataSnapshot student : dataSnapshot.getChildren()) {
 
-                                emailExists = true;
-                                if (currentUser.getPassword().equals(pw)) {
-                                    Toast.makeText(getApplicationContext(), "User Authenticated! Welcome " + currentUser.getUsername(),
-                                            Toast.LENGTH_LONG).show();
-                                    ref.removeEventListener(this);
-                                    MainActivity.currentUser = currentUser;
-									startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
-									return;
-                                }
+									User currentUser = (User) student.getValue(User.class);
+									if (!currentUser.getEmail().equals(email)) {
+										continue;
+									}
 
-                                else {
-                                    Toast.makeText(getApplicationContext(), "Incorrect password, please try again!", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }
-                        else
-                            Toast.makeText(getApplicationContext(), "There are no registered users yet", Toast.LENGTH_LONG).show();
-                        if (!emailExists)
-                            Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+									emailExists = true;
+									if (currentUser.getPassword().equals(pw)) {
+										ref.removeEventListener(this);
+										MainActivity.currentUser = currentUser;
+										msg.hide();
+										toast_msg = "User Authenticated! Welcome " +
+												currentUser.getUsername();
+										Toast.makeText(getApplicationContext(), toast_msg, duration).show();
+										startActivity(new Intent(MainContentLogin.this, CourseFilterActivity.class));
+										return;
+									}
+								}
+							}
+							msg.hide();
+							Toast.makeText(getApplicationContext(), toast_msg, duration).show();
+						}
+						@Override
+						public void onCancelled(DatabaseError databaseError) {
+							msg.hide();
+						}
+					});
+				}
             }
         });
         forgotPasswordButton = findViewById(R.id.forgot_password);
