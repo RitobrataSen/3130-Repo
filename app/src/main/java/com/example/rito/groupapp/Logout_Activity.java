@@ -36,7 +36,8 @@ public class Logout_Activity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        msg.hide();
+
+        msg.dismiss();
         Toast.makeText(getBaseContext(),"logout was successful",Toast.LENGTH_LONG).show();
         Logout_Activity.this.startActivity(intent);
         finish();

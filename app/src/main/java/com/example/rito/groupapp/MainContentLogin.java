@@ -28,30 +28,34 @@ import com.google.firebase.database.ValueEventListener;
  * @since   07-06-18
  */
 public class MainContentLogin extends AppCompatActivity {
-    private Button forgotPasswordButton;
-    private Button loginButton;
-    private EditText userEmail;
-    private EditText userPassword;
-    private ProgressDialog msg;
-    private String toast_msg;
-    private int duration = Toast.LENGTH_LONG;
+	private Button forgotPasswordButton;
+	private Button loginButton;
+	private EditText userEmail;
+	private EditText userPassword;
+	private String toast_msg;
+	private int duration = Toast.LENGTH_LONG;
+	private ProgressDialog msg;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.content_main);
 
-        Log.d("debug.print","onCreate MainContentLogin");
+		msg = new ProgressDialog(MainContentLogin.this);
+		msg.setTitle("Login");
+		msg.setMessage("Verifying credentials, please wait...");
+		msg.setCancelable(false);
+		msg.show();
 
-        loginButton = findViewById(R.id.login_submit_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+		Log.d("debug.print","onCreate MainContentLogin");
 
-            public void onClick(View view) {
-				msg = new ProgressDialog(MainContentLogin.this);
+		loginButton = findViewById(R.id.login_submit_button);
+		loginButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View view) {
 				msg.setTitle("Login");
 				msg.setMessage("Verifying credentials, please wait...");
-				msg.setCancelable(false);
 				msg.show();
 
 				userEmail = findViewById(R.id.user_email);
@@ -68,13 +72,16 @@ public class MainContentLogin extends AppCompatActivity {
 				if (email.equals("") || pw.equals("")){
 					toast_msg= "One or more required fields were not entered. Please verify and " +
 							"try again.";
-					msg.hide();
+					msg.dismiss();
 					Toast.makeText(getApplicationContext(), toast_msg, duration).show();
 				} else {
 					ref = db.getDbRef();
 					ref.addListenerForSingleValueEvent(new ValueEventListener() {
 						@Override
 						public void onDataChange(DataSnapshot dataSnapshot) {
+							msg.setTitle("Login");
+							msg.setMessage("Verifying credentials, please wait...");
+							msg.show();
 							boolean emailExists = false;
 
 							if (dataSnapshot.exists()) {
@@ -89,7 +96,7 @@ public class MainContentLogin extends AppCompatActivity {
 									if (currentUser.getPassword().equals(pw)) {
 										ref.removeEventListener(this);
 										MainActivity.currentUser = currentUser;
-										msg.hide();
+										msg.dismiss();
 										toast_msg = "User Authenticated! Welcome " +
 												currentUser.getUsername();
 										Toast.makeText(getApplicationContext(), toast_msg, duration).show();
@@ -98,22 +105,26 @@ public class MainContentLogin extends AppCompatActivity {
 									}
 								}
 							}
-							msg.hide();
+							msg.dismiss();
 							Toast.makeText(getApplicationContext(), toast_msg, duration).show();
 						}
 						@Override
 						public void onCancelled(DatabaseError databaseError) {
-							msg.hide();
+							msg.dismiss();
 						}
 					});
 				}
-            }
-        });
-        forgotPasswordButton = findViewById(R.id.forgot_password);
-        forgotPasswordButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                startActivity(new Intent(MainContentLogin.this,RecoveryEmailActivity.class));
-            }
-        });
-    }
+				msg.dismiss();
+			}
+		});
+		forgotPasswordButton = findViewById(R.id.forgot_password);
+		forgotPasswordButton.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View view){
+				msg.dismiss();
+				startActivity(new Intent(MainContentLogin.this,RecoveryEmailActivity
+						.class));
+			}
+		});
+		msg.dismiss();
+	}
 }
